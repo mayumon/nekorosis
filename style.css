@@ -1,0 +1,10 @@
+@font-face {
+    font-family: 'nds_bios';
+    src: url("fonts/nds_bios/ndsbios.ttf")format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    font-family: 'nds_bios', sans-serif;
+}
