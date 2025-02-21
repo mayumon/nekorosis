@@ -1,5 +1,5 @@
 // todo: add posts fetching
-const posts = ["example_post.md"];
+const posts = ["example_post.md", "i_love_pngs.md"];
 
 const postList = document.getElementById("post-list");
 const postContent = document.getElementById("post-content");
@@ -19,7 +19,7 @@ posts.forEach(post => {
 
     // format post title (currently filename)
     link.textContent = post.replace(".md", "")
-        .replace("_", " ");
+        .replace(/_/g, " ");
 
     link.onclick = () => loadPost(post)
 

@@ -8,3 +8,25 @@
 body {
     font-family: 'nds_bios', sans-serif;
 }
+
+.blog-container{
+    display: flex;
+    gap: 20px;
+}
+
+#post-list{
+    width: 30%;
+    list-style: none;
+}
+
+#post-content {
+    width: 70%;
+    border: 2px solid black;
+    padding: 20px;
+    margin-right: 10%;
+}
+
+.blog-img {
+    height: 200px;
+    object-fit: cover;
+}
