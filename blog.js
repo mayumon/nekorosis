@@ -1,6 +1,3 @@
-// todo: add posts fetching
-const posts = ["example_post.md", "i_love_pngs.md"];
-
 const postList = document.getElementById("post-list");
 const postContent = document.getElementById("post-content");
 
@@ -11,18 +8,28 @@ function loadPost(post){
         .catch(error => console.error("failed to load post:", error));
 }
 
-// display posts
-posts.forEach(post => {
-    const li = document.createElement("li");
-    const link = document.createElement("a");
-    link.href = "#";
+// fetch and display posts
+fetch('blog_posts/posts.json')
+    .then(response => response.json())
+    .then(data => {
+        data.posts.forEach(post => {
+            const li = document.createElement("li");
+            const link = document.createElement("a");
+            link.href = "#";
 
-    // format post title (currently filename)
-    link.textContent = post.replace(".md", "")
-        .replace(/_/g, " ");
+            // format post title (currently filename)
+            link.textContent = post.replace(".md", "")
+                .replace(/_/g, " ");
 
-    link.onclick = () => loadPost(post)
+            link.onclick = () => loadPost(post)
 
-    li.appendChild(link);
-    postList.appendChild(li);
-})
+            li.appendChild(link);
+            postList.appendChild(li);
+        });
+    })
+    .catch(error => console.error("failed to fetch posts:", error));
+
+// todo: add date filter (newest first)
+// todo: search?
+
+// ☆ todo: github api/raw post fetching?
