@@ -1,7 +1,7 @@
 {
-  "posts":[
+  "posts": [
     "example_post.md",
-    "i_love_pngs.md",
-    "image_wrap_test.md"
+    "image_wrap_test.md",
+    "i_love_pngs.md"
   ]
 }

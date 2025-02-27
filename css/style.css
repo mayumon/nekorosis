@@ -1,6 +1,6 @@
 @font-face {
     font-family: 'nds_bios';
-    src: url("fonts/nds_bios/ndsbios.ttf")format("truetype");
+    src: url("../assets/fonts/nds_bios/ndsbios.ttf")format("truetype");
     font-weight: normal;
     font-style: normal;
 }

@@ -1,4 +1,3 @@
-// todo: automate json generation?
 // todo: add date to posts? on json
 // todo: add date filter (newest first)
 // todo: search?
