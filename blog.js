@@ -45,7 +45,7 @@ fetch(`${baseUrl}posts.json`)
 
 
 // check for url post and fetch if needed
-window.addEventListener('DOMContentLoaded', () => {
+window.addEventListener('hashchange', () => {
     const hash = window.location.hash.slice(1);
     if (hash) {
         const postFile = hash + '.md';
