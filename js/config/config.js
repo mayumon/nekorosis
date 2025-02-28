@@ -1,5 +1,5 @@
 // config.js
-// current setting: local
-    
-const preview_mode = true;
+// current setting: deployment
+
+const preview_mode = false;
 export default preview_mode;
