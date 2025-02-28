@@ -1,9 +1,10 @@
+// generate_posts.js
 // automated posts.json generation
-// run: node generate-posts.js
+// run: node generate_posts.js
 
 const fs = require('fs')
 const path = require('path')
-const postsDir = path.join(__dirname, "../blog_posts");
+const postsDir = path.join(__dirname, "../../blog_posts");
 
 fs.readdir(postsDir, (err,files) => {
 

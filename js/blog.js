@@ -1,4 +1,7 @@
-const preview_mode = false; // set to false for production
+// blog.js
+// blog page script
+
+import preview_mode from './config/config.js';
 
 const baseUrl = preview_mode
     ? 'blog_posts/'
@@ -6,7 +9,6 @@ const baseUrl = preview_mode
 
 const postList = document.getElementById("post-list");
 const postContent = document.getElementById("post-content");
-
 
 function loadPost(post){
     fetch(`${baseUrl}${post}`)
