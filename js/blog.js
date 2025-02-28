@@ -1,12 +1,11 @@
-// todo: add date to posts? on json
-// todo: add date filter (newest first)
-// todo: search?
+const preview_mode = false; // set to false for production
 
+const baseUrl = preview_mode
+    ? 'blog_posts/'
+    : 'https://raw.githubusercontent.com/mayumon/nekorosis/main/blog_posts/';
 
 const postList = document.getElementById("post-list");
 const postContent = document.getElementById("post-content");
-
-const baseUrl = 'https://raw.githubusercontent.com/mayumon/nekorosis/main/blog_posts/';
 
 
 function loadPost(post){

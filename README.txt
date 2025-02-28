@@ -1,7 +1,6 @@
-## add blog post
+## to add a blog post...
 
-- write md file
-- add to blog_posts
-- run: node generate-posts.js
-- git push
+- write deepest thoughts to md file
+- add it to blog_posts
+- git commit + push
 - celebrate
