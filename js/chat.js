@@ -20,7 +20,11 @@ const db = getFirestore(app);
 
 let currentChatCollectionRef = null;
 let unsubscribeChat = null;
+
 let currentUsername = "anon";
+
+const allowedColours = ["#ff0091", "#c000ff", "#4a00ff", "#3fff00"]
+let currentUsernameColour = allowedColours[Math.floor(Math.random() * allowedColours.length)];
 
 // sets up the chat for the current post
 function initChat() {
@@ -67,6 +71,7 @@ function subscribeToChat() {
             const usernameElem = document.createElement("strong");
 
             usernameElem.textContent = data.username + ":";
+            usernameElem.style.color = data.colour || "#000";
 
             msgDiv.appendChild(usernameElem);
 
@@ -91,6 +96,7 @@ async function sendMessage(messageText) {
     try {
         await addDoc(currentChatCollectionRef, {
             username: currentUsername,
+            colour: currentUsernameColour,
             message: messageText,
             createdAt: serverTimestamp()
         });
@@ -141,20 +147,41 @@ function setupProfilePopup(){
     const usernameInput = document.getElementById("username-input");
     const profileOk = document.getElementById("profile-ok");
     const profileCancel = document.getElementById("profile-cancel");
+    const colourOptionContainer = document.getElementById("colour-options");
 
     if (!profileBtn || !profilePopup || !usernameInput || !profileOk) {
         console.error("profile popup elements not found");
         return;
     }
 
+    let tempUsernameColour = currentUsernameColour;
+
     profileBtn.addEventListener("click", () => {
         profilePopup.style.display = "block";
         usernameInput.value = currentUsername;
+
+        tempUsernameColour = currentUsernameColour;
+        colourOptionElements.forEach(option => {
+            option.style.border = "none";
+            if(option.getAttribute("data-colour") === currentUsernameColour){
+                option.style.border = "2px solid #000";
+            }
+        })
+    })
+
+    const colourOptionElements = colourOptionContainer.querySelectorAll(".colour-option");
+    colourOptionElements.forEach(option => {
+        option.addEventListener("click", () => {
+            colourOptionElements.forEach(opt => opt.style.border = "none"); // test diff settings for these later
+            option.style.border = "2px solid #000";
+            tempUsernameColour = option.getAttribute("data-colour");
+        })
     })
 
     profileOk.addEventListener("click", () => {
         let newUsername = usernameInput.value.trim();
         currentUsername = newUsername !== "" ? newUsername : "anon";
+        currentUsernameColour = tempUsernameColour;
         profilePopup.style.display = "none";
     })
 

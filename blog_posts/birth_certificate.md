@@ -39,14 +39,16 @@ nekorosis/n3korosis began development in february 20th, 2025 - though it has alw
     - limited messages to 280 characters max
     - added tiny profile view
       - added username customization (20 characters max)
+      - added username colour customization (4 colour options)
 
 ## <span style="color:hotpink">dreams</span>
 
 - extra chat area features (add colours make it cute...)
+  - add like symbols in front of posts?? uhh idk
 - search bar
 - start work on art/videos... areas - maybe add tags?? that would go crazy. wow.
 - theres also the forum idea but tbh not something i really want to deal with myself. i think a chat is enough
 - ensure chat messages are "clean" no script running
-
-## <span style="color:hotpink">lame file documentation?</span>
+- bug catchers.
+- add email + pw auth?
   

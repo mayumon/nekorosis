@@ -39,7 +39,7 @@ fetch(`${baseUrl}posts.json`)
             link.textContent = post.title ||
                 post.filename.replace(".md", "").replace(/_/g, " ");
 
-            link.onclick = () => loadPost(post)
+            link.onclick = () => loadPost(post.filename)
 
             li.appendChild(link);
             postList.appendChild(li);
