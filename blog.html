@@ -30,8 +30,26 @@
     <!--chat area-->
     <div id="chat-container">
         <div id="chat-messages" style="border:1px solid #ccc; padding: 10px; height: 300px; overflow-y: scroll;"></div>
-        <input id="chat-input" type="text" placeholder="Type your message..." />
-        <button id="send-btn">Send</button>
+
+        <!-- lower bar -->
+        <div id="chat-controls">
+            <button id="profile-btn"style="margin-right: 10px;">P</button>
+            <input id="chat-input" type="text" placeholder="type your message..." maxlength="280" style="flex: 1;"/>
+            <button id="send-btn">Send</button>
+        </div>
+
+        <!-- profile popup -->
+        <div id="profile-popup"
+             style="display:none; position: fixed; top: 30%; left: 50%; transform: translate(-50%, -30%);
+              background: #fff; border: 1px solid #ccc; padding: 20px; z-index: 1000;">
+
+            <label for="username-input">username:</label>
+            <input id="username-input" type="text" placeholder="anon" maxlength="20">
+            <button id="profile-ok">ok</button>
+            <button id="profile-cancel">cancel</button>
+
+        </div>
+
     </div>
 
     <script type="module" src="js/chat.js"></script>

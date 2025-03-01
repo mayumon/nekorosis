@@ -20,6 +20,7 @@ const db = getFirestore(app);
 
 let currentChatCollectionRef = null;
 let unsubscribeChat = null;
+let currentUsername = "anon";
 
 // sets up the chat for the current post
 function initChat() {
@@ -62,7 +63,15 @@ function subscribeToChat() {
         snapshot.forEach((doc) => {
             const data = doc.data();
             const msgDiv = document.createElement("div");
-            msgDiv.textContent = data.message;
+
+            const usernameElem = document.createElement("strong");
+
+            usernameElem.textContent = data.username + ":";
+
+            msgDiv.appendChild(usernameElem);
+
+            msgDiv.appendChild(document.createTextNode(" " + data.message));
+
             chatMessages.appendChild(msgDiv);
         });
 
@@ -81,6 +90,7 @@ async function sendMessage(messageText) {
 
     try {
         await addDoc(currentChatCollectionRef, {
+            username: currentUsername,
             message: messageText,
             createdAt: serverTimestamp()
         });
@@ -125,7 +135,37 @@ function setupSendListeners() {
     }
 }
 
+function setupProfilePopup(){
+    const profileBtn = document.getElementById("profile-btn");
+    const profilePopup = document.getElementById("profile-popup");
+    const usernameInput = document.getElementById("username-input");
+    const profileOk = document.getElementById("profile-ok");
+    const profileCancel = document.getElementById("profile-cancel");
+
+    if (!profileBtn || !profilePopup || !usernameInput || !profileOk) {
+        console.error("profile popup elements not found");
+        return;
+    }
+
+    profileBtn.addEventListener("click", () => {
+        profilePopup.style.display = "block";
+        usernameInput.value = currentUsername;
+    })
+
+    profileOk.addEventListener("click", () => {
+        let newUsername = usernameInput.value.trim();
+        currentUsername = newUsername !== "" ? newUsername : "anon";
+        profilePopup.style.display = "none";
+    })
+
+    profileCancel.addEventListener("click", () => {
+        profilePopup.style.display = "none";
+    })
+}
+
+// call setup functions
 setupSendListeners();
+setupProfilePopup();
 
 // reinitialize chat on hashchange
 window.addEventListener("hashchange", () => {

@@ -29,10 +29,13 @@ nekorosis/n3korosis began development in february 20th, 2025 - though it has alw
   - added post title formatting
   - added url change according to post
   - added simple chat/comment area
+    - limited messages to 280 characters max
+    - added tiny profile view
+      - added username customization (20 characters max)
 
 ## <span style="color:hotpink">dreams</span>
 
-- extra chat area features (add names, add colours make it cute...)
+- extra chat area features (add colours make it cute...)
 - date filter (newest first)
 - search bar
 - fix title formatting to allow more punctuation somehow
