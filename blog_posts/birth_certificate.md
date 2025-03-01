@@ -28,17 +28,19 @@ nekorosis/n3korosis began development in february 20th, 2025 - though it has alw
   - added markdown support
   - added post title formatting
   - added url change according to post
+  - added simple chat/comment area
 
 ## <span style="color:hotpink">dreams</span>
 
-- comment area for every post
-
+- extra chat area features (add names, add colours make it cute...)
 - date filter (newest first)
 - search bar
 - fix title formatting to allow more punctuation somehow
   - date to posts? on json and visually
 
 - start work on art/videos... areas - maybe add tags?? that would go crazy. wow.
+- theres also the forum idea but tbh not something i really want to deal with myself. i think a chat is enough
+- ensure chat messages are "clean" no script running
 
 ## <span style="color:hotpink">lame file documentation?</span>
   

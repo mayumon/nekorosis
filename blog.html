@@ -1,3 +1,5 @@
+<!--blog.html-->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,8 +27,16 @@
         <div id="post-content"></div>
     </div>
 
+    <!--chat area-->
+    <div id="chat-container">
+        <div id="chat-messages" style="border:1px solid #ccc; padding: 10px; height: 300px; overflow-y: scroll;"></div>
+        <input id="chat-input" type="text" placeholder="Type your message..." />
+        <button id="send-btn">Send</button>
+    </div>
 
+    <script type="module" src="js/chat.js"></script>
     <script type="module" src="js/blog.js"></script>
+
 </body>
 
 </html>
