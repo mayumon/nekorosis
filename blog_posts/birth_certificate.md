@@ -1,3 +1,8 @@
+---
+title: "nekorosis' birth certificate"
+date: "2025-03-01T00:00:00Z"
+---
+
 # <span style="color:hotpink">birth certificate</span>
 
 nekorosis/n3korosis began development in february 20th, 2025 - though it has always been, in other forms.
@@ -16,6 +21,8 @@ nekorosis/n3korosis began development in february 20th, 2025 - though it has alw
   - added blog img style
 - added **post fetching** (`blog.js`)
   - added `posts.json` to keep track of posts (.md files) in blog_posts
+    - adjusted to keep track of filename, title, and date
+    - adjusted to chronological order
     - **automatic posts.json generation**
       - posts.json generation script (`generate_posts.js`)
       - called upon commit through git hook
@@ -36,11 +43,7 @@ nekorosis/n3korosis began development in february 20th, 2025 - though it has alw
 ## <span style="color:hotpink">dreams</span>
 
 - extra chat area features (add colours make it cute...)
-- date filter (newest first)
 - search bar
-- fix title formatting to allow more punctuation somehow
-  - date to posts? on json and visually
-
 - start work on art/videos... areas - maybe add tags?? that would go crazy. wow.
 - theres also the forum idea but tbh not something i really want to deal with myself. i think a chat is enough
 - ensure chat messages are "clean" no script running

@@ -1,3 +1,8 @@
+---
+title: "markdown test"
+date: "2025-02-01T00:00:00Z"
+---
+
 # too slow
 ## when the moon
 ### is with you

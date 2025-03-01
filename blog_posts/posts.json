@@ -1,8 +1,24 @@
 {
   "posts": [
-    "birth_certificate.md",
-    "example_post.md",
-    "image_wrap_test.md",
-    "i_love_pngs.md"
+    {
+      "filename": "birth_certificate.md",
+      "title": "nekorosis' birth certificate",
+      "date": "2025-03-01T00:00:00Z"
+    },
+    {
+      "filename": "image_wrap_test.md",
+      "title": "wrapping images like gifts with text...",
+      "date": "2025-02-13T00:00:00Z"
+    },
+    {
+      "filename": "example_post.md",
+      "title": "markdown test",
+      "date": "2025-02-01T00:00:00Z"
+    },
+    {
+      "filename": "i_love_pngs.md",
+      "title": "i love .jpgs",
+      "date": "2025-01-01T00:00:00Z"
+    }
   ]
 }

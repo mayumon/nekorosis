@@ -4,6 +4,7 @@
 
 const fs = require('fs')
 const path = require('path')
+const matter = require('gray-matter');
 const postsDir = path.join(__dirname, "../../blog_posts");
 
 fs.readdir(postsDir, (err,files) => {
@@ -13,7 +14,21 @@ fs.readdir(postsDir, (err,files) => {
         return;
     }
 
-    const posts = files.filter(file => file.endsWith(".md"));
+    const posts = files.filter(file => file.endsWith(".md"))
+        .map(file => {
+            const filePath = path.join(postsDir, file);
+            const fileContent = fs.readFileSync(filePath, 'utf8');
+            const parsed = matter(fileContent);
+
+            return {
+                filename: file,
+                title: parsed.data.title || file.replace(".md", ""),
+                date: parsed.data.date || null
+            };
+        });
+
+    // sort posts chronologically
+    posts.sort((a, b) => new Date(b.date) - new Date(a.date));
 
     const jsonData = { posts };
 
