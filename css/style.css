@@ -7,6 +7,9 @@
 
 body {
     font-family: 'nds_bios', sans-serif;
+    font-size: 14pt;
+    background-color: black;
+    color: white;
 }
 
 .blog-container{
@@ -15,15 +18,88 @@ body {
 }
 
 #post-list{
-    width: 30%;
+    width: 20%;
     list-style: none;
 }
 
-#post-content {
-    width: 70%;
-    border: 2px solid black;
+
+#post-display-container {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+}
+
+#post-content, #chat-container {
+    width: 100%;
+    max-width: 1000px;
+
+    box-sizing: border-box;
+}
+
+#profile-area{
+    width: 30%;
+    height: 300px;
+    border: #ff0091 1px solid;
+    padding: 40px;
+    box-sizing: border-box;
+    margin-right: 40px;
+}
+
+#post-content{
+    border: #ff0091 1px solid;
+    padding: 40px;
+    /* background-color: white;
+    color: black; */
+}
+
+#chat-container{
+    padding: 0px 30px 30px 30px;
+    border: 1px solid #ff0091;
+}
+
+#chat-messages {
+    border: 1px solid #ff0091;
+    padding: 10px;
+    height: 300px;
+    overflow-y: scroll;
+}
+
+#chat-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#profile-btn {
+    margin-right: 10px;
+}
+
+#chat-input {
+    flex: 1;
+}
+
+#profile-popup {
+    display: none;
+    position: fixed;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -30%);
+    background: #fff;
+    border: 1px solid #ccc;
     padding: 20px;
-    margin-right: 10%;
+    z-index: 1000;
+}
+
+#colour-options {
+    display: flex;
+    gap: 5px;
+    margin-top: 5px;
+}
+
+.colour-option {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
 }
 
 .blog-img {

@@ -3,22 +3,36 @@
     {
       "filename": "birth_certificate.md",
       "title": "nekorosis' birth certificate",
-      "date": "2025-03-01T00:00:00Z"
+      "date": "2025-03-01T00:00:00Z",
+      "tags": [
+        "life",
+        "death"
+      ]
     },
     {
       "filename": "image_wrap_test.md",
       "title": "wrapping images like gifts with text...",
-      "date": "2025-02-13T00:00:00Z"
+      "date": "2025-02-13T00:00:00Z",
+      "tags": [
+        "test"
+      ]
     },
     {
       "filename": "example_post.md",
       "title": "markdown test",
-      "date": "2025-02-01T00:00:00Z"
+      "date": "2025-02-01T00:00:00Z",
+      "tags": [
+        "test",
+        "death"
+      ]
     },
     {
       "filename": "i_love_pngs.md",
       "title": "i love .jpgs",
-      "date": "2025-01-01T00:00:00Z"
+      "date": "2025-01-01T00:00:00Z",
+      "tags": [
+        "test"
+      ]
     }
   ]
 }

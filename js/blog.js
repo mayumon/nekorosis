@@ -21,29 +21,100 @@ function loadPost(post){
         .catch(error => console.error("failed to load post:", error));
 }
 
+// render post list given a filter tag
+function renderPostList(posts, filterTag = "all"){
+    postList.innerHTML = "";
+    const filteredPosts = filterTag === "all"
+        ? posts
+        : posts.filter(post => Array.isArray(post.tags) && post.tags.includes(filterTag));
+
+    filteredPosts.forEach(post => {
+        const li = document.createElement("li");
+        const link = document.createElement("a");
+
+        // format post-specific url
+        const postHash = post.filename
+            .replace(".md", "");
+        link.href = "#" + postHash;
+
+        // format post title (currently filename)
+        link.textContent = post.title ||
+            post.filename.replace(".md", "").replace(/_/g, " ");
+
+        link.onclick = () => loadPost(post.filename)
+
+        li.appendChild(link);
+        postList.appendChild(li);
+    })
+}
+
 
 // fetch and display posts
 fetch(`${baseUrl}posts.json`)
     .then(response => response.json())
     .then(data => {
-        data.posts.forEach(post => {
-            const li = document.createElement("li");
-            const link = document.createElement("a");
+        const posts = data.posts;
 
-            // format post-specific url
-            const postHash = post.filename
-                .replace(".md", "");
-            link.href = "#" + postHash;
+        // build tag counts
+        const tagCounts = {};
 
-            // format post title (currently filename)
-            link.textContent = post.title ||
-                post.filename.replace(".md", "").replace(/_/g, " ");
+        posts.forEach(post =>{
 
-            link.onclick = () => loadPost(post.filename)
+            if (Array.isArray(post.tags)) {
 
-            li.appendChild(link);
-            postList.appendChild(li);
+                post.tags.forEach(tag => {
+                    tagCounts[tag] = (tagCounts[tag] || 0) + 1;
+                });
+            }
         });
+
+        // sort tags by descending count, then alphabetically
+        const sortedTags = Object.keys(tagCounts).sort((a,b) => {
+
+            if (tagCounts[b] !== tagCounts[a]){
+                return tagCounts[b] - tagCounts[a];
+
+            } else {
+                return a.localeCompare(b);
+            }
+        });
+
+        // create tag filter container - move to html
+        const tagFilterDiv = document.createElement("div");
+        tagFilterDiv.id = "tag-filter";
+
+        // create all option
+        const allTag = document.createElement("span");
+        allTag.classList.add("tag");
+        allTag.textContent = `all (${posts.length})`;
+        allTag.dataset.tag = "all";
+        tagFilterDiv.appendChild(allTag);
+
+        // create tags options
+        sortedTags.forEach(tag => {
+            const tagElem = document.createElement("span");
+            tagElem.classList.add("tag");
+            tagElem.textContent = `${tag} (${tagCounts[tag]})`;
+            tagElem.dataset.tag = tag;
+            tagFilterDiv.appendChild(tagElem);
+        });
+
+        postList.parentNode.insertBefore(tagFilterDiv, postList);
+
+        // click listeners for tags
+        const tagElements = tagFilterDiv.querySelectorAll(".tag");
+        tagElements.forEach(elem => {
+            elem.addEventListener("click", () => {
+                tagElements.forEach(el => el.classList.remove("active"));
+                elem.classList.add("active")
+                renderPostList(posts, elem.dataset.tag);
+            });
+        });
+
+        // default to all
+        allTag.classList.add("active");
+        renderPostList(posts,"all");
+
     })
     .catch(error => console.error("failed to fetch posts:", error));
 

@@ -5,9 +5,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    <script src="https://cdn.jsdelivr.net/npm/marked@15.0.7/lib/marked.umd.min.js"></script>
     <link rel="stylesheet" href="css/style.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.2.12/marked.min.js"></script>
 
     <title>weblog</title>
 
@@ -24,46 +23,57 @@
 
     <div class="blog-container">
         <ul id="post-list"></ul>
-        <div id="post-content"></div>
-    </div>
+        <div id="post-display-container">
+            <div id="post-content"></div>
 
-    <!--chat area-->
-    <div id="chat-container">
-        <div id="chat-messages" style="border:1px solid #ccc; padding: 10px; height: 300px; overflow-y: scroll;"></div>
+            <!--chat area-->
+            <div id="chat-container">
+                <h2 id="chat-header">comments</h2>
+                <div id="chat-messages"></div>
 
-        <!-- lower bar -->
-        <div id="chat-controls">
-            <button id="profile-btn"style="margin-right: 10px;">P</button>
-            <input id="chat-input" type="text" placeholder="type your message..." maxlength="280" style="flex: 1;"/>
-            <button id="send-btn">Send</button>
-        </div>
-
-        <!-- profile popup -->
-        <div id="profile-popup"
-             style="display:none; position: fixed; top: 30%; left: 50%; transform: translate(-50%, -30%);
-              background: #fff; border: 1px solid #ccc; padding: 20px; z-index: 1000;">
-
-            <label for="username-input">username:</label>
-            <input id="username-input" type="text" placeholder="anon" maxlength="20">
-
-            <br>
-
-            <label>colour:</label>
-                <div id="colour-options" style="display: flex; gap: 5px; margin-top: 5px;">
-                    <div class="colour-option" data-colour="#ff0091" style="width:20px; height:20px; background:#ff0091; cursor:pointer;"></div>
-                    <div class="colour-option" data-colour="#c000ff" style="width:20px; height:20px; background:#c000ff; cursor:pointer;"></div>
-                    <div class="colour-option" data-colour="#4a00ff" style="width:20px; height:20px; background:#4a00ff; cursor:pointer;"></div>
-                    <div class="colour-option" data-colour="#3fff00" style="width:20px; height:20px; background:#3fff00; cursor:pointer;"></div>
+                <!-- lower bar -->
+                <div id="chat-controls">
+                    <button id="profile-btn">P</button>
+                    <input id="chat-input" type="text" placeholder="type your message..." maxlength="280">
+                    <button id="send-btn">Send</button>
                 </div>
 
-            <br>
+                <!-- profile popup -->
+                <div id="profile-popup">
 
-            <button id="profile-ok">ok</button>
-            <button id="profile-cancel">cancel</button>
+                    <label for="username-input">username:</label>
+                    <input id="username-input" type="text" placeholder="anon" maxlength="20">
 
+                    <br>
+
+                    <label>colour:</label>
+                    <div id="colour-options">
+                        <div class="colour-option" data-colour="#ff0091"></div>
+                        <div class="colour-option" data-colour="#c000ff"></div>
+                        <div class="colour-option" data-colour="#4a00ff"></div>
+                        <div class="colour-option" data-colour="#3fff00"></div>
+                    </div>
+
+                    <br>
+
+                    <button id="profile-ok">ok</button>
+                    <button id="profile-cancel">cancel</button>
+
+                </div>
+
+            </div>
+        </div>
+
+        <!-- profile area -->
+        <div id="profile-area">
+            <h2>profile</h2>
+            <p>name: x</p>
+        </div>
         </div>
 
     </div>
+
+
 
     <script type="module" src="js/chat.js"></script>
     <script type="module" src="js/blog.js"></script>

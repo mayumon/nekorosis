@@ -23,7 +23,8 @@ fs.readdir(postsDir, (err,files) => {
             return {
                 filename: file,
                 title: parsed.data.title || file.replace(".md", ""),
-                date: parsed.data.date || null
+                date: parsed.data.date || null,
+                tags: parsed.data.tags || []
             };
         });
 

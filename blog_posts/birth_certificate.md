@@ -1,13 +1,14 @@
 ---
 title: "nekorosis' birth certificate"
 date: "2025-03-01T00:00:00Z"
+tags: ["life", "death"]
 ---
 
-# <span style="color:hotpink">birth certificate</span>
+# <span style="color:#ff0091">birth certificate</span>
 
 nekorosis/n3korosis began development in february 20th, 2025 - though it has always been, in other forms.
 
-## <span style="color:hotpink">procedures</span>
+## <span style="color:#ff0091">procedures</span>
 
 ### general
 
@@ -21,7 +22,8 @@ nekorosis/n3korosis began development in february 20th, 2025 - though it has alw
   - added blog img style
 - added **post fetching** (`blog.js`)
   - added `posts.json` to keep track of posts (.md files) in blog_posts
-    - adjusted to keep track of filename, title, and date
+    - adjusted to keep track of filename, title, date
+    - added tags and tag filtering
     - adjusted to chronological order
     - **automatic posts.json generation**
       - posts.json generation script (`generate_posts.js`)
@@ -41,14 +43,18 @@ nekorosis/n3korosis began development in february 20th, 2025 - though it has alw
       - added username customization (20 characters max)
       - added username colour customization (4 colour options)
 
-## <span style="color:hotpink">dreams</span>
+## <span style="color:#ff0091">dreams</span>
 
-- extra chat area features (add colours make it cute...)
+- visual concept?
   - add like symbols in front of posts?? uhh idk
 - search bar
 - start work on art/videos... areas - maybe add tags?? that would go crazy. wow.
 - theres also the forum idea but tbh not something i really want to deal with myself. i think a chat is enough
 - ensure chat messages are "clean" no script running
-- bug catchers.
+- bug catcher program
 - add email + pw auth?
+- blingees... blinkies.
+- profile area to the right...?
+  - picture
+  - social media
   
