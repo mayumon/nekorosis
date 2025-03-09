@@ -99,7 +99,8 @@ fetch(`${baseUrl}posts.json`)
             tagFilterDiv.appendChild(tagElem);
         });
 
-        postList.parentNode.insertBefore(tagFilterDiv, postList);
+        const tagFilterContainer = document.getElementById("tag-filter");
+        tagFilterContainer.parentNode.replaceChild(tagFilterDiv, tagFilterContainer);
 
         // click listeners for tags
         const tagElements = tagFilterDiv.querySelectorAll(".tag");
