@@ -52,10 +52,10 @@ body {
 }
 
 #post-content{
-    border: #ff0091 1px solid;
+    /*border: #ff0091 1px solid;*/
     padding: 40px;
-    /* background-color: white;
-    color: black; */
+    background-color: #e7d9e1;
+    color: black;
 }
 
 #chat-container{
@@ -113,7 +113,7 @@ body {
     object-fit: cover;
 }
 
-/* tags */
+/* ─── tags ───────────────────────────────────────────────────────────── */
 
 #tag-filter {
     margin-bottom: 10px;
@@ -131,4 +131,59 @@ body {
 
 #tag-filter .tag.active {
     background-color: #ff0091;
+}
+
+/* ─── lace frame ───────────────────────────────────────────────────────────── */
+
+.lace-container {
+    position: relative;
+    padding: 15px;
+    box-sizing: border-box;
+}
+
+.lace {
+    position: absolute;
+    display: block;
+}
+
+/* ─── corners ─── */
+
+.lace.corner {
+    width: 15px;
+    height: 15px;
+    background: url('../assets/images/lace-1-corner.png') no-repeat center;
+}
+.lace.top-left     { top:    0; left:    0;            }
+.lace.top-right    { top:    0; right:   0; transform: rotate(90deg);  }
+.lace.bottom-right { bottom: 0; right:   0; transform: rotate(180deg); }
+.lace.bottom-left  { bottom: 0; left:    0; transform: rotate(270deg); }
+
+/* ─── top & bottom edges ─── */
+
+.lace.side.top,
+.lace.side.bottom {
+    left: 15px;
+    right: 15px;
+    height: 15px;
+    background: url('../assets/images/lace-1-topbot.png') repeat-x center/auto 15px;
+}
+
+.lace.side.top    { top:    0;                       }
+.lace.side.bottom { bottom: 0; transform: rotate(180deg); }
+
+/* ─── left + right edges ─── */
+
+.lace.side.left,
+.lace.side.right {
+    top:    15px;
+    bottom: 15px;
+    width:  15px;
+    background: url('../assets/images/lace-1-side.png') repeat-y center/15px auto;
+}
+
+.lace.side.left  { left:  0; }
+.lace.side.right {
+    right: 0;
+    transform: scaleX(-1);
+    transform-origin: center;
 }
