@@ -4,6 +4,10 @@
 import preview_mode from './config/config.js';
 import matter from "https://cdn.skypack.dev/gray-matter?min";
 
+// ================================
+// post-list
+// ================================
+
 const baseUrl = preview_mode
     ? 'blog_posts/'
     : 'https://raw.githubusercontent.com/mayumon/nekorosis/main/blog_posts/';
@@ -128,3 +132,16 @@ window.addEventListener('hashchange', () => {
         loadPost(postFile);
     }
 })
+
+
+
+
+
+
+
+
+
+
+
+
+

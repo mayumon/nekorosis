@@ -14,24 +14,17 @@
 
 <body>
 
-    <nav>
-        <a href="index.html">home</a>
-        <a href="blog.html">blog</a>
-    </nav>
-
     <h1>blog</h1>
 
     <div class="blog-container">
 
-        <div id="left-column">
-            <div id="tag-filter"></div>
-            <ul id="post-list"></ul>
-        </div>
+        <div id="sidebar-placeholder"></div>
 
         <div id="post-display-container">
 
             <!--lace border-->
             <div class="lace-container">
+
                 <!-- corners -->
                 <div class="lace corner top-left"></div>
                 <div class="lace corner top-right"></div>
@@ -81,20 +74,19 @@
                     <button id="profile-cancel">cancel</button>
 
                 </div>
-
             </div>
         </div>
 
-        <!-- profile area -->
-        <div id="profile-area">
-            <h2>profile</h2>
-            <p>name: x</p>
+        <!-- post-list -->
+        <div id="right-column">
+            <div id="tag-filter"></div>
+            <ul id="post-list"></ul>
         </div>
-        </div>
-
+    </div>
 
     <script type="module" src="js/chat.js"></script>
     <script type="module" src="js/blog.js"></script>
+    <script type="module" src="js/sidebar.js"></script>
 
 </body>
 
