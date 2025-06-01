@@ -2,6 +2,7 @@
 title: "nekorosis' birth certificate"
 date: "2025-03-01T00:00:00Z"
 tags: ["life", "death"]
+image: birth.png
 ---
 
 # <span style="color:#ff0091">birth certificate</span>

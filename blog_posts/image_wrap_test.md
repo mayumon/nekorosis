@@ -2,6 +2,7 @@
 title: "wrapping images like gifts with text..."
 date: "2025-02-13T00:00:00Z"
 tags: ["test"]
+image: birth.png
 ---
 
 <img src="https://resize.cdn.otakumode.com/full/u/2568f695d1194d3da9b298c8288516f0.jpg" alt="Example Image" class="blog-img" style="float: right; margin: 0 0 1em 1em;">

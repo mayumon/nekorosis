@@ -2,6 +2,7 @@
 title: "i love .jpgs"
 date: "2025-01-01T00:00:00Z"
 tags: ["test"]
+image: birth.png
 ---
 
 |                                                                              |       |                                                                                                                     |

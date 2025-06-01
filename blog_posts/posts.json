@@ -7,7 +7,8 @@
       "tags": [
         "life",
         "death"
-      ]
+      ],
+      "image": "birth.png"
     },
     {
       "filename": "image_wrap_test.md",
@@ -15,7 +16,8 @@
       "date": "2025-02-13T00:00:00Z",
       "tags": [
         "test"
-      ]
+      ],
+      "image": "birth.png"
     },
     {
       "filename": "example_post.md",
@@ -24,7 +26,8 @@
       "tags": [
         "test",
         "death"
-      ]
+      ],
+      "image": "birth.png"
     },
     {
       "filename": "i_love_pngs.md",
@@ -32,7 +35,8 @@
       "date": "2025-01-01T00:00:00Z",
       "tags": [
         "test"
-      ]
+      ],
+      "image": "birth.png"
     }
   ]
 }

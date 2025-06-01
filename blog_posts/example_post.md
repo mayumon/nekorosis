@@ -2,6 +2,7 @@
 title: "markdown test"
 date: "2025-02-01T00:00:00Z"
 tags: ["test", "death"]
+image: birth.png
 ---
 
 # too slow

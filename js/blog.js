@@ -36,6 +36,15 @@ function renderPostList(posts, filterTag = "all"){
         const li = document.createElement("li");
         const link = document.createElement("a");
 
+        // show floppy disk thumbnail
+        if (post.image){
+            const img = document.createElement("img");
+            img.src = `assets/images/posts/${post.image}`;
+            img.alt = post.title || post.filename.replace(".md", "");
+            img.classList.add("post-thumb");
+            li.appendChild(img);
+        }
+
         // format post-specific url
         const postHash = post.filename
             .replace(".md", "");
