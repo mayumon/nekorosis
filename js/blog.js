@@ -13,7 +13,11 @@ const baseUrl = preview_mode
     : 'https://raw.githubusercontent.com/mayumon/nekorosis/main/blog_posts/';
 
 const postList = document.getElementById("post-list");
+const postListContainer    = document.getElementById("post-list-container");
+const rightColumn          = document.getElementById("right-column");
+const postDisplayContainer = document.getElementById("post-display-container");
 const postContent = document.getElementById("post-content");
+const returnBtn = document.getElementById("return-btn");
 
 function loadPost(post){
     fetch(`${baseUrl}${post}`)
@@ -42,7 +46,7 @@ function renderPostList(posts, filterTag = "all"){
             .replace(".md", "");
         link.href = "#" + postHash;
 
-        link.onclick = () => loadPost(post.filename);
+        link.onclick = () => {window.location.hash = postHash;};
 
         // show floppy disk thumbnail
         if (post.image){
@@ -64,6 +68,49 @@ function renderPostList(posts, filterTag = "all"){
 
         postList.appendChild(li);
     })
+}
+
+// toggle grid vs compact view
+
+function updateLayout() {
+
+    // grab the current hash
+    const hash = window.location.hash.slice(1);
+
+    const laceContainer = postDisplayContainer.querySelector(".lace-container");
+    const chatContainer = postDisplayContainer.querySelector("#chat-container");
+
+    if (!hash) {
+        // no post selected --> grid mode
+
+        rightColumn.style.display = "none";
+        laceContainer.style.display = "none";
+        chatContainer.style.display = "none";
+
+        if (postList.parentNode !== postDisplayContainer) {
+            postDisplayContainer.appendChild(postList);
+        }
+
+        postList.classList.add("grid");
+
+        returnBtn.classList.remove("visible");
+
+    } else {
+        // post is selected --> compact mode
+        rightColumn.style.display = "";
+
+        if (postList.parentNode !== postListContainer) {
+            postListContainer.appendChild(postList);
+        }
+
+        postList.classList.remove("grid");
+        laceContainer.style.display = "";
+        chatContainer.style.display = "";
+
+        loadPost(hash + ".md");
+
+        returnBtn.classList.add("visible");
+    }
 }
 
 
@@ -133,6 +180,7 @@ fetch(`${baseUrl}posts.json`)
         // default to all
         allTag.classList.add("active");
         renderPostList(posts,"all");
+        updateLayout();
 
     })
     .catch(error => console.error("failed to fetch posts:", error));
@@ -145,7 +193,12 @@ window.addEventListener('hashchange', () => {
         const postFile = hash + '.md';
         loadPost(postFile);
     }
+    updateLayout();
 })
+
+returnBtn.addEventListener("click", () => {
+    window.location.hash = "";
+});
 
 
 

@@ -86,6 +86,52 @@ body {
     color: black;
 }
 
+#return-btn {
+    display: none;
+    width: 80%;
+    max-width: 300px;         /* cap the width?? */
+    margin: 16px auto;
+    padding: 8px 0;
+    background-color: #d590b7;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#return-btn.visible {
+    display: block;
+}
+
+/* grid view */
+
+#post-list.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 16px;
+    padding: 0;
+}
+
+#post-list.grid .post-item {
+    margin-top: 0;
+    transform: none;
+    z-index: auto;
+}
+
+#post-list.grid .post-title {
+    position: static;
+    transform: none;
+    opacity: 1;
+    margin-top: 8px;
+    background: none;
+    color: #fff;
+}
+
+#post-list.grid .post-thumb {
+    width: 100%;
+    height: auto;
+}
 
 /* ================================ */
 /* comments */
@@ -184,7 +230,6 @@ body {
 }
 
 /* corners */
-
 .lace.corner {
     width: 15px;
     height: 15px;
@@ -196,7 +241,6 @@ body {
 .lace.bottom-left  { bottom: 0; left:    0; transform: rotate(270deg); }
 
 /* top & bottom edges */
-
 .lace.side.top,
 .lace.side.bottom {
     left: 15px;
@@ -209,7 +253,6 @@ body {
 .lace.side.bottom { bottom: 0; transform: rotate(180deg); }
 
 /* left + right edges  */
-
 .lace.side.left,
 .lace.side.right {
     top:    15px;
