@@ -34,7 +34,15 @@ function renderPostList(posts, filterTag = "all"){
 
     filteredPosts.forEach(post => {
         const li = document.createElement("li");
+        li.classList.add("post-item");
         const link = document.createElement("a");
+
+        // format post-specific url
+        const postHash = post.filename
+            .replace(".md", "");
+        link.href = "#" + postHash;
+
+        link.onclick = () => loadPost(post.filename);
 
         // show floppy disk thumbnail
         if (post.image){
@@ -42,21 +50,18 @@ function renderPostList(posts, filterTag = "all"){
             img.src = `assets/images/posts/${post.image}`;
             img.alt = post.title || post.filename.replace(".md", "");
             img.classList.add("post-thumb");
-            li.appendChild(img);
+            link.appendChild(img);
         }
 
-        // format post-specific url
-        const postHash = post.filename
-            .replace(".md", "");
-        link.href = "#" + postHash;
-
-        // format post title (currently filename)
-        link.textContent = post.title ||
-            post.filename.replace(".md", "").replace(/_/g, " ");
-
-        link.onclick = () => loadPost(post.filename)
-
         li.appendChild(link);
+
+        // create hover title overlay
+        const titleDiv = document.createElement("div");
+        titleDiv.classList.add("post-title");
+        titleDiv.textContent = post.title ||
+            post.filename.replace(".md", "").replace(/_/g, " ");
+        li.appendChild(titleDiv);
+
         postList.appendChild(li);
     })
 }
