@@ -7,7 +7,7 @@ async function loadSidebar() {
         const resp = await fetch('sidebar.html');
         if (!resp.ok) throw new Error(resp.statusText);
         placeholder.innerHTML = await resp.text();
-        initSidebarVisuals();  // your existing overlay code (hover + active)
+        initSidebarVisuals();
     } catch(err) {
         console.error('Couldn’t load sidebar:', err);
     }

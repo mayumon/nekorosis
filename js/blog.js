@@ -18,8 +18,13 @@ const rightColumn          = document.getElementById("right-column");
 const postDisplayContainer = document.getElementById("post-display-container");
 const postContent = document.getElementById("post-content");
 const returnBtn = document.getElementById("return-btn");
+let tagFilterContainer = document.getElementById("tag-filter");
+const tagFilterParent    = tagFilterContainer.parentNode;
 
 function loadPost(post){
+
+    postContent.innerHTML = "";
+
     fetch(`${baseUrl}${post}`)
         .then(response => response.text())
         .then(markdown => {
@@ -77,15 +82,17 @@ function updateLayout() {
     // grab the current hash
     const hash = window.location.hash.slice(1);
 
-    const laceContainer = postDisplayContainer.querySelector(".lace-container");
-    const chatContainer = postDisplayContainer.querySelector("#chat-container");
-
     if (!hash) {
         // no post selected --> grid mode
 
         rightColumn.style.display = "none";
-        laceContainer.style.display = "none";
-        chatContainer.style.display = "none";
+
+        if (tagFilterContainer.parentNode !== postDisplayContainer) {
+            postDisplayContainer.insertBefore(
+                tagFilterContainer,
+                postDisplayContainer.firstChild
+            );
+        }
 
         if (postList.parentNode !== postDisplayContainer) {
             postDisplayContainer.appendChild(postList);
@@ -93,23 +100,39 @@ function updateLayout() {
 
         postList.classList.add("grid");
 
+        postDisplayContainer.classList.remove("detail");
         returnBtn.classList.remove("visible");
+
+        document.querySelectorAll("#post-list .post-thumb").forEach(img => {
+            img.style.transform = "";
+        });
 
     } else {
         // post is selected --> compact mode
         rightColumn.style.display = "";
+
+        if (tagFilterContainer.parentNode !== tagFilterParent) {
+            tagFilterParent.insertBefore(
+                tagFilterContainer,
+                tagFilterParent.firstChild
+            );
+        }
 
         if (postList.parentNode !== postListContainer) {
             postListContainer.appendChild(postList);
         }
 
         postList.classList.remove("grid");
-        laceContainer.style.display = "";
-        chatContainer.style.display = "";
+        postDisplayContainer.classList.add("detail");
+        returnBtn.classList.add("visible");
+
+        document.querySelectorAll("#post-list .post-thumb").forEach(img => {
+
+            const randomAngle = (Math.random() * 20) - 10; // angle adjust
+            img.style.transform = `rotate(${randomAngle}deg) scale(0.8)`; // scale adjust
+        });
 
         loadPost(hash + ".md");
-
-        returnBtn.classList.add("visible");
     }
 }
 
@@ -164,8 +187,8 @@ fetch(`${baseUrl}posts.json`)
             tagFilterDiv.appendChild(tagElem);
         });
 
-        const tagFilterContainer = document.getElementById("tag-filter");
-        tagFilterContainer.parentNode.replaceChild(tagFilterDiv, tagFilterContainer);
+        tagFilterParent.replaceChild(tagFilterDiv, tagFilterContainer);
+        tagFilterContainer = tagFilterDiv;
 
         // click listeners for tags
         const tagElements = tagFilterDiv.querySelectorAll(".tag");
@@ -174,6 +197,7 @@ fetch(`${baseUrl}posts.json`)
                 tagElements.forEach(el => el.classList.remove("active"));
                 elem.classList.add("active")
                 renderPostList(posts, elem.dataset.tag);
+                updateLayout();
             });
         });
 
