@@ -70,7 +70,7 @@ body {
     bottom: 8px;         /* distance from bottom of thumbnail */
     left: 50%;
     transform: translateX(-50%);
-    padding: 4px 8px;
+    padding: 4px 0;
     background: rgba(0, 0, 0, 0.7);
     color: #fff;
     font-size: 14px;
@@ -135,20 +135,38 @@ body {
     margin-top: 0;
     transform: none;
     z-index: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
 }
 
 #post-list.grid .post-title {
     position: static;
     transform: none;
     opacity: 1;
-    margin-top: 8px;
     background: none;
     color: #fff;
+    white-space: normal;
+    word-break: break-word;
+    font-size: 14px;
+    text-align: left;
 }
 
 #post-list.grid .post-thumb {
     width: 100%;
     height: auto;
+}
+
+#post-list.grid .post-date {
+    display: block;
+    font-size: 12px;
+    color: gray;
+    margin-bottom: 8px;
+    text-align: left;
+}
+
+#post-list:not(.grid) .post-date {
+    display: none;
 }
 
 /* ================================ */
@@ -157,7 +175,7 @@ body {
 
 #chat-container{
     padding: 0 30px 30px 30px;
-    border: 1px solid #d590b7;
+    /*border: 1px solid #d590b7*/;
 }
 
 #chat-messages {
@@ -294,7 +312,7 @@ body {
 #sidebar {
     width: 266px;
     flex: none;
-    margin: 0px 20px;
+    margin: 0 20px;
 }
 
 .sidebar-img-wrapper {

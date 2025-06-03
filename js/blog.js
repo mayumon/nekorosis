@@ -71,6 +71,18 @@ function renderPostList(posts, filterTag = "all"){
             post.filename.replace(".md", "").replace(/_/g, " ");
         li.appendChild(titleDiv);
 
+        // create date
+        if (post.date) {
+            const dateObj = new Date(post.date);
+            const dd = String(dateObj.getUTCDate()).padStart(2, '0');
+            const mm = String(dateObj.getUTCMonth() + 1).padStart(2, '0');
+            const yyyy = dateObj.getUTCFullYear();
+            const dateDiv = document.createElement("div");
+            dateDiv.classList.add("post-date");
+            dateDiv.textContent = `${dd}-${mm}-${yyyy}`;
+            li.appendChild(dateDiv);
+        }
+
         postList.appendChild(li);
     })
 }
