@@ -3,7 +3,7 @@
 // firebase setup
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
 import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
-import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyBEsyRw_-yN0TuRdWMQ_oJIQr2IBwcQhis",
@@ -25,7 +25,7 @@ let currentUsername = localStorage.getItem("chatUsername") || "anon";
 
 let currentUsernameColour =
     localStorage.getItem("chatColour") ||
-    ["#ff0091", "#c000ff", "#4a00ff", "#3fff00"][
+    ["#d590b7", "#d5bc90", "#d5d090", "#90d5ae", "#90d5d1", "#9095d5", "#ae90d5"][
         Math.floor(Math.random() * 4)
         ];
 
@@ -40,11 +40,19 @@ async function sendMessage(messageText) {
         return;
     }
 
+    const uid = auth.currentUser?.uid;
+
+    if (!uid) {
+        console.error("Cannot send: user is not authenticated");
+        return;
+    }
+
     try {
         await addDoc(currentChatCollectionRef, {
             username: currentUsername,
             colour: currentUsernameColour,
             message: messageText,
+            userId: uid,
             createdAt: serverTimestamp()
         });
 
@@ -159,11 +167,12 @@ function initChatListener() {
             return;
         }
 
-        // update the chat UI
+        // update the chat ui
         chatMessages.innerHTML = ""; // clear previous messages
 
-        snapshot.forEach((doc) => {
-            const data = doc.data();
+        snapshot.forEach((docSnapshot) => {
+            const data = docSnapshot.data();
+            const messageId = docSnapshot.id;
             const msgDiv = document.createElement("div");
 
             const usernameElem = document.createElement("strong");
@@ -174,6 +183,21 @@ function initChatListener() {
             msgDiv.appendChild(usernameElem);
 
             msgDiv.appendChild(document.createTextNode(" " + data.message));
+
+            // make message deletable if it belongs to the user
+            if (data.userId === auth.currentUser.uid) {
+                msgDiv.classList.add("deletable");
+                msgDiv.addEventListener("click", () => {
+
+                    const ok = confirm("delete this message?");
+                    if (!ok) return;
+
+                    const docRef = doc(db, "posts", postId, "chat", messageId);
+                    deleteDoc(docRef).catch((err) =>
+                        console.error("couldn't delete message:", err)
+                    );
+                });
+            }
 
             chatMessages.appendChild(msgDiv);
         });

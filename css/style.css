@@ -157,6 +157,10 @@ body {
     align-items: flex-start;
 }
 
+#post-list.grid .post-item:hover {
+    transform: translateY(-10px);
+}
+
 #post-list.grid .post-title {
     position: static;
     width: 100%;
@@ -231,11 +235,15 @@ body {
     min-width: 0;
     overflow-y: scroll;
 
-
     /* wrap content */
     word-wrap: break-word;
     overflow-wrap: break-word;
     white-space: pre-wrap;
+}
+
+#chat-messages .deletable:hover {
+    color: red;
+    cursor: pointer;
 }
 
 #chat-controls {

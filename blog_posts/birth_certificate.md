@@ -48,35 +48,43 @@ nekorosis/n3korosis began development in february 20th, 2025 - though it has alw
   - added url change according to post
   - added simple chat/comment area
     - limited messages to 280 characters max
-    - added tiny profile view
+    - added tiny profile view - changed to inline
       - added username customization (20 characters max)
-      - added username colour customization (4 colour options)
+      - added username colour customization (7 colour options)
     - added google sign-in
       - added saving username and colour combination to local storage
+    - added adaptive text box for input
+    - added ascii animation
+    - added message deletion on hover + click
   - added return button
   
 
 ## <span style="color:#ff0091">dreams</span>
 
 - chat fixes 
-  - add chat msg deletion
-  - add msg censorship 
   - ensure chat messages are "clean" no script running
-  - change chat colours
-  - ensure unique usernames (possible???)
-  - change colour picking shape?
-  - add creatures?
-- bug catcher program
-- change return button?
+  - (idea) ensure unique usernames (possible???)
+  - (idea) change colour picking shape?
+  - (idea) add creatures?
+  - minimum username length?
+- improve return button
 - post bg and lace personalization (add variants...)
-- improve comments visuals (ascii and colour refresh)
-- drawing/sticker guestbook
+
+- (big) drawing/sticker guestbook
   - scene behind
   - drag and drop
   - highlighting
   - customizing
 
+- clean up birth certificate
+  - floppy
+  - beg for feedback
+
+- (final touches) bug catcher club badge
+
 - (postponed) "newsletter" notif system
-- (postponed) search bar
 - (postponed) blingees... blinkies.
+- (postponed, idea) add msg bleeppp
+- (postponed,idea) search bar
+
   
