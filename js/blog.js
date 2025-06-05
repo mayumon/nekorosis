@@ -87,7 +87,7 @@ function renderPostList(posts, filterTag = "all"){
     })
 }
 
-// toggle grid vs compact view
+// toggle grid vs detail view
 
 function updateLayout() {
 
@@ -120,7 +120,7 @@ function updateLayout() {
         });
 
     } else {
-        // post is selected --> compact mode
+        // post is selected --> detail mode
         rightColumn.style.display = "";
 
         if (tagFilterContainer.parentNode !== tagFilterParent) {

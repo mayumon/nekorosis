@@ -2,7 +2,7 @@
 
 // firebase setup
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
-import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
 import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -26,25 +26,11 @@ let currentUsername = "anon";
 const allowedColours = ["#ff0091", "#c000ff", "#4a00ff", "#3fff00"]
 let currentUsernameColour = allowedColours[Math.floor(Math.random() * allowedColours.length)];
 
-// sets up the chat for the current post
-function initChat() {
+const googleProvider = new GoogleAuthProvider();
+googleProvider.setCustomParameters({prompt: "select_account"})
 
-    // determine post id from the URL hash, default is "nyan"
-    const postId = window.location.hash.slice(1) || "nyan";
-    console.log("Initializing chat for post:", postId);
 
-    // if a previous listener exists, unsubscribe from it
-    if (unsubscribeChat) {
-        unsubscribeChat();
-        unsubscribeChat = null;
-    }
-
-    currentChatCollectionRef = collection(db, "posts", postId, "chat");
-    subscribeToChat();
-}
-
-// subscribes to the chat messages for the current post,
-
+// subscribes to the chat messages for the current post
 function subscribeToChat() {
 
     // order chat messages by creation time
@@ -135,7 +121,6 @@ function setupSendListeners() {
             }
         });
     }
-
     else {
         console.error("chat input or send button not found");
     }
@@ -190,21 +175,137 @@ function setupProfilePopup(){
     })
 }
 
-// call setup functions
-setupSendListeners();
-setupProfilePopup();
+// sets up the chat for the current post
+function initChatListener() {
 
-// reinitialize chat on hashchange
-window.addEventListener("hashchange", () => {
-    initChat();
+    // determine post id from the URL hash, default is "nyan"
+    const postId = window.location.hash.slice(1) || "nyan";
+
+    // if a previous listener exists, unsubscribe from it
+    if (unsubscribeChat) {
+        unsubscribeChat();
+        unsubscribeChat = null;
+    }
+    currentChatCollectionRef = collection(db, "posts", postId, "chat");
+    const q = query(currentChatCollectionRef, orderBy("createdAt", "asc"));
+
+    unsubscribeChat = onSnapshot(q, (snapshot) => {
+        const chatMessages = document.getElementById("chat-messages");
+
+        if (!chatMessages) {
+            console.error("chat messages element not found");
+            return;
+        }
+
+        // update the chat UI
+        chatMessages.innerHTML = ""; // clear previous messages
+
+        snapshot.forEach((doc) => {
+            const data = doc.data();
+            const msgDiv = document.createElement("div");
+
+            const usernameElem = document.createElement("strong");
+
+            usernameElem.textContent = data.username + ":";
+            usernameElem.style.color = data.colour || "#fff";
+
+            msgDiv.appendChild(usernameElem);
+
+            msgDiv.appendChild(document.createTextNode(" " + data.message));
+
+            chatMessages.appendChild(msgDiv);
+        });
+
+        // auto-scroll to bottom of the chat container
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    });
+}
+
+function setupAuthStateListener() {
+    const loginPrompt = document.getElementById("login-prompt");
+    const googleLoginBtn = document.getElementById("google-login-btn");
+    const chatControls = document.getElementById("chat-controls");
+    const chatInput = document.getElementById("chat-input");
+    const sendBtn = document.getElementById("send-btn");
+
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            loginPrompt.style.display = "none";
+            chatControls.style.display = "flex";
+            chatInput.disabled = false;
+            sendBtn.disabled = false;
+        } else {
+            loginPrompt.style.display = "flex";
+            chatControls.style.display = "none";
+            chatInput.disabled = true;
+            sendBtn.disabled = true;
+        }
+    });
+
+    googleLoginBtn.addEventListener("click", () => {
+        signInWithPopup(auth, googleProvider).catch((err) => {
+            console.error("Google sign-in error:", err);
+        });
+    });
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+
+    initChatListener();
+    setupSendListeners();
+    setupProfilePopup();
+    setupAuthStateListener();
+    playChatInfoAnim1();
 });
 
-// sign in anonymously and initialize chat
-signInAnonymously(auth)
-    .then(() => {
-        console.log("signed in anonymously");
-        initChat();
-    })
-    .catch((error) => {
-        console.error("anonymous sign-in error:", error);
-    });
+// ================================
+// ascii animation
+// ================================
+
+async function loadAsciiFramesFromTxt(path, delimiter = '***FRAME***') {
+    const resp = await fetch(path);
+    if (!resp.ok) throw new Error(`Failed to fetch ${path}`);
+    const text = await resp.text();
+
+    return text
+        .split(delimiter)
+        .map(frame => frame.trim())
+        .filter(frame => frame.length > 0);
+}
+
+function startAsciiLoop(containerEl, frames, intervalMs) {
+
+    if (containerEl._asciiInterval) {
+        clearInterval(containerEl._asciiInterval);
+    }
+    let idx = 0;
+
+    containerEl.textContent = frames[idx];
+
+    containerEl._asciiInterval = setInterval(() => {
+        idx = (idx + 1) % frames.length;
+        containerEl.textContent = frames[idx];
+    }, intervalMs);
+}
+
+async function playChatInfoAnim1() {
+    const chatInfo = document.getElementById('chat-info');
+    if (!chatInfo) return;
+    try {
+        const frames = await loadAsciiFramesFromTxt('assets/ascii/anim1.txt');
+
+        startAsciiLoop(chatInfo, frames, 200); // adjustable framerate
+    } catch (err) {
+        console.error('Could not load ASCII animation:', err);
+    }
+}
+
+function stopChatInfoAnimation() {
+    const chatInfo = document.getElementById('chat-info');
+    if (chatInfo && chatInfo._asciiInterval) {
+        clearInterval(chatInfo._asciiInterval);
+        delete chatInfo._asciiInterval;
+        chatInfo.textContent = '';
+    }
+}
+

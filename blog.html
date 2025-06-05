@@ -43,8 +43,20 @@
 
             <!--chat area-->
             <div id="chat-container">
-                <h2 id="chat-header">comments</h2>
+
+
+                <div id="chat-header-container">
+                    <p id="chat-info">leave thinks HERE!!!!!!!</p>
+                </div>
+
+
+                <div id="chat-main">
                 <div id="chat-messages"></div>
+
+                <!-- login button -->
+                <div id="login-prompt" style="display: none; margin-top: 8px;">
+                    <button id="google-login-btn">Log in with Google to comment</button>
+                </div>
 
                 <!-- lower bar -->
                 <div id="chat-controls">
@@ -52,6 +64,7 @@
                     <input id="chat-input" type="text" placeholder="type your message..." maxlength="280">
                     <button id="send-btn">Send</button>
                 </div>
+                    </div>
 
                 <!-- profile popup -->
                 <div id="profile-popup">

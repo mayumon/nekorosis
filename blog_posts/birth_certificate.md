@@ -16,6 +16,7 @@ nekorosis/n3korosis began development in february 20th, 2025 - though it has alw
 - added index skeleton (`index.html`)
 - added font
 - added piano sidebar with animations
+  - added clickable logo with animation
 
 ### blog area
 - added blog **skeleton** (`blog.html`, `blog.js`, `style.css`)
@@ -35,7 +36,11 @@ nekorosis/n3korosis began development in february 20th, 2025 - though it has alw
     - automate preview_mode disabling upon commit (through git hooks calling `setup_pre_commit.js`)
     - added `setup_preview.js`, a script to quickly switch to preview mode
 - added tag filtering for posts
-- added floppy disk thumbnail post views (compact and grid)
+- added floppy disk thumbnail post views 
+  - added compact view mode
+    - added animation
+  - added grid view mode
+    - added date display
 
 - **individual post features**
   - added markdown support
@@ -46,20 +51,24 @@ nekorosis/n3korosis began development in february 20th, 2025 - though it has alw
     - added tiny profile view
       - added username customization (20 characters max)
       - added username colour customization (4 colour options)
+    - added google sign-in
+  - added return button
   
 
 ## <span style="color:#ff0091">dreams</span>
 
-- search bar
-- ensure chat messages are "clean" no script running
+- chat fixes 
+  - add chat msg deletion
+  - add msg censorship 
+  - ensure chat messages are "clean" no script running
+  - change profile customization (modify display, keep name and colour for users)
 - bug catcher program
-- add email + pw auth?
-- blingees... blinkies.
-- add the logo
-- add return button for individual posts
+- change return button?
 - post bg and lace personalization (add variants...)
 - improve comments visuals (ascii and colour refresh)
-- add sign up for messaging
 - drawing guest book thing?
-- "newsletter" notif system
+
+- (postponed) "newsletter" notif system
+- (postponed) search bar
+- (postponed) blingees... blinkies.
   
