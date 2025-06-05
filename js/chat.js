@@ -32,48 +32,6 @@ let currentUsernameColour =
 const googleProvider = new GoogleAuthProvider();
 googleProvider.setCustomParameters({prompt: "select_account"})
 
-
-// subscribes to the chat messages for the current post
-function subscribeToChat() {
-
-    // order chat messages by creation time
-    const q = query(currentChatCollectionRef, orderBy("createdAt", "asc"));
-
-    unsubscribeChat = onSnapshot(q, (snapshot) => {
-
-        console.log("received snapshot with", snapshot.size, "documents");
-
-        const chatMessages = document.getElementById("chat-messages");
-
-        if (!chatMessages) {
-            console.error("chat messages element not found");
-            return;
-        }
-
-        // update the chat UI
-        chatMessages.innerHTML = ""; // clear previous messages
-
-        snapshot.forEach((doc) => {
-            const data = doc.data();
-            const msgDiv = document.createElement("div");
-
-            const usernameElem = document.createElement("strong");
-
-            usernameElem.textContent = data.username + ":";
-            usernameElem.style.color = data.colour || "#000";
-
-            msgDiv.appendChild(usernameElem);
-
-            msgDiv.appendChild(document.createTextNode(" " + data.message));
-
-            chatMessages.appendChild(msgDiv);
-        });
-
-        // auto-scroll to bottom of the chat container
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-    });
-}
-
 // send a chat message using the current chat collection reference
 async function sendMessage(messageText) {
 
@@ -104,20 +62,33 @@ function setupSendListeners() {
     const chatInput = document.getElementById("chat-input");
     if (sendBtn && chatInput) {
 
+        // auto-growing text box
+        chatInput.style.overflowY = "hidden";
+
+        chatInput.addEventListener("input", () => {
+            chatInput.style.height = "";
+            const needed = chatInput.scrollHeight;
+
+            const current = chatInput.clientHeight;
+
+            if (needed > current) {
+                chatInput.style.height = needed + "px";
+            }
+        });
+
         // clicking send
         sendBtn.addEventListener("click", () => {
-
             const messageText = chatInput.value.trim();
 
             if (messageText) {
                 sendMessage(messageText);
                 chatInput.value = "";
+                chatInput.style.height = "";
             }
         });
 
         // pressing enter
         chatInput.addEventListener("keydown", (e) => {
-
             if (e.key === "Enter") {
                 e.preventDefault();
                 sendBtn.click();
@@ -129,57 +100,41 @@ function setupSendListeners() {
     }
 }
 
-function setupProfilePopup(){
-    const profileBtn = document.getElementById("profile-btn");
-    const profilePopup = document.getElementById("profile-popup");
+function setupInlineUserInfo() {
+    const userInfoDiv = document.getElementById("chat-user-info");
     const usernameInput = document.getElementById("username-input");
-    const profileOk = document.getElementById("profile-ok");
-    const profileCancel = document.getElementById("profile-cancel");
     const colourOptionContainer = document.getElementById("colour-options");
 
-    if (!profileBtn || !profilePopup || !usernameInput || !profileOk) {
-        console.error("profile popup elements not found");
-        return;
-    }
+    const colourOptionElements = document.querySelectorAll("#colour-options .colour-option");
+    colourOptionElements.forEach(el => {
+        el.style.backgroundColor = el.dataset.colour;
+    });
 
-    let tempUsernameColour = currentUsernameColour;
+    usernameInput.value = currentUsername;
 
-    profileBtn.addEventListener("click", () => {
-        profilePopup.style.display = "block";
-        usernameInput.value = currentUsername;
+    colourOptionElements.forEach(el => {
+        const c = el.dataset.colour;
+        if (c === currentUsernameColour) el.classList.add("selected");
+    });
 
-        tempUsernameColour = currentUsernameColour;
-        colourOptionElements.forEach(option => {
-            option.style.border = "none";
-            if(option.getAttribute("data-colour") === currentUsernameColour){
-                option.style.border = "2px solid #000";
-            }
-        })
-    })
+    // save username on change
+    usernameInput.addEventListener("change", () => {
+        const newUsername = usernameInput.value.trim() || "anon";
+        currentUsername = newUsername;
+        localStorage.setItem("chatUsername", currentUsername);
+    });
 
-    const colourOptionElements = colourOptionContainer.querySelectorAll(".colour-option");
+    // save username colour on change
     colourOptionElements.forEach(option => {
         option.addEventListener("click", () => {
-            colourOptionElements.forEach(opt => opt.style.border = "none"); // test diff settings for these later
-            option.style.border = "2px solid #000";
-            tempUsernameColour = option.getAttribute("data-colour");
-        })
-    })
 
-    profileOk.addEventListener("click", () => {
-        let newUsername = usernameInput.value.trim();
-        currentUsername = newUsername !== "" ? newUsername : "anon";
-        currentUsernameColour = tempUsernameColour;
+            colourOptionElements.forEach(opt => opt.classList.remove("selected"));
+            option.classList.add("selected");
 
-        localStorage.setItem("chatUsername", currentUsername);
-        localStorage.setItem("chatColour", currentUsernameColour);
-
-        profilePopup.style.display = "none";
-    })
-
-    profileCancel.addEventListener("click", () => {
-        profilePopup.style.display = "none";
-    })
+            currentUsernameColour = option.dataset.colour;
+            localStorage.setItem("chatColour", currentUsernameColour);
+        });
+    });
 }
 
 // sets up the chat for the current post
@@ -259,7 +214,7 @@ function setupAuthStateListener() {
 window.addEventListener("DOMContentLoaded", () => {
     initChatListener();
     setupSendListeners();
-    setupProfilePopup();
+    setupInlineUserInfo();
     setupAuthStateListener();
     playChatInfoAnim1();
 });

@@ -52,6 +52,7 @@ nekorosis/n3korosis began development in february 20th, 2025 - though it has alw
       - added username customization (20 characters max)
       - added username colour customization (4 colour options)
     - added google sign-in
+      - added saving username and colour combination to local storage
   - added return button
   
 
@@ -61,7 +62,10 @@ nekorosis/n3korosis began development in february 20th, 2025 - though it has alw
   - add chat msg deletion
   - add msg censorship 
   - ensure chat messages are "clean" no script running
-  - change profile customization (modify display, keep name and colour for users)
+  - change chat colours
+  - ensure unique usernames (possible???)
+  - change colour picking shape?
+  - add creatures?
 - bug catcher program
 - change return button?
 - post bg and lace personalization (add variants...)

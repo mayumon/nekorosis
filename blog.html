@@ -51,43 +51,42 @@
 
 
                 <div id="chat-main">
-                <div id="chat-messages"></div>
 
-                <!-- login button -->
-                <div id="login-prompt" style="display: none; margin-top: 8px;">
-                    <button id="google-login-btn">Log in with Google to comment</button>
-                </div>
+                    <div id="chat-messages"></div>
 
-                <!-- lower bar -->
-                <div id="chat-controls">
-                    <button id="profile-btn">P</button>
-                    <input id="chat-input" type="text" placeholder="type your message..." maxlength="280">
-                    <button id="send-btn">Send</button>
-                </div>
+                    <div id="chat-user-info">
+
+                        <label for="username-input">username:</label>
+                        <input id="username-input" type="text" placeholder="anon" maxlength="20">
+
+
+                        <label>colour:</label>
+                        <div id="colour-options">
+                            <div class="colour-option" data-colour="#ff0091"></div>
+                            <div class="colour-option" data-colour="#c000ff"></div>
+                            <div class="colour-option" data-colour="#4a00ff"></div>
+                            <div class="colour-option" data-colour="#3fff00"></div>
+                        </div>
+
                     </div>
+
+                    <!-- login button -->
+                    <div id="login-prompt" style="display: none; margin-top: 8px;">
+                        <button id="google-login-btn">Log in with Google to comment</button>
+                    </div>
+
+                    <!-- lower bar -->
+                    <div id="chat-controls">
+                        <textarea id="chat-input" type="text"
+                                  placeholder="type your message..."
+                                  maxlength="280" wrap="soft"
+                                  rows="2"></textarea>
+                        <button id="send-btn">send</button>
+                    </div>
+                </div>
 
                 <!-- profile popup -->
-                <div id="profile-popup">
 
-                    <label for="username-input">username:</label>
-                    <input id="username-input" type="text" placeholder="anon" maxlength="20">
-
-                    <br>
-
-                    <label>colour:</label>
-                    <div id="colour-options">
-                        <div class="colour-option" data-colour="#ff0091"></div>
-                        <div class="colour-option" data-colour="#c000ff"></div>
-                        <div class="colour-option" data-colour="#4a00ff"></div>
-                        <div class="colour-option" data-colour="#3fff00"></div>
-                    </div>
-
-                    <br>
-
-                    <button id="profile-ok">ok</button>
-                    <button id="profile-cancel">cancel</button>
-
-                </div>
             </div>
         </div>
 
