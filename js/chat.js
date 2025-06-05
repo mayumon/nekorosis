@@ -21,10 +21,13 @@ const db = getFirestore(app);
 let currentChatCollectionRef = null;
 let unsubscribeChat = null;
 
-let currentUsername = "anon";
+let currentUsername = localStorage.getItem("chatUsername") || "anon";
 
-const allowedColours = ["#ff0091", "#c000ff", "#4a00ff", "#3fff00"]
-let currentUsernameColour = allowedColours[Math.floor(Math.random() * allowedColours.length)];
+let currentUsernameColour =
+    localStorage.getItem("chatColour") ||
+    ["#ff0091", "#c000ff", "#4a00ff", "#3fff00"][
+        Math.floor(Math.random() * 4)
+        ];
 
 const googleProvider = new GoogleAuthProvider();
 googleProvider.setCustomParameters({prompt: "select_account"})
@@ -167,6 +170,10 @@ function setupProfilePopup(){
         let newUsername = usernameInput.value.trim();
         currentUsername = newUsername !== "" ? newUsername : "anon";
         currentUsernameColour = tempUsernameColour;
+
+        localStorage.setItem("chatUsername", currentUsername);
+        localStorage.setItem("chatColour", currentUsernameColour);
+
         profilePopup.style.display = "none";
     })
 
@@ -250,12 +257,15 @@ function setupAuthStateListener() {
 }
 
 window.addEventListener("DOMContentLoaded", () => {
-
     initChatListener();
     setupSendListeners();
     setupProfilePopup();
     setupAuthStateListener();
     playChatInfoAnim1();
+});
+
+window.addEventListener("hashchange", () => {
+    initChatListener();
 });
 
 // ================================
@@ -308,4 +318,5 @@ function stopChatInfoAnimation() {
         chatInfo.textContent = '';
     }
 }
+
 

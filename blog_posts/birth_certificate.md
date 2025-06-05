@@ -66,7 +66,11 @@ nekorosis/n3korosis began development in february 20th, 2025 - though it has alw
 - change return button?
 - post bg and lace personalization (add variants...)
 - improve comments visuals (ascii and colour refresh)
-- drawing guest book thing?
+- drawing/sticker guestbook
+  - scene behind
+  - drag and drop
+  - highlighting
+  - customizing
 
 - (postponed) "newsletter" notif system
 - (postponed) search bar
