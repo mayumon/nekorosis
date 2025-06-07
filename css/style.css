@@ -15,7 +15,7 @@ body {
     font-family: 'nds_bios', sans-serif;
     font-size: 14pt;
     background-color: black;
-    color: white;
+    color: #e7d9e1;
 }
 
 .blog-container{
@@ -44,6 +44,7 @@ body {
 #post-display-container.detail #chat-container{
     display: flex;
 }
+
 
 /* ================================ */
 /* posts display */
@@ -191,13 +192,14 @@ body {
     display: none;
 }
 
+
 /* ================================ */
 /* comments */
 /* ================================ */
 
 #chat-info {
     font-size: 9px;
-    color: white;
+    color: #e7d9e1;
     font-family: monospace;
     white-space: pre;
 }
@@ -331,7 +333,7 @@ body {
 
     display: inline-block;
     background-color: #d590b7;
-    color: white;
+    color: #e7d9e1;
     margin-right: 6px;
     padding: 3px 6px;
     border-radius: 2px;
@@ -341,6 +343,7 @@ body {
 #send-btn:hover {
     background-color: #7d4f69; /* TODO: CHANGE */
 }
+
 
 /* ================================ */
 /* tags */
@@ -363,6 +366,7 @@ body {
 #tag-filter .tag.active {
     background-color: #d590b7;
 }
+
 
 /* ================================ */
 /* lace border */
@@ -496,6 +500,7 @@ body {
     align-items: center;
 }
 
+
 /* ================================ */
 /* logo */
 /* ================================ */
@@ -518,4 +523,86 @@ body {
 
 .logo:active {
     transform: rotate(0deg);
+}
+
+
+/* ================================ */
+/* guestbook */
+/* ================================ */
+
+.guest-entry {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    transition: transform 0.1s ease, filter 0.1s ease;
+}
+.guest-entry:hover {
+    transform: scale(1.1);
+    filter: drop-shadow(0 0 4px red);
+}
+.guest-entry.deletable:hover {
+    filter: drop-shadow(0 0 6px crimson);
+}
+
+.guest-tooltip {
+    position: absolute;
+    background-color: #e7d9e1;
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    pointer-events: none;
+    white-space: nowrap;
+    z-index: 100;
+    opacity: 0;
+    transition: opacity 0.1s ease;
+}
+.guest-tooltip.visible {
+    opacity: 1;
+}
+
+/* hover bubble */
+
+.hover-tooltip {
+    position: absolute;
+    pointer-events: none;
+    background: #e7d9e1;
+    color: black;
+    padding: 6px 8px;
+    border-radius: 4px;
+    border: #71646b 4px solid;
+    font-size: 0.9rem;
+    line-height: 1.2;
+    z-index: 1000;
+    display: none;
+
+    max-width: 200px;
+    white-space: pre-wrap;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    box-sizing: border-box;
+    transform-origin: bottom center;
+}
+
+/* triangle above */
+.hover-tooltip::after {
+    content: "";
+    position: absolute;
+    bottom: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: #e7d9e1;
+}
+
+/* triangle underneath */
+.hover-tooltip::before {
+    content: "";
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 8px solid transparent;
+    border-top-color: #71646b;
+    z-index: -1;
 }

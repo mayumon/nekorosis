@@ -66,25 +66,41 @@ nekorosis/n3korosis began development in february 20th, 2025 - though it has alw
   - (idea) ensure unique usernames (possible???)
   - (idea) change colour picking shape?
   - (idea) add creatures?
-  - minimum username length?
+  - add user sheet for 
 - improve return button
 - post bg and lace personalization (add variants...)
 
 - (big) drawing/sticker guestbook
+  - fields:
+    - creature/thing pick
+    - name
+    - short message
+    - a song?
+    - the date
+    - visitor number
+  - laws: not too close to other's, i want the setup around it, one per person...
+    - TODO: IT SHOULD BE VISIBLE IF YOURE NOT SIGNED IN.
+-
+  - (DONE) chat bubble.. thing on hover.
   - scene behind
   - drag and drop
   - highlighting
-  - customizing
+  - customizing -- must add some sort of effort on users part so they feel represented...
+
+- fix home url
 
 - clean up birth certificate
   - floppy
   - beg for feedback
 
 - (final touches) bug catcher club badge
+- (final touches) drawing of me to introduce. ichirositas
+- (final touches) hosting...
+- (final touches, idea) hosting...
 
 - (postponed) "newsletter" notif system
 - (postponed) blingees... blinkies.
 - (postponed, idea) add msg bleeppp
 - (postponed,idea) search bar
 
-  
+- (future) colouring pages, theater, nico nico cmmts, maid cafe, asciier.
