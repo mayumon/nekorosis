@@ -82,8 +82,9 @@ nekorosis/n3korosis began development in february 20th, 2025 - though it has alw
     - TODO: IT SHOULD BE VISIBLE IF YOURE NOT SIGNED IN.
 -
   - (DONE) chat bubble.. thing on hover.
+  - add random icon at first
   - scene behind
-  - drag and drop
+  - (DONE) drag and drop
   - highlighting
   - customizing -- must add some sort of effort on users part so they feel represented...
 
@@ -103,4 +104,12 @@ nekorosis/n3korosis began development in february 20th, 2025 - though it has alw
 - (postponed, idea) add msg bleeppp
 - (postponed,idea) search bar
 
-- (future) colouring pages, theater, nico nico cmmts, maid cafe, asciier.
+- (future)
+  - colouring pages
+  - theater
+  - nico nico cmmts
+  - maid cafe
+  - asciier
+  - least commentable languages
+  - dvd bouncing...
+  - wii

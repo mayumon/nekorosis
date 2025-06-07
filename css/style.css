@@ -539,10 +539,10 @@ body {
 }
 .guest-entry:hover {
     transform: scale(1.1);
-    filter: drop-shadow(0 0 4px red);
+    filter: drop-shadow(0 0 4px white);
 }
 .guest-entry.deletable:hover {
-    filter: drop-shadow(0 0 6px crimson);
+    filter: drop-shadow(0 0 6px white);
 }
 
 .guest-tooltip {

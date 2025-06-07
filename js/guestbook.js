@@ -43,6 +43,8 @@ const textInput     = document.getElementById("guest-text");
 const iconsContainer= document.getElementById("guestbook-icons");
 const dropzone      = document.getElementById("guestbook-dropzone");
 
+let selectedIconId = null; // will be set on click
+
 // tooltip (unchanged)
 const tooltipDiv    = document.createElement("div");
 tooltipDiv.classList.add("guest-tooltip");
@@ -79,13 +81,38 @@ function setupAuthListener() {
     });
 }
 
+async function saveEntry(x, y, iconId) {
+    const path = ["posts", getCurrentPostId(), "guestbook"];
+    const docData = {
+        name:      nameInput.value.trim() || "anon",
+        message:   textInput.value.trim(),
+        userId:    auth.currentUser.uid,
+        x, y,
+        iconId,
+        createdAt: serverTimestamp()
+    };
+
+    if (currentEntryDocId) {
+        // update existing
+        await setDoc(doc(db, ...path, currentEntryDocId), docData, { merge: true });
+
+    } else {
+        // new
+        const ref = await addDoc(collection(db, ...path), docData);
+        currentEntryDocId = ref.id;
+    }
+
+    // clear your text field if you like
+    textInput.value = "";
+}
+
 // drag and drop logic
 function setupDragAndDrop() {
     // mark icons as draggable
     iconsContainer.querySelectorAll(".guestbook-icon").forEach((iconEl) => {
         iconEl.addEventListener("dragstart", (ev) => {
             // store icon name
-            ev.dataTransfer.setData("iconType", iconEl.dataset.icon);
+            ev.dataTransfer.setData("iconId", iconEl.dataset.icon);
             // store docid
             const docId = iconEl.dataset.docId || "";
             ev.dataTransfer.setData("docId", docId);
@@ -97,97 +124,21 @@ function setupDragAndDrop() {
         ev.preventDefault();
     });
 
-    dropzone.addEventListener("drop", async (ev) => {
+    dropzone.addEventListener("drop", async ev => {
         ev.preventDefault();
-
         const rect = dropzone.getBoundingClientRect();
-        const rawX = ev.clientX - rect.left;
-        const rawY = ev.clientY - rect.top;
-        const centeredX = rawX - 20; // TODO: adjust for new icon sizes
-        const centeredY = rawY - 20;
-
+        const x = ev.clientX - rect.left - 20;
+        const y = ev.clientY - rect.top  - 20;
         const user = auth.currentUser;
-        if (!user) {
-            console.error("Non‐authenticated drop attempt.");
-            return;
-        }
-        const uid = user.uid;
-        const postId = getCurrentPostId();
-        const guestbookColRef = collection(db, "posts", postId, "guestbook");
+        if (!user) return console.error("not signed in");
 
-        // dragged existing entry
-        const draggedDocId = ev.dataTransfer.getData("docId");
-        if (draggedDocId) {
-            try {
-                const docRef = doc(db, "posts", postId, "guestbook", draggedDocId);
-                // update coordinates
-                await setDoc(
-                    docRef,
-                    {
-                        x: centeredX,
-                        y: centeredY,
-                        createdAt: serverTimestamp()
-                    },
-                    { merge: true }
-                );
-            } catch (err) {
-                console.error("Error updating existing entry:", err);
-            }
-        } else {
-            // new drop or attempt at repeated drop
-            if (currentEntryDocId) {
-                // repeated drop - update coords/message/icon
-                try {
-                    const docRef = doc(db, "posts", postId, "guestbook", currentEntryDocId);
-                    await setDoc(
-                        docRef,
-                        {
-                            iconType: ev.dataTransfer.getData("iconType"),
-                            name:     nameInput.value.trim() || "anon",
-                            message:  textInput.value.trim(),
-                            userId:   uid,
-                            x:        centeredX,
-                            y:        centeredY,
-                            createdAt: serverTimestamp()
-                        },
-                        { merge: true }
-                    );
+        // try to get an iconId from the drag or from the picker
+        const draggedIcon = ev.dataTransfer.getData("iconId");
+        const iconId      = draggedIcon || selectedIconId;
+        if (!iconId)     return alert("Pick an icon first!");
 
-                    textInput.value = "";
-
-                } catch (err) {
-                    console.error("Error updating existing entry:", err);
-                }
-            } else {
-                // new drop
-                const iconType = ev.dataTransfer.getData("iconType");
-                if (!iconType) return;
-
-                const nameVal = nameInput.value.trim() || "anon";
-                const msgVal = textInput.value.trim();
-                if (!msgVal) {
-                    alert("Please write a short message before dropping your icon.");
-                    return;
-                }
-
-                try {
-                    const ref = await addDoc(guestbookColRef, {
-                        iconType,
-                        name:     nameVal,
-                        message:  msgVal,
-                        userId:   uid,
-                        x:        centeredX,
-                        y:        centeredY,
-                        createdAt: serverTimestamp()
-                    });
-                    currentEntryDocId = ref.id;
-                    textInput.value = "";
-                } catch (err) {
-                    console.error("Error creating guestbook entry:", err);
-                }
-            }
-        }
-    })
+        await saveEntry(x, y, iconId);
+    });
 }
 
 // render/delete listener
@@ -217,41 +168,19 @@ function initGuestbookListener() {
         }
 
         snapshot.forEach((docSnap) => {
-            const data = docSnap.data();
-            const docId = docSnap.id;
+                const data = docSnap.data();
+                const docId = docSnap.id;
 
-            // create a new <div> for each saved icon
-            const el = document.createElement("div");
-            el.classList.add("guest-entry");
-            el.dataset.docId = docId;
-            el.dataset.userId = data.userId || "";
+                const el = document.createElement('div');
+                el.classList.add('guest-entry');
+                el.style.position = 'absolute';
+                el.style.left = data.x + 'px';
+                el.style.top  = data.y + 'px';
 
-            el.style.width  = "40px";
-            el.style.height = "40px";
-            el.style.position = "absolute";
-            el.style.left = `${data.x}px`;
-            el.style.top  = `${data.y}px`;
-
-            // draw its shape & color
-            switch (data.iconType) {
-                case "star":
-                    el.style.background = "gold";
-                    el.style.clipPath =
-                        "polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)";
-                    break;
-                case "heart":
-                    el.style.background = "hotpink";
-                    el.style.clipPath =
-                        "polygon(50% 93%, 0% 46%, 12% 15%, 37% 15%, 50% 40%, 63% 15%, 88% 15%, 100% 46%)";
-                    break;
-                case "flower":
-                    el.style.background = "lavender";
-                    el.style.borderRadius = "50%";
-                    el.style.boxShadow = "inset 0 0 0 2px purple";
-                    break;
-                default:
-                    el.style.background = "#ccc";
-            }
+                const iconImg = document.createElement('img');
+                iconImg.src = `assets/icons/${data.iconId || 1}.gif`;
+                iconImg.style.cssText = 'width:30px;height:30px;pointer-events:none;';
+                el.appendChild(iconImg);
 
             // make it draggable iff it belongs to the user
             if (user && data.userId === user.uid) {
@@ -260,7 +189,7 @@ function initGuestbookListener() {
 
                 el.addEventListener("dragstart", (ev) => {
                     ev.dataTransfer.setData("docId", docId);
-                    ev.dataTransfer.setData("iconType", data.iconType);
+                    ev.dataTransfer.setData("iconId", data.iconId);
                 });
 
                 el.style.cursor = "grab";
@@ -335,7 +264,7 @@ function initGuestbookListener() {
 function showTooltip(x, y, text) {
     tooltipDiv.textContent = text;
     tooltipDiv.style.left = `${x + 8}px`;
-    tooltipDiv.style.top  = x`${y + 8}px`;
+    tooltipDiv.style.top  = `${y + 8}px`;
     tooltipDiv.classList.add("visible");
     setTimeout(() => {
         tooltipDiv.classList.remove("visible");
@@ -353,3 +282,53 @@ window.addEventListener("DOMContentLoaded", () => {
     setupDragAndDrop();
     initGuestbookListener();
 });
+
+
+// ================================
+// icon-picker
+// ================================
+
+const openPickerBtn   = document.getElementById('open-icon-picker');
+const closePickerBtn  = document.getElementById('close-icon-picker');
+const overlay         = document.getElementById('icon-picker-overlay');
+const grid            = document.getElementById('icon-grid');
+const preview         = document.getElementById('selected-icon-preview');
+
+// generate 144 icons
+for (let i = 1; i <= 144; i++) {
+    const img = document.createElement('img');
+    img.src = `assets/icons/${i}.gif`;
+    img.dataset.iconId = i;
+    img.style.cssText = 'width:32px;height:32px;cursor:pointer;';
+
+    img.addEventListener('click', () => {
+        selectedIconId = img.dataset.iconId;
+        preview.src = img.src;
+        preview.style.visibility = 'visible';
+        overlay.style.display = 'none';
+
+        // make preview draggable from now on:
+        preview.draggable = true;
+        preview.dataset.iconId = selectedIconId;
+        preview.addEventListener('dragstart', ev => {
+            ev.dataTransfer.setData('iconId', selectedIconId);
+        });
+    });
+
+    grid.appendChild(img);
+}
+
+// open
+openPickerBtn.addEventListener('click', () => {
+    overlay.style.display = 'flex';
+});
+
+// close
+closePickerBtn.addEventListener('click', () => {
+    overlay.style.display = 'none';
+});
+
+
+
+
+
