@@ -61,12 +61,15 @@ nekorosis/n3korosis began development in february 20th, 2025 - though it has alw
 
 ## <span style="color:#ff0091">dreams</span>
 
+
+
 - chat fixes 
-  - ensure chat messages are "clean" no script running
+  - (DONE) ensure chat messages are "clean" no script running
   - (idea) ensure unique usernames (possible???)
   - (idea) change colour picking shape?
-  - (idea) add creatures?
   - add user sheet in data?
+  - add replying
+  - add border...
 
 - improve return button
 - post bg and lace personalization (add variants...)

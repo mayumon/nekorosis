@@ -261,16 +261,13 @@ body {
 
 #chat-controls {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: 10px;
 }
 
-#profile-btn {
-    margin-right: 10px;
-}
-
 #chat-input {
-    flex: 1;
+    flex: 1 1 auto;
     resize: none;
     overflow-y: hidden;
     overflow-wrap: break-word;
@@ -341,6 +338,8 @@ body {
     font: inherit;
     color: inherit;
     cursor: pointer;
+    order: 1;
+    flex: 0 0 auto;
 
     display: inline-block;
     background-color: #d590b7;
@@ -356,6 +355,30 @@ body {
     background-color: #7d4f69; /* TODO: CHANGE */
 }
 
+#reply-tag {
+    order: 2;
+    flex-basis: 100%;
+    margin-top: 0.25rem;
+}
+
+#clear-reply {
+    border: 1px solid #e7d9e1;
+    border-radius: 50%;
+    background: transparent;
+    color: #e7d9e1;
+    width: 1.5em;
+    height: 1.5em;
+    line-height: 1.5em;
+    text-align: center;
+    padding: 0;
+    cursor: pointer;
+    font-size: 0.5em;
+}
+
+#clear-reply:hover {
+    background: #e7d9e1;
+    color: black;
+}
 
 /* ================================ */
 /* tags */
@@ -707,4 +730,44 @@ body {
     display: grid;
     grid-template-columns: repeat(12, 32px);
     gap: 8px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* only show reply/delete buttons on hover */
+.msg-controls {
+    display: none;
+    margin-left: 8px;
+    font-size: 0.9em;
+    color: #d590b7;
+}
+
+.chat-msg:hover .msg-controls {
+    display: inline;
+}
+
+/* make the words clickable and underlined on hover */
+.msg-controls span {
+    cursor: pointer;
+}
+
+.msg-controls span:hover {
+    text-decoration: underline;
 }

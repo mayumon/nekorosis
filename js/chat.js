@@ -20,6 +20,7 @@ const db = getFirestore(app);
 
 let currentChatCollectionRef = null;
 let unsubscribeChat = null;
+let replyToId = null;
 
 let currentUsername = localStorage.getItem("chatUsername") || "anon";
 
@@ -32,8 +33,12 @@ let currentUsernameColour =
 const googleProvider = new GoogleAuthProvider();
 googleProvider.setCustomParameters({prompt: "select_account"})
 
+const replyTag    = document.getElementById("reply-tag");
+const replyTagId  = document.getElementById("reply-tag-id");
+const clearReply  = document.getElementById("clear-reply");
+
 // send a chat message using the current chat collection reference
-async function sendMessage(messageText) {
+async function sendMessage(messageText, replyTo = null) {
 
     if (!currentChatCollectionRef) {
         console.error("chat not initialized.");
@@ -52,6 +57,7 @@ async function sendMessage(messageText) {
             username: currentUsername,
             colour: currentUsernameColour,
             message: messageText,
+            replyTo,
             userId: uid,
             createdAt: serverTimestamp()
         });
@@ -68,6 +74,7 @@ async function sendMessage(messageText) {
 function setupSendListeners() {
     const sendBtn = document.getElementById("send-btn");
     const chatInput = document.getElementById("chat-input");
+
     if (sendBtn && chatInput) {
 
         // auto-growing text box
@@ -86,13 +93,17 @@ function setupSendListeners() {
 
         // clicking send
         sendBtn.addEventListener("click", () => {
-            const messageText = chatInput.value.trim();
+            const raw = chatInput.value.trim();
+            if (!raw) return;
 
-            if (messageText) {
-                sendMessage(messageText);
-                chatInput.value = "";
-                chatInput.style.height = "";
-            }
+            // send using the replyToId we set on “Reply”
+            sendMessage(raw, replyToId);
+
+            // clear input + reply UI
+            replyToId = null;
+            chatInput.value = "";
+            chatInput.style.height = "";
+            replyTag.style.display = "none";
         });
 
         // pressing enter
@@ -101,6 +112,12 @@ function setupSendListeners() {
                 e.preventDefault();
                 sendBtn.click();
             }
+        });
+
+        // add this inside setupSendListeners(), to let the user cancel a reply
+        clearReply.addEventListener("click", () => {
+            replyToId = null;
+            replyTag.style.display = "none";
         });
     }
     else {
@@ -145,6 +162,69 @@ function setupInlineUserInfo() {
     });
 }
 
+// helper to build one message element (with indent, controls & handlers)
+function createMsgElement(data, indent, postId, chatInput) {
+    const msgDiv = document.createElement("div");
+    msgDiv.style.marginLeft = indent + "px";
+    msgDiv.dataset.id = data.id;
+    msgDiv.classList.add("chat-msg");
+
+    // username
+    const usernameElem = document.createElement("strong");
+    usernameElem.textContent = data.username + ":";
+    usernameElem.style.color = data.colour || "#fff";
+    msgDiv.appendChild(usernameElem);
+
+    // message text
+    msgDiv.appendChild(document.createTextNode(" " + data.message));
+
+    // controls container
+    const ctl = document.createElement("span");
+    ctl.className = "msg-controls";
+    // build "(reply/delete)" markup
+    const parts = [];
+    // only top‐level messages get “reply”
+    if (!data.replyTo) {
+        parts.push(`<span class="reply-btn">reply</span>`);
+    }
+    // only your own messages get “delete”
+    if (data.userId === auth.currentUser.uid) {
+        parts.push(`<span class="delete-btn">delete</span>`);
+    }
+    ctl.innerHTML = "(" + parts.join("/") + ")";
+
+    ctl.style.display = "none";
+    msgDiv.appendChild(ctl);
+
+    // show controls on hover
+    msgDiv.addEventListener("mouseenter", () => (ctl.style.display = "inline"));
+    msgDiv.addEventListener("mouseleave", () => (ctl.style.display = "none"));
+
+    // reply handler
+    const rbtn = ctl.querySelector(".reply-btn");
+    if (rbtn) {
+        rbtn.addEventListener("click", () => {
+            // set the replyToId and show the little tag
+            replyToId = data.id;
+            replyTagId.textContent = data.id;
+            replyTag.style.display = "block";
+            chatInput.focus();
+            });
+        }
+
+    // delete handler (your own messages)
+    const delBtn = ctl.querySelector(".delete-btn");
+    if (delBtn) {
+        delBtn.addEventListener("click", async () => {
+            if (!confirm("delete this message?")) return;
+            await deleteDoc(doc(db, "posts", postId, "chat", data.id));
+        });
+    }
+
+    return msgDiv;
+}
+
+
 // sets up the chat for the current post
 function initChatListener() {
 
@@ -158,51 +238,45 @@ function initChatListener() {
     }
     currentChatCollectionRef = collection(db, "posts", postId, "chat");
     const q = query(currentChatCollectionRef, orderBy("createdAt", "asc"));
+    const chatMessages = document.getElementById("chat-messages");
+    const chatInput    = document.getElementById("chat-input");
 
     unsubscribeChat = onSnapshot(q, (snapshot) => {
-        const chatMessages = document.getElementById("chat-messages");
-
         if (!chatMessages) {
             console.error("chat messages element not found");
             return;
         }
 
-        // update the chat ui
-        chatMessages.innerHTML = ""; // clear previous messages
+        // gather all docs into an array
+        const all = snapshot.docs.map((ds) => ({
+            id:   ds.id,
+            ...ds.data(),
+        }));
 
-        snapshot.forEach((docSnapshot) => {
-            const data = docSnapshot.data();
-            const messageId = docSnapshot.id;
-            const msgDiv = document.createElement("div");
-
-            const usernameElem = document.createElement("strong");
-
-            usernameElem.textContent = data.username + ":";
-            usernameElem.style.color = data.colour || "#fff";
-
-            msgDiv.appendChild(usernameElem);
-
-            msgDiv.appendChild(document.createTextNode(" " + data.message));
-
-            // make message deletable if it belongs to the user
-            if (data.userId === auth.currentUser.uid) {
-                msgDiv.classList.add("deletable");
-                msgDiv.addEventListener("click", () => {
-
-                    const ok = confirm("delete this message?");
-                    if (!ok) return;
-
-                    const docRef = doc(db, "posts", postId, "chat", messageId);
-                    deleteDoc(docRef).catch((err) =>
-                        console.error("couldn't delete message:", err)
-                    );
-                });
+        // partition top-level vs replies
+        const repliesMap = {};
+        const topLevel   = [];
+        all.forEach((m) => {
+            if (m.replyTo) {
+                ;(repliesMap[m.replyTo] ||= []).push(m);
+            } else {
+                topLevel.push(m);
             }
-
-            chatMessages.appendChild(msgDiv);
         });
 
-        // auto-scroll to bottom of the chat container
+        // clear & render
+        chatMessages.innerHTML = "";
+        topLevel.forEach((m) => {
+            chatMessages.appendChild(
+                createMsgElement(m, 0, postId, chatInput)
+            );
+            ;(repliesMap[m.id] || []).forEach((r) => {
+                chatMessages.appendChild(
+                    createMsgElement(r, 24, postId, chatInput)
+                );
+            });
+        });
+
         chatMessages.scrollTop = chatMessages.scrollHeight;
     });
 }
