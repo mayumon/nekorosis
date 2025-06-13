@@ -87,7 +87,7 @@ body {
     transform: translateX(-50%);
     padding: 4px 0;
     background: rgba(0, 0, 0, 0.7);
-    color: #fff;
+    color: #e7d9e1;
     font-size: 14px;
     white-space: nowrap;
     opacity: 0;
@@ -248,6 +248,9 @@ body {
     min-width: 0;
     overflow-y: scroll;
 
+    background: #e7d9e1;
+    color: black;
+
     /* wrap content */
     word-wrap: break-word;
     overflow-wrap: break-word;
@@ -279,6 +282,7 @@ body {
     border: 1px solid #e7d9e1;
     padding: 5px;
     margin: 0 10px;
+    order: 0;
 }
 
 #colour-options {
@@ -290,6 +294,7 @@ body {
     width: 20px;
     height: 20px;
     cursor: pointer;
+    border-radius: 50%;
 }
 
 .blog-img {
@@ -338,7 +343,7 @@ body {
     font: inherit;
     color: inherit;
     cursor: pointer;
-    order: 1;
+    order: 0;
     flex: 0 0 auto;
 
     display: inline-block;
@@ -356,7 +361,7 @@ body {
 }
 
 #reply-tag {
-    order: 2;
+    order: 1;
     flex-basis: 100%;
     margin-top: 0.25rem;
 }
@@ -376,6 +381,82 @@ body {
 }
 
 #clear-reply:hover {
+    background: #e7d9e1;
+    color: black;
+}
+
+.flex-break {
+    flex-basis: 100%;
+    width: 0;
+    height: 0;
+}
+
+
+#logout-btn {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: none;
+    background: none;
+    padding: 0;
+    margin: 0;
+    font: inherit;
+    cursor: pointer;
+    order: 0;
+    flex: 0 0 auto;
+
+    margin-left: auto;
+    display: inline-block;
+
+    border: 1px solid #e7d9e1;
+    border-radius: 20px;
+    background: transparent;
+    color: #e7d9e1;
+    width: 5em;
+    height: 1.5em;
+    line-height: 1em;
+    text-align: center;
+    font-size: 0.8em;
+}
+
+#logout-btn:hover{
+    background: #e7d9e1;
+    color: black;
+}
+
+#login-prompt {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 8px;
+}
+
+#google-login-btn{
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background: none;
+    padding: 0;
+    margin: 0 auto;
+    font: inherit;
+    cursor: pointer;
+    order: 0;
+    flex: 0 0 auto;
+
+    display: block;
+    text-align: center;
+
+    border: 1px solid #e7d9e1;
+    border-radius: 20px;
+    background: transparent;
+    color: #e7d9e1;
+    width: 8em;
+    height: 1.5em;
+    line-height: 1em;
+    font-size: 0.8em;
+}
+
+#google-login-btn:hover{
     background: #e7d9e1;
     color: black;
 }
@@ -575,10 +656,10 @@ body {
 }
 .guest-entry:hover {
     transform: scale(1.1);
-    filter: drop-shadow(0 0 4px white);
+    filter: drop-shadow(0 0 4px #e7d9e1);
 }
 .guest-entry.deletable:hover {
-    filter: drop-shadow(0 0 6px white);
+    filter: drop-shadow(0 0 6px #e7d9e1);
 }
 
 .guest-tooltip {
@@ -719,7 +800,7 @@ body {
 }
 
 #icon-picker-overlay > div {
-    background: white;
+    background: #e7d9e1;
     padding: 1rem;
     border-radius: 8px;
     max-height: 80vh;

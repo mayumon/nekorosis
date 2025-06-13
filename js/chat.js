@@ -1,22 +1,15 @@
 // chat.js
 
 // firebase setup
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
-import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
-import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 
-const firebaseConfig = {
-    apiKey: "AIzaSyBEsyRw_-yN0TuRdWMQ_oJIQr2IBwcQhis",
-    authDomain: "nekorosis.firebaseapp.com",
-    projectId: "nekorosis",
-    storageBucket: "nekorosis.appspot.com",
-    messagingSenderId: "1029151428629",
-    appId: "1:1029151428629:web:aea428725d6d2ffdb83e1c"
-};
+import { collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, deleteDoc, getDoc } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+import { auth, db, setupGlobalAuth, signInWithGoogle, signOutUser } from "./auth.js";
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+
+const replyTag    = document.getElementById("reply-tag");
+const replyTagId  = document.getElementById("reply-tag-id");
+const clearReply  = document.getElementById("clear-reply");
+
 
 let currentChatCollectionRef = null;
 let unsubscribeChat = null;
@@ -26,16 +19,8 @@ let currentUsername = localStorage.getItem("chatUsername") || "anon";
 
 let currentUsernameColour =
     localStorage.getItem("chatColour") ||
-    ["#d590b7", "#d5bc90", "#d5d090", "#90d5ae", "#90d5d1", "#9095d5", "#ae90d5"][
-        Math.floor(Math.random() * 4)
-        ];
-
-const googleProvider = new GoogleAuthProvider();
-googleProvider.setCustomParameters({prompt: "select_account"})
-
-const replyTag    = document.getElementById("reply-tag");
-const replyTagId  = document.getElementById("reply-tag-id");
-const clearReply  = document.getElementById("clear-reply");
+    ["#d590b7", "#d5bc90", "#d5d090", "#90d5ae", "#90d5d1", "#9095d5", "#ae90d5"]
+        [Math.floor(Math.random() * 4)];
 
 // send a chat message using the current chat collection reference
 async function sendMessage(messageText, replyTo = null) {
@@ -181,13 +166,15 @@ function createMsgElement(data, indent, postId, chatInput) {
     // controls container
     const ctl = document.createElement("span");
     ctl.className = "msg-controls";
-    // build "(reply/delete)" markup
+
+    // build (reply/delete) markup
     const parts = [];
-    // only top‐level messages get “reply”
+
+    // only top‐level messages get reply
     if (!data.replyTo) {
         parts.push(`<span class="reply-btn">reply</span>`);
     }
-    // only your own messages get “delete”
+    // only your own messages get delete
     if (data.userId === auth.currentUser.uid) {
         parts.push(`<span class="delete-btn">delete</span>`);
     }
@@ -281,45 +268,55 @@ function initChatListener() {
     });
 }
 
-function setupAuthStateListener() {
-    const loginPrompt = document.getElementById("login-prompt");
-    const googleLoginBtn = document.getElementById("google-login-btn");
-    const chatControls = document.getElementById("chat-controls");
-    const chatInput = document.getElementById("chat-input");
-    const sendBtn = document.getElementById("send-btn");
-
-    onAuthStateChanged(auth, (user) => {
-        if (user) {
-            loginPrompt.style.display = "none";
-            chatControls.style.display = "flex";
-            chatInput.disabled = false;
-            sendBtn.disabled = false;
-        } else {
-            loginPrompt.style.display = "flex";
-            chatControls.style.display = "none";
-            chatInput.disabled = true;
-            sendBtn.disabled = true;
-        }
-    });
-
-    googleLoginBtn.addEventListener("click", () => {
-        signInWithPopup(auth, googleProvider).catch((err) => {
-            console.error("Google sign-in error:", err);
-        });
-    });
-}
-
 window.addEventListener("DOMContentLoaded", () => {
     initChatListener();
     setupSendListeners();
     setupInlineUserInfo();
-    setupAuthStateListener();
     playChatInfoAnim1();
 });
 
 window.addEventListener("hashchange", () => {
     initChatListener();
 });
+
+setupGlobalAuth({
+    onLogin: async (user) => {
+        document.getElementById("login-prompt").style.display  = "none";
+        document.getElementById("chat-controls").style.display = "flex";
+        document.getElementById("chat-input").disabled = false;
+        document.getElementById("send-btn" ).disabled = false;
+        document.getElementById("chat-user-info").style.display = "flex";
+
+        // load colour
+        const userRef = doc(db, "users", user.uid);
+        const userSnap = await getDoc(userRef);
+        if (userSnap.exists()) {
+            const data = userSnap.data();
+            if (data.chatColour) {
+                currentUsernameColour = data.chatColour;
+                localStorage.setItem("chatColour", data.chatColour);
+            }
+        }
+    },
+    onLogout: () => {
+        document.getElementById("login-prompt").style.display  = "flex";
+        document.getElementById("chat-controls").style.display = "none";
+        document.getElementById("chat-input").disabled = true;
+        document.getElementById("send-btn" ).disabled = true;
+        document.getElementById("chat-user-info").style.display = "none";
+    }
+});
+
+// set up login/logout button
+document.getElementById("google-login-btn")
+    .addEventListener("click", () => signInWithGoogle().catch(console.error));
+
+
+document.getElementById("logout-btn")
+    .addEventListener("click", () => {
+        signOutUser()
+            .catch(err => console.error("Logout failed:", err));
+    });
 
 // ================================
 // ascii animation
@@ -359,7 +356,7 @@ async function playChatInfoAnim1() {
 
         startAsciiLoop(chatInfo, frames, 200); // adjustable framerate
     } catch (err) {
-        console.error('Could not load ASCII animation:', err);
+        console.error('could not load ASCII animation:', err);
     }
 }
 

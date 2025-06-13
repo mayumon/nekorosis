@@ -61,18 +61,22 @@ nekorosis/n3korosis began development in february 20th, 2025 - though it has alw
 
 ## <span style="color:#ff0091">dreams</span>
 
-
+- design - concepts: turn buttons into things, more drawings, cute designs
+  - chat creatures
+  - chat border
+  - return button 
+  - post bgs and lace variants
+  - guestbook id
+  -  alien ref, magic ref, bone ref,
+  - bug (catcher) club member badge (cat w bug?)
 
 - chat fixes 
   - (DONE) ensure chat messages are "clean" no script running
   - (idea) ensure unique usernames (possible???)
   - (idea) change colour picking shape?
-  - add user sheet in data?
-  - add replying
-  - add border...
-
-- improve return button
-- post bg and lace personalization (add variants...)
+  - x add user sheet in data?
+  - x add logout button
+  - (DONE) add replying
 
 - (big) drawing/sticker guestbook
   - fields:
@@ -84,7 +88,7 @@ nekorosis/n3korosis began development in february 20th, 2025 - though it has alw
     - visitor number
   - rules
     - not too close to other's
-    - i want the setup around it
+    - i want the setup around it (?)
     - (DONE) one per person... 
     - make visible if youre not signed in
     - add log out
@@ -105,12 +109,6 @@ nekorosis/n3korosis began development in february 20th, 2025 - though it has alw
       - ugly skeleton, ugly paw, ugly strawberry, ugly bat, all the white bears depending.
       - want: more sky things?
       - rework: smoke, korilla ghost
-    
-    - (in progress) bg 
-      - places:
-        - amusement park w carousel, cotton candy stand, ferris wheel, hopscotch
-        - restaurant
-        - alien ref, magic ref, bone ref,
 
 - fix home url
 
@@ -127,10 +125,10 @@ nekorosis/n3korosis began development in february 20th, 2025 - though it has alw
 - (postponed) "newsletter" notif system
 - (postponed) blingees... blinkies.
 - (postponed, idea) add msg bleeppp
-- (postponed,idea) search bar
+- (postponed, idea) search bar
 
 - (future)
-  - colouring pages
+  - colouring pages interactive
   - theater
   - nico nico cmmts
   - maid cafe
@@ -139,3 +137,4 @@ nekorosis/n3korosis began development in february 20th, 2025 - though it has alw
   - dvd bouncing...
   - wii
   - seasons for the uh guestbook (chapters/episodes/volume/page/. now is birth day party)
+  - miku vscode

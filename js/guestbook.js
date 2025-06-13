@@ -1,37 +1,7 @@
 // guestbook.js
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
-import {
-    getAuth,
-    onAuthStateChanged,
-    GoogleAuthProvider,
-    signInWithPopup
-} from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
-import {
-    getFirestore,
-    collection,
-    addDoc,
-    setDoc,
-    query,
-    orderBy,
-    onSnapshot,
-    serverTimestamp,
-    deleteDoc,
-    doc
-} from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
-
-// firebase setup
-const firebaseConfig = {
-    apiKey: "AIzaSyBEsyRw_-yN0TuRdWMQ_oJIQr2IBwcQhis",
-    authDomain: "nekorosis.firebaseapp.com",
-    projectId: "nekorosis",
-    storageBucket: "nekorosis.appspot.com",
-    messagingSenderId: "1029151428629",
-    appId: "1:1029151428629:web:aea428725d6d2ffdb83e1c"
-};
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+import { collection, addDoc, setDoc, query, orderBy, onSnapshot, serverTimestamp, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+import { auth, db, setupGlobalAuth, signInWithGoogle } from "./auth.js";
 
 // cache dom elements
 const loginPromptGB = document.getElementById("guestbook-login-prompt");
@@ -59,27 +29,6 @@ function getCurrentPostId() {
 }
 
 let currentEntryDocId = null;
-
-// auth listener (unchanged)
-function setupAuthListener() {
-    onAuthStateChanged(auth, (user) => {
-        if (user) {
-            loginPromptGB.style.display = "none";
-            guestbookUI.style.display  = "block";
-        } else {
-            loginPromptGB.style.display = "block";
-            guestbookUI.style.display   = "none";
-        }
-    });
-
-    loginBtnGB.addEventListener("click", () => {
-        const provider = new GoogleAuthProvider();
-        provider.setCustomParameters({ prompt: "select_account" });
-        signInWithPopup(auth, provider).catch((err) => {
-            console.error("Google sign-in error (guestbook):", err);
-        });
-    });
-}
 
 async function saveEntry(x, y, iconId) {
     const path = ["posts", getCurrentPostId(), "guestbook"];
@@ -110,9 +59,12 @@ async function saveEntry(x, y, iconId) {
 function setupDragAndDrop() {
     // mark icons as draggable
     iconsContainer.querySelectorAll(".guestbook-icon").forEach((iconEl) => {
+
         iconEl.addEventListener("dragstart", (ev) => {
+
             // store icon name
             ev.dataTransfer.setData("iconId", iconEl.dataset.icon);
+
             // store docid
             const docId = iconEl.dataset.docId || "";
             ev.dataTransfer.setData("docId", docId);
@@ -278,9 +230,13 @@ window.addEventListener("hashchange", () => {
 
 // on initial load
 window.addEventListener("DOMContentLoaded", () => {
-    setupAuthListener();
     setupDragAndDrop();
     initGuestbookListener();
+});
+
+setupGlobalAuth({
+    onLogin:  () => { loginPromptGB.style.display = "none"; guestbookUI.style.display = "block"; },
+    onLogout: () => { loginPromptGB.style.display = "block"; guestbookUI.style.display = "none"; }
 });
 
 
@@ -327,6 +283,10 @@ openPickerBtn.addEventListener('click', () => {
 closePickerBtn.addEventListener('click', () => {
     overlay.style.display = 'none';
 });
+
+document.getElementById("guestbook-google-login-btn")
+    .addEventListener("click", () => signInWithGoogle().catch(console.error));
+
 
 
 
