@@ -5,10 +5,21 @@
     font-style: normal;
 }
 
+/* ================================ */
+/* home display */
+/* ================================ */
+
 .home-container{
     display: flex;
     gap: 10px;
     align-items: flex-start;
+}
+
+.content-wrapper {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 10px;
 }
 
 body {
@@ -32,6 +43,11 @@ body {
     margin: 20px 0;
 }
 
+
+/* ================================ */
+/* posts display */
+/* ================================ */
+
 #post-display-container .lace-container,
 #post-display-container #chat-container {
     display: none;
@@ -41,14 +57,9 @@ body {
     display: block;
 }
 
-#post-display-container.detail #chat-container{
+#post-display-container.detail #chat-container {
     display: flex;
 }
-
-
-/* ================================ */
-/* posts display */
-/* ================================ */
 
 #post-list{
     list-style: none;
@@ -340,6 +351,7 @@ body {
     font-size: 12pt;
     text-align: center;
 }
+
 #send-btn:hover {
     background-color: #7d4f69; /* TODO: CHANGE */
 }
@@ -389,6 +401,7 @@ body {
     height: 15px;
     background: url('../assets/images/lace-1-corner.png') no-repeat center;
 }
+
 .lace.top-left     { top:    0; left:    0;            }
 .lace.top-right    { top:    0; right:   0; transform: rotate(90deg);  }
 .lace.bottom-right { bottom: 0; right:   0; transform: rotate(180deg); }
@@ -605,4 +618,93 @@ body {
     border: 8px solid transparent;
     border-top-color: #71646b;
     z-index: -1;
+}
+
+#guestbook-login-prompt {
+    margin-bottom: 1rem;
+    display: none;
+}
+
+#guestbook-ui {
+    display: none;
+    width: 100%;
+}
+
+#guestbook-icons {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+#guestbook-dropzone {
+    position: relative;
+    width: 60%; /* todo: change later to 100% if i have right bar...*/
+    border: 2px dashed #ccc;
+    border-radius: 8px;
+    aspect-ratio: 4 / 3;
+    background: url('../assets/images/guestbook-bg.png') center/cover no-repeat;
+}
+
+#guestbook-form {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+#guestbook-form label {
+    display: block;
+}
+
+#guestbook-form input,
+#guestbook-form textarea {
+    padding: 0.3rem 0.5rem;
+    font-family: inherit;
+    font-size: 1rem;
+}
+
+#guestbook-form textarea {
+    width: 100%;
+}
+
+#icon-chooser-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+#selected-icon-preview {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+    visibility: hidden;
+    border: 1px solid #ccc;
+}
+
+/* ================================ */
+/* icon-picker overlay */
+/* ================================ */
+
+#icon-picker-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.75);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
+
+#icon-picker-overlay > div {
+    background: white;
+    padding: 1rem;
+    border-radius: 8px;
+    max-height: 80vh;
+    overflow: auto;
+}
+
+#icon-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 32px);
+    gap: 8px;
 }

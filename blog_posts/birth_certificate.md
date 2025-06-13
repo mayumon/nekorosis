@@ -66,7 +66,8 @@ nekorosis/n3korosis began development in february 20th, 2025 - though it has alw
   - (idea) ensure unique usernames (possible???)
   - (idea) change colour picking shape?
   - (idea) add creatures?
-  - add user sheet for 
+  - add user sheet in data?
+
 - improve return button
 - post bg and lace personalization (add variants...)
 
@@ -78,20 +79,41 @@ nekorosis/n3korosis began development in february 20th, 2025 - though it has alw
     - a song?
     - the date
     - visitor number
-  - laws: not too close to other's, i want the setup around it, one per person...
-    - TODO: IT SHOULD BE VISIBLE IF YOURE NOT SIGNED IN.
--
+  - rules
+    - not too close to other's
+    - i want the setup around it
+    - (DONE) one per person... 
+    - make visible if youre not signed in
+    - add log out
+
   - (DONE) chat bubble.. thing on hover.
+    - add border on border if possible?
+
   - add random icon at first
   - scene behind
+
   - (DONE) drag and drop
+  
   - highlighting
-  - customizing -- must add some sort of effort on users part so they feel represented...
+  - customizing 
+    - icons to replace:
+      - coffee, soot sprite, korilakkuma sleeping both, korila w chick, rila w heart peek,
+      - rila witch full bd, korila w umbrella, pudding, ponponpurin on phone duplicate,
+      - ugly skeleton, ugly paw, ugly strawberry, ugly bat, all the white bears depending.
+      - want: more sky things?
+      - rework: smoke, korilla ghost
+    
+    - (in progress) bg 
+      - places:
+        - amusement park w carousel, cotton candy stand, ferris wheel, hopscotch
+        - restaurant
+        - alien ref, magic ref, bone ref,
 
 - fix home url
 
 - clean up birth certificate
   - floppy
+  - title
   - beg for feedback
 
 - (final touches) bug catcher club badge
@@ -113,3 +135,4 @@ nekorosis/n3korosis began development in february 20th, 2025 - though it has alw
   - least commentable languages
   - dvd bouncing...
   - wii
+  - seasons for the uh guestbook (chapters/episodes/volume/page/. now is birth day party)
