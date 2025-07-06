@@ -193,27 +193,41 @@ fetch(`${baseUrl}posts.json`)
         function makeTagElements(tagName, count){
             // icon
             const img = document.createElement("img");
-            img.src = `assets/icons-tag/${tagName}.ico`;
-            img.alt = tagName;
             img.dataset.tag = tagName;
+            img.dataset.default = `assets/icons-tag/${tagName}.ico`;
+            img.dataset.selected = `assets/icons-tag/selected.ico`;
+            img.src = img.dataset.default;
+            img.alt = tagName;
             img.classList.add("tag-icon");
+
             // label
             const span = document.createElement("span");
             span.textContent = `${tagName} (${count})`;
             span.dataset.tag = tagName;
             span.classList.add("tag-label");
+
             // click both the same way
             [img, span].forEach(el => {
                 el.addEventListener("click", () => {
-                    // clear old active
-                    iconRow.querySelectorAll(".tag-icon").forEach(i => i.classList.remove("active"));
-                    labelRow.querySelectorAll(".tag-label").forEach(l => l.classList.remove("active"));
+                    // 1) remove “active” from everything
+                    iconRow.querySelectorAll(".tag-icon").forEach(i => {
+                        i.classList.remove("active");
+                        i.src = i.dataset.default;
+                    });
+                    labelRow.querySelectorAll(".tag-label").forEach(l => {
+                        l.classList.remove("active");
+                    });
 
-                    // set new active
-                    iconRow.querySelector(`img[data-tag="${tagName}"]`).classList.add("active");
-                    labelRow.querySelector(`span[data-tag="${tagName}"]`).classList.add("active");
+                    // add active to clicked
+                    const icon = iconRow.querySelector(`img[data-tag="${tagName}"]`);
+                    const label = labelRow.querySelector(`span[data-tag="${tagName}"]`);
+                    icon.classList.add("active");
+                    label.classList.add("active");
 
-                    // render posts
+                    // swap image
+                    icon.src = icon.dataset.selected;
+
+                    // filter
                     renderPostList(posts, tagName);
                     updateLayout();
                 });
@@ -241,9 +255,15 @@ fetch(`${baseUrl}posts.json`)
 
         // default to all
         all.img.classList.add("active");
+        all.img.src = all.img.dataset.selected;
         all.span.classList.add("active");
         renderPostList(posts, "all");
         updateLayout();
+
+        document.querySelectorAll('.tag-icon').forEach(img => {
+            img.setAttribute('draggable', 'false');
+            img.addEventListener('dragstart', e => e.preventDefault());
+        });
 
     })
     .catch(error => console.error("failed to fetch posts:", error));
