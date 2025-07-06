@@ -25,8 +25,9 @@
 body {
     font-family: 'nds_bios', sans-serif;
     font-size: 14pt;
+    color: white;
     background-color: black;
-    color: #e7d9e1;
+
 }
 
 .blog-container{
@@ -295,6 +296,11 @@ body {
     height: 20px;
     cursor: pointer;
     border-radius: 50%;
+    border: 2px solid black;
+}
+
+.colour-option.selected {
+    border: 2px solid #e7d9e1;
 }
 
 .blog-img {
@@ -321,43 +327,33 @@ body {
     margin-right: 8px;
 }
 
-.colour-option {
-    width: 20px;
-    height: 20px;
-    cursor: pointer;
-    border: 2px solid black;
-}
-
-.colour-option.selected {
-    border: 2px solid #e7d9e1;
-}
-
 #send-btn {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    border: none;
-    background: none;
-    padding: 0;
+    border: 1px solid #e7d9e1;
     margin: 0;
     font: inherit;
-    color: inherit;
     cursor: pointer;
     order: 0;
     flex: 0 0 auto;
 
+    height: 50px;
+    width: 50px;
+
     display: inline-block;
-    background-color: #d590b7;
+    background-color: transparent;
     color: #e7d9e1;
     margin-right: 6px;
     padding: 3px 6px;
-    border-radius: 2px;
+    border-radius: 50%;
     font-size: 12pt;
     text-align: center;
 }
 
 #send-btn:hover {
-    background-color: #7d4f69; /* TODO: CHANGE */
+    background-color: #e7d9e1; /* TODO: CHANGE */
+    color: black;
 }
 
 #reply-tag {
@@ -466,21 +462,42 @@ body {
 /* ================================ */
 
 #tag-filter {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
     margin-bottom: 10px;
 }
 
-#tag-filter .tag {
-    display: inline-block;
-    margin-right: 6px;
-    padding: 3px 6px;
-    background-color: black;
-    border-radius: 2px;
-    cursor: pointer;
-    font-size: 12pt;
+#tag-filter .icon-row,
+#tag-filter .label-row {
+    display: flex;
+    gap: 12px;
 }
 
-#tag-filter .tag.active {
-    background-color: #d590b7;
+#tag-filter .icon-row .tag-icon {
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    border-radius: 4px;
+    border: 2px solid transparent;
+}
+
+#tag-filter .tag img {
+    width: 32px;
+    height: 32px;
+    display: block;
+}
+
+#tag-filter .icon-row .tag-icon.active {
+    border-color: #d590b7;
+}
+
+#tag-filter .label-row .tag-label {
+    cursor: pointer;
+    font-size: 0.9em;
+    color: #e7d9e1;
+    white-space: nowrap;
 }
 
 

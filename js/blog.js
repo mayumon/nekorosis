@@ -183,39 +183,66 @@ fetch(`${baseUrl}posts.json`)
         const tagFilterDiv = document.createElement("div");
         tagFilterDiv.id = "tag-filter";
 
+        // create icon-row and label-row
+        const iconRow  = document.createElement("div");
+        iconRow.classList.add("icon-row");
+        const labelRow = document.createElement("div");
+        labelRow.classList.add("label-row");
+
+        // helper: build one icon and one label, wiring them together
+        function makeTagElements(tagName, count){
+            // icon
+            const img = document.createElement("img");
+            img.src = `assets/icons-tag/${tagName}.ico`;
+            img.alt = tagName;
+            img.dataset.tag = tagName;
+            img.classList.add("tag-icon");
+            // label
+            const span = document.createElement("span");
+            span.textContent = `${tagName} (${count})`;
+            span.dataset.tag = tagName;
+            span.classList.add("tag-label");
+            // click both the same way
+            [img, span].forEach(el => {
+                el.addEventListener("click", () => {
+                    // clear old active
+                    iconRow.querySelectorAll(".tag-icon").forEach(i => i.classList.remove("active"));
+                    labelRow.querySelectorAll(".tag-label").forEach(l => l.classList.remove("active"));
+
+                    // set new active
+                    iconRow.querySelector(`img[data-tag="${tagName}"]`).classList.add("active");
+                    labelRow.querySelector(`span[data-tag="${tagName}"]`).classList.add("active");
+
+                    // render posts
+                    renderPostList(posts, tagName);
+                    updateLayout();
+                });
+            });
+
+            return { img, span };
+        }
+
         // create all option
-        const allTag = document.createElement("span");
-        allTag.classList.add("tag");
-        allTag.textContent = `all (${posts.length})`;
-        allTag.dataset.tag = "all";
-        tagFilterDiv.appendChild(allTag);
+        const all = makeTagElements("all", posts.length);
+        iconRow.appendChild(all.img);
+        labelRow.appendChild(all.span);
 
         // create tags options
         sortedTags.forEach(tag => {
-            const tagElem = document.createElement("span");
-            tagElem.classList.add("tag");
-            tagElem.textContent = `${tag} (${tagCounts[tag]})`;
-            tagElem.dataset.tag = tag;
-            tagFilterDiv.appendChild(tagElem);
+            const { img, span } = makeTagElements(tag, tagCounts[tag]);
+            iconRow.appendChild(img);
+            labelRow.appendChild(span);
         });
 
+        tagFilterDiv.appendChild(iconRow);
+        tagFilterDiv.appendChild(labelRow);
         tagFilterParent.replaceChild(tagFilterDiv, tagFilterContainer);
         tagFilterContainer = tagFilterDiv;
 
-        // click listeners for tags
-        const tagElements = tagFilterDiv.querySelectorAll(".tag");
-        tagElements.forEach(elem => {
-            elem.addEventListener("click", () => {
-                tagElements.forEach(el => el.classList.remove("active"));
-                elem.classList.add("active")
-                renderPostList(posts, elem.dataset.tag);
-                updateLayout();
-            });
-        });
-
         // default to all
-        allTag.classList.add("active");
-        renderPostList(posts,"all");
+        all.img.classList.add("active");
+        all.span.classList.add("active");
+        renderPostList(posts, "all");
         updateLayout();
 
     })

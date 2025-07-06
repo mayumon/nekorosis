@@ -71,12 +71,12 @@ nekorosis/n3korosis began development in february 20th, 2025 - though it has alw
   - bug (catcher) club member badge (cat w bug?)
 
 - chat fixes 
-  - (DONE) ensure chat messages are "clean" no script running
+  - x ensure chat messages are "clean" no script running
   - (idea) ensure unique usernames (possible???)
   - (idea) change colour picking shape?
   - x add user sheet in data?
   - x add logout button
-  - (DONE) add replying
+  - x add replying
 
 - (big) drawing/sticker guestbook
   - fields:
@@ -89,11 +89,11 @@ nekorosis/n3korosis began development in february 20th, 2025 - though it has alw
   - rules
     - not too close to other's
     - i want the setup around it (?)
-    - (DONE) one per person... 
+    - x one per person... 
     - make visible if youre not signed in
     - add log out
 
-  - (DONE) chat bubble.. thing on hover.
+  - x chat bubble.. thing on hover.
     - add border on border if possible?
 
   - add random icon at first
@@ -138,3 +138,4 @@ nekorosis/n3korosis began development in february 20th, 2025 - though it has alw
   - wii
   - seasons for the uh guestbook (chapters/episodes/volume/page/. now is birth day party)
   - miku vscode
+  - domino
