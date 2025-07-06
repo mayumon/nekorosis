@@ -45,6 +45,9 @@ body {
     margin: 20px 0;
 }
 
+#chat-banner img {
+    display: none;
+}
 
 /* ================================ */
 /* posts display */
@@ -53,14 +56,6 @@ body {
 #post-display-container .lace-container,
 #post-display-container #chat-container {
     display: none;
-}
-
-#post-display-container.detail .lace-container{
-    display: block;
-}
-
-#post-display-container.detail #chat-container {
-    display: flex;
 }
 
 #post-list{
@@ -159,6 +154,14 @@ body {
 
 /* detail view */
 
+#post-display-container.detail .lace-container{
+    display: block;
+}
+
+#post-display-container.detail #chat-container {
+    display: flex;
+}
+
 #post-display-container.detail #post-header {
     display: block;
 }
@@ -178,6 +181,13 @@ body {
 
 #post-display-container.detail #chat-container{
     display: flex;
+}
+
+#post-display-container.detail #chat-banner img {
+    display: block;
+    width: 150px;
+    height: auto;
+    margin-bottom: 12px;
 }
 
 /* grid view */
@@ -245,10 +255,8 @@ body {
 }
 
 #chat-container{
-    padding: 30px;
     display: flex;
     align-items: flex-start;
-    gap: 20px;
 }
 
 #chat-main{
@@ -745,7 +753,7 @@ body {
     color: black;
     padding: 6px 8px;
     border-radius: 4px;
-    border: #71646b 4px solid;
+    border: black 2px solid;
     font-size: 0.9rem;
     line-height: 1.2;
     z-index: 1000;
@@ -774,11 +782,11 @@ body {
 .hover-tooltip::before {
     content: "";
     position: absolute;
-    bottom: -20px;
+    bottom: -16px;
     left: 50%;
     transform: translateX(-50%);
     border: 8px solid transparent;
-    border-top-color: #71646b;
+    border-top-color: black;
     z-index: -1;
 }
 
@@ -882,17 +890,17 @@ body {
     top: 0;
     left: 0;
     right: 0;
-    height: 40px;                  /* adjust thickness */
-    background: black;             /* or whatever your page bg is */
+    height: 40px;
+    background: black;
     border-bottom: 1px solid white;
-    z-index: 1000;                 /* sit above everything */
+    z-index: 1000;
     display: flex;
     align-items: center;
-    padding: 0 16px;               /* horizontal padding */
+    padding: 0 16px;
     box-sizing: border-box;
 }
 
 #site-header .logo-container .logo {
-    height: 24px;                  /* scale to fit your bar height */
+    height: 24px;
     width: auto;
 }

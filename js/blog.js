@@ -149,7 +149,7 @@ function updateLayout() {
         document.querySelectorAll("#post-list .post-thumb").forEach(img => {
 
             const randomAngle = (Math.random() * 20) - 10; // angle adjust
-            img.style.transform = `rotate(${randomAngle}deg) scale(0.8)`; // scale adjust
+            img.style.transform = `rotate(${randomAngle}deg) scale(1)`; // scale adjust
         });
 
         loadPost(hash + ".md");
