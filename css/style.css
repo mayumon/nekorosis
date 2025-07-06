@@ -27,6 +27,7 @@ body {
     font-size: 14pt;
     color: white;
     background-color: black;
+    padding-top: 40px;
 
 }
 
@@ -233,7 +234,7 @@ body {
 
 
 /* ================================ */
-/* comments */
+/* chat */
 /* ================================ */
 
 #chat-info {
@@ -482,6 +483,27 @@ body {
 #google-login-btn:hover{
     background: white;
     color: black;
+}
+
+/* only show reply/delete buttons on hover */
+.msg-controls {
+    display: none;
+    margin-left: 8px;
+    font-size: 0.9em;
+    color: #d590b7;
+}
+
+.chat-msg:hover .msg-controls {
+    display: inline;
+}
+
+/* make the words clickable and underlined on hover */
+.msg-controls span {
+    cursor: pointer;
+}
+
+.msg-controls span:hover {
+    text-decoration: underline;
 }
 
 /* ================================ */
@@ -821,6 +843,7 @@ body {
     border: 1px solid #ccc;
 }
 
+
 /* ================================ */
 /* icon-picker overlay */
 /* ================================ */
@@ -850,41 +873,26 @@ body {
 }
 
 
+/* ================================ */
+/* outer header */
+/* ================================ */
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* only show reply/delete buttons on hover */
-.msg-controls {
-    display: none;
-    margin-left: 8px;
-    font-size: 0.9em;
-    color: #d590b7;
+#site-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 40px;                  /* adjust thickness */
+    background: black;             /* or whatever your page bg is */
+    border-bottom: 1px solid white;
+    z-index: 1000;                 /* sit above everything */
+    display: flex;
+    align-items: center;
+    padding: 0 16px;               /* horizontal padding */
+    box-sizing: border-box;
 }
 
-.chat-msg:hover .msg-controls {
-    display: inline;
-}
-
-/* make the words clickable and underlined on hover */
-.msg-controls span {
-    cursor: pointer;
-}
-
-.msg-controls span:hover {
-    text-decoration: underline;
+#site-header .logo-container .logo {
+    height: 24px;                  /* scale to fit your bar height */
+    width: auto;
 }
