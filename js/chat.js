@@ -81,10 +81,10 @@ function setupSendListeners() {
             const raw = chatInput.value.trim();
             if (!raw) return;
 
-            // send using the replyToId we set on “Reply”
+            // send
             sendMessage(raw, replyToId);
 
-            // clear input + reply UI
+            // clear input + reply ui
             replyToId = null;
             chatInput.value = "";
             chatInput.style.height = "";
@@ -99,7 +99,7 @@ function setupSendListeners() {
             }
         });
 
-        // add this inside setupSendListeners(), to let the user cancel a reply
+        // cancel reply
         clearReply.addEventListener("click", () => {
             replyToId = null;
             replyTag.style.display = "none";

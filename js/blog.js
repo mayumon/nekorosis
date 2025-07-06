@@ -23,6 +23,9 @@ const tagFilterParent    = tagFilterContainer.parentNode;
 
 function loadPost(post){
 
+    const header = document.getElementById('post-header');
+    header.textContent = "";
+
     postContent.innerHTML = "";
 
     fetch(`${baseUrl}${post}`)
@@ -30,6 +33,11 @@ function loadPost(post){
         .then(markdown => {
             const parsed = matter(markdown);
             postContent.innerHTML = marked.parse(parsed.content);
+
+            // set header title
+            const header = document.getElementById('post-header');
+            header.textContent = '▶ ' + parsed.data.title
+                || '▶ ' + post.replace('.md','').replace(/_/g,' ');
         })
         .catch(error => console.error("failed to load post:", error));
 }

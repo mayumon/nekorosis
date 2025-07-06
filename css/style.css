@@ -122,18 +122,45 @@ body {
 
 #return-btn {
     display: none;
+    position: absolute;
     font-family: 'nds_bios', sans-serif;
-    width: 90%;
-    margin: 16px auto;
-    padding: 8px 0;
-    background-color: #d590b7;
-    color: white;
-    border: none;
-    border-radius: 4px;
     cursor: pointer;
+    top: 21px;
+    right: 21px;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    line-height: 32px;
+    font-size: 14px;
+    text-align: center;
+    background: white;
+    color: black;
+    border: darkgray 1px solid;
+}
+
+#post-header {
+    display: none;
+    position: absolute;
+    top: 21px;
+    left: 21px;
+    right: calc(22px + 32px + 4px);
+    font-size: 14px;
+    background: white;
+    color: black;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    z-index: 5;
+    height: 21px;
+    padding: 5px;
+    border: darkgray 1px solid;
 }
 
 /* detail view */
+
+#post-display-container.detail #post-header {
+    display: block;
+}
 
 #return-btn.visible {
     display: block;
