@@ -28,35 +28,53 @@ const danmakuComments = [
     "so cool", "wowwwwww", "yea genius obviously", "awesome and cool and so awesome just wow honestly", "nice."
 ];
 
-const NUM_LANES = 10;  // how many horizontal tracks
-const LANE_HEIGHT = 100 / NUM_LANES;  // percent per lane
+const NUM_LANES = 10;
+const laneScores = new Array(NUM_LANES).fill(0);
+
+function pickLane() {
+
+    // decay
+    for (let i = 0; i < NUM_LANES; i++) {
+        laneScores[i] = Math.max(0, laneScores[i] - 1);
+    }
+
+    // array of weights
+    const weights = laneScores.map(s => 1 / (s + 1));
+    const total = weights.reduce((a, b) => a + b, 0);
+
+    // pick a "random" lane proportional to weights
+    let r = Math.random() * total;
+    for (let i = 0; i < NUM_LANES; i++) {
+        if (r < weights[i]) {
+
+            // bump score
+            laneScores[i] += 3;
+            return i;
+        }
+        r -= weights[i];
+    }
+
+    const last = NUM_LANES - 1;
+    laneScores[last]++;
+    return last;
+}
 
 function launchDanmaku() {
     const container = document.querySelector("#newest-post-card .danmaku");
     if (!container) return;
 
-    // pick a random comment
     const text = danmakuComments[
         Math.floor(Math.random() * danmakuComments.length)
         ];
 
-    // create the span
     const span = document.createElement("span");
     span.textContent = text;
 
-    // pick a random lane 0…NUM_LANES-1
-    const lane = Math.floor(Math.random() * NUM_LANES);
-
-    // place in the middle of that lane
-    const topPercent = (lane + 0.5) * LANE_HEIGHT;
-    span.style.top = topPercent + "%";
+    const lane = pickLane();
+    span.style.top = `${(lane + 0.5) * (100 / NUM_LANES)}%`;
 
     container.appendChild(span);
-
-    // remove span after animation finishes
-    span.addEventListener("animationend", () => {
-        span.remove();
-    });
+    span.addEventListener("animationend", () => span.remove());
 }
 
 setInterval(launchDanmaku, 500);
