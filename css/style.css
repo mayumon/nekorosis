@@ -1019,6 +1019,7 @@ hr.dotted {
     color: white;
     text-shadow: 0 0 2px black;
     animation: slide-left 6s linear forwards;
+    transform: translateY(-50%);
 }
 
 @keyframes slide-left {

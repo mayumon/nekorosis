@@ -30,7 +30,7 @@ const danmakuComments = [
 
 const NUM_LANES = 10;
 const laneAvailableAt = new Array(NUM_LANES).fill(0);
-const TICK_MS = 350;
+const TICK_MS = 300;
 
 // how many pixels per second comments travel
 const SPEED_PX_PER_SEC = 100;
