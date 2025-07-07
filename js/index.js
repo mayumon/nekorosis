@@ -1,5 +1,13 @@
 // index.js
 
+import {
+    collection,
+    query,
+    orderBy,
+    onSnapshot
+} from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+import { db } from "./auth.js";
+
 (async () => {
     const base = window.location.pathname.endsWith('index.html')
         ? 'blog_posts/'
@@ -14,8 +22,10 @@
             const thumb = document.getElementById('newest-thumb');
             const title = document.getElementById('newest-title');
             thumb.src = `assets/images/posts/${newest.image}`;
-            thumb.alt = newest.title || newest.filename.replace('.md','');
+            const postId = newest.filename.replace('.md','');
+            thumb.alt = newest.title || postId;
             title.textContent = newest.title || newest.filename.replace('.md','').replace(/_/g,' ');
+            initDanmakuComments(postId);
         }
     } catch(e) {
         console.error('Could not load newest post:', e);
@@ -24,9 +34,18 @@
 
 // danmaku comments
 
-const danmakuComments = [
-    "so cool", "wowwwwww", "yea genius obviously", "awesome and cool and so awesome just wow honestly", "nice."
-];
+let danmakuComments = [];
+
+function initDanmakuComments(postId) {
+    const chatRef = collection(db, "posts", postId, "chat");
+    const q = query(chatRef, orderBy("createdAt", "asc"));
+
+    // real-time listener
+    onSnapshot(q, snapshot => {
+        // just pull out the `.message` field from each doc
+        danmakuComments = snapshot.docs.map(doc => doc.data().message);
+    });
+}
 
 const NUM_LANES = 10;
 const laneAvailableAt = new Array(NUM_LANES).fill(0);
@@ -59,12 +78,13 @@ function pickLane() {
 
 function launchDanmaku() {
     const container = document.querySelector("#newest-post-card .danmaku");
-    if (!container) return;
+    if (!container || danmakuComments.length === 0) return;
 
-    // pick & clamp text
+    // get & clamp text
     let text = danmakuComments[
         Math.floor(Math.random() * danmakuComments.length)
-        ];
+        ] || "";
+
     if (text.length > 40) text = text.slice(0,40) + "…";
 
     // create comment
