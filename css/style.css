@@ -20,6 +20,7 @@
     flex: 1;
     flex-direction: column;
     gap: 10px;
+    margin-top: 20px;
 }
 
 body {
@@ -47,6 +48,12 @@ body {
 
 #chat-banner img {
     display: none;
+}
+
+hr.dotted {
+    border: none;
+    border-top: 3px dotted darkgrey;
+    width: 100%;
 }
 
 /* ================================ */
@@ -904,3 +911,95 @@ body {
     height: 24px;
     width: auto;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ================================ */
+/* featured posts */
+/* ================================ */
+
+#featured-posts {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 24px;
+    align-items: stretch;
+}
+
+#featured-banner {
+    height: 100%;
+    width: auto;
+    display: block;
+    object-fit: cover;
+    padding: 30px;
+}
+
+.post-squares {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* Wrapper for each card */
+.post-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 200px; /* fix card width */
+}
+
+/* label above */
+.post-card .square-header {
+    margin-bottom: 4px;
+    font-size: 0.9em;
+    text-align: center;
+}
+
+/* the square itself: enforces 1:1 aspect ratio */
+.post-card .post-square {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background: black;
+    border: 1px solid #e7d9e1;
+    position: relative;
+    overflow: hidden;
+}
+
+/* thumbnail inside */
+.post-card .post-square img {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    object-fit: cover;
+}
+
+/* title below */
+.post-card .square-title {
+    margin-top: 4px;
+    font-size: 0.9em;
+    text-align: center;
+    color: #333;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+

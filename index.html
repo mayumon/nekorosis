@@ -16,7 +16,36 @@
     <div id="sidebar-placeholder"></div>
 
     <div class="content-wrapper">
-        <p>im a buff baby that can dance like a man</p>
+
+        <section id="featured-posts">
+            <img src="assets/images/banner-index.png" alt="featured banner" id="featured-banner">
+
+            <div class="post-squares">
+
+                <!-- newest post card -->
+                <div class="post-card" id="newest-post-card">
+                    <div class="square-header">newest post</div>
+                    <div class="post-square">
+                        <img src="" alt="newest post thumbnail" id="newest-thumb">
+                    </div>
+                    <div class="square-title" id="newest-title"></div>
+                </div>
+
+                <!-- empty placeholders -->
+                <div class="post-card">
+                    <div class="square-header">song of the day</div>
+                    <div class="post-square"></div>
+                    <div class="square-title">cool person - cool song</div>
+                </div>
+                <div class="post-card">
+                    <div class="square-header">something else</div>
+                    <div class="post-square"></div>
+                    <div class="square-title">i mean i dont know</div>
+                </div>
+
+            </div>
+        </section>
+
 
         <h2>♡˚. guestbook</h2>
 
@@ -46,7 +75,7 @@
 
                 <!-- name -->
                 <div>
-                    <label for="guest-name">Your name:</label>
+                    <label for="guest-name">your name:</label>
                     <input id="guest-name" placeholder="your name..." type="text" maxlength="20">
                 </div>
 
@@ -75,6 +104,7 @@
 <script type="module" src="js/guestbook.js"></script>
 <script type="module" src="js/sidebar.js"></script>
 <script type="module" src="js/header.js"></script>
+<script type="module" src="js/index.js"></script>
 
 </body>
 </html>
