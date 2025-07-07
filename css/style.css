@@ -1023,5 +1023,5 @@ hr.dotted {
 
 @keyframes slide-left {
     from { left: 100%; }
-    to   { left: -200%; }
+    to   { left: -150%; }
 }

@@ -29,52 +29,69 @@ const danmakuComments = [
 ];
 
 const NUM_LANES = 10;
-const laneScores = new Array(NUM_LANES).fill(0);
+const laneAvailableAt = new Array(NUM_LANES).fill(0);
+const TICK_MS = 350;
+
+// how many pixels per second comments travel
+const SPEED_PX_PER_SEC = 100;
 
 function pickLane() {
+    const now = performance.now();
 
-    // decay
+    // find free lanes
+    const freeLanes = [];
     for (let i = 0; i < NUM_LANES; i++) {
-        laneScores[i] = Math.max(0, laneScores[i] - 1);
+        if (laneAvailableAt[i] <= now) freeLanes.push(i);
     }
 
-    // array of weights
-    const weights = laneScores.map(s => 1 / (s + 1));
-    const total = weights.reduce((a, b) => a + b, 0);
-
-    // pick a "random" lane proportional to weights
-    let r = Math.random() * total;
-    for (let i = 0; i < NUM_LANES; i++) {
-        if (r < weights[i]) {
-
-            // bump score
-            laneScores[i] += 3;
-            return i;
-        }
-        r -= weights[i];
+    // if none free, pick the soonest freed
+    let lane;
+    if (freeLanes.length > 0) {
+        lane = freeLanes[Math.floor(Math.random() * freeLanes.length)];
+    } else {
+        lane = laneAvailableAt
+            .map((t,i) => ({i,t}))
+            .reduce((a,b) => a.t < b.t ? a : b).i;
     }
 
-    const last = NUM_LANES - 1;
-    laneScores[last]++;
-    return last;
+    return lane;
 }
 
 function launchDanmaku() {
     const container = document.querySelector("#newest-post-card .danmaku");
     if (!container) return;
 
-    const text = danmakuComments[
+    // pick & clamp text
+    let text = danmakuComments[
         Math.floor(Math.random() * danmakuComments.length)
         ];
+    if (text.length > 40) text = text.slice(0,40) + "…";
 
+    // create comment
     const span = document.createElement("span");
     span.textContent = text;
+    container.appendChild(span);
 
+    // choose lane
     const lane = pickLane();
     span.style.top = `${(lane + 0.5) * (100 / NUM_LANES)}%`;
 
-    container.appendChild(span);
+    // measure width & compute duration
+    const width = span.getBoundingClientRect().width;
+    const containerW = container.getBoundingClientRect().width;
+    const distance = containerW + width;
+    const duration = distance / SPEED_PX_PER_SEC;
+
+    // schedule lane free time
+    const now = performance.now();
+    laneAvailableAt[lane] = now + (duration * 1000);
+
+    // animate
+    span.style.whiteSpace = "nowrap";
+    span.style.position = "absolute";
+    span.style.right = `-${width}px`;
+    span.style.animation = `slide-left ${duration}s linear`;
     span.addEventListener("animationend", () => span.remove());
 }
 
-setInterval(launchDanmaku, 500);
+setInterval(launchDanmaku, TICK_MS);
