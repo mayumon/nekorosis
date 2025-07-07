@@ -25,7 +25,11 @@ import { db } from "./auth.js";
             const postId = newest.filename.replace('.md','');
             thumb.alt = newest.title || postId;
             title.textContent = newest.title || newest.filename.replace('.md','').replace(/_/g,' ');
+
             initDanmakuComments(postId);
+
+            const a = document.getElementById('newest-link');
+            a.href = `blog.html#${postId}`;
         }
     } catch(e) {
         console.error('Could not load newest post:', e);

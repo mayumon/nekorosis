@@ -136,9 +136,10 @@ hr.dotted {
     line-height: 32px;
     font-size: 14px;
     text-align: center;
-    background: white;
-    color: black;
-    border: darkgray 1px solid;
+    font-weight: bold;
+    background: lightgray;
+    color: dimgray;
+    border: dimgray 1px solid;
 }
 
 #post-header {
@@ -156,7 +157,7 @@ hr.dotted {
     z-index: 5;
     height: 21px;
     padding: 5px;
-    border: darkgray 1px solid;
+    border: dimgray 1px solid;
 }
 
 /* detail view */
@@ -964,7 +965,7 @@ hr.dotted {
 .post-card {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     width: 200px; /* fix card width */
 }
 
@@ -972,7 +973,7 @@ hr.dotted {
 .post-card .square-header {
     margin-bottom: 4px;
     font-size: 0.9em;
-    text-align: center;
+    text-align: left;
 }
 
 /* the square itself: enforces 1:1 aspect ratio */
@@ -996,7 +997,7 @@ hr.dotted {
 .post-card .square-title {
     margin-top: 4px;
     font-size: 0.9em;
-    text-align: center;
+    text-align: left;
     color: #333;
     width: 100%;
     white-space: nowrap;
