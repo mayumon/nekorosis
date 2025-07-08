@@ -730,7 +730,7 @@ hr.dotted {
 }
 
 #guestbook-ui {
-    display: none;
+    display: block;
     width: 100%;
 }
 
@@ -750,7 +750,7 @@ hr.dotted {
 }
 
 #guestbook-form {
-    display: flex;
+    display: none;
     gap: 1rem;
     align-items: center;
     margin-bottom: 1rem;

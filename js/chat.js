@@ -149,6 +149,8 @@ function setupInlineUserInfo() {
 
 // helper to build one message element (with indent, controls & handlers)
 function createMsgElement(data, indent, postId, chatInput) {
+    const currentUid = auth.currentUser?.uid || null;
+
     const msgDiv = document.createElement("div");
     msgDiv.style.marginLeft = indent + "px";
     msgDiv.dataset.id = data.id;
@@ -171,14 +173,15 @@ function createMsgElement(data, indent, postId, chatInput) {
     const parts = [];
 
     // only top‐level messages get reply
-    if (!data.replyTo) {
+    if (!data.replyTo && currentUid) {
         parts.push(`<span class="reply-btn">reply</span>`);
+        ctl.innerHTML = "(" + parts.join("/") + ")";
     }
     // only your own messages get delete
-    if (data.userId === auth.currentUser.uid) {
+    if (data.userId === currentUid) {
         parts.push(`<span class="delete-btn">delete</span>`);
+        ctl.innerHTML = "(" + parts.join("/") + ")";
     }
-    ctl.innerHTML = "(" + parts.join("/") + ")";
 
     ctl.style.display = "none";
     msgDiv.appendChild(ctl);
@@ -281,7 +284,6 @@ window.addEventListener("hashchange", () => {
 
 setupGlobalAuth({
     onLogin: async (user) => {
-        document.getElementById("login-prompt").style.display  = "none";
         document.getElementById("chat-controls").style.display = "flex";
         document.getElementById("chat-input").disabled = false;
         document.getElementById("send-btn" ).disabled = false;
@@ -299,7 +301,6 @@ setupGlobalAuth({
         }
     },
     onLogout: () => {
-        document.getElementById("login-prompt").style.display  = "flex";
         document.getElementById("chat-controls").style.display = "none";
         document.getElementById("chat-input").disabled = true;
         document.getElementById("send-btn" ).disabled = true;

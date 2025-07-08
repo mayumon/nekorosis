@@ -11,12 +11,18 @@ fetch('header.html')
         const logoutBtn = document.getElementById('logout-btn');
 
         loginBtn.addEventListener('click', () =>
-            signInWithGoogle().catch(console.error)
+            signInWithGoogle()
+                .then(() => window.location.reload())
+                .catch(console.error)
         );
+
         logoutBtn.addEventListener('click', () => {
-            if (confirm("log out?")) {
-                signOutUser().catch(console.error);
-            }
+            if (!confirm("log out?")) return;
+            signOutUser()
+                .then(() => {
+                    window.location.reload();
+                })
+                .catch(console.error);
         });
 
         // show/hide buttons

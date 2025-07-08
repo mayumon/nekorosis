@@ -4,9 +4,7 @@ import { collection, addDoc, setDoc, query, orderBy, onSnapshot, serverTimestamp
 import { auth, db, setupGlobalAuth, signInWithGoogle } from "./auth.js";
 
 // cache dom elements
-const loginPromptGB = document.getElementById("guestbook-login-prompt");
-const loginBtnGB    = document.getElementById("guestbook-google-login-btn");
-const guestbookUI   = document.getElementById("guestbook-ui");
+const guestbookForm = document.getElementById("guestbook-form");
 
 const nameInput     = document.getElementById("guest-name");
 const textInput     = document.getElementById("guest-text");
@@ -278,10 +276,15 @@ closePickerBtn.addEventListener('click', () => {
     overlay.style.display = 'none';
 });
 
-document.getElementById("guestbook-google-login-btn")
-    .addEventListener("click", () => signInWithGoogle().catch(console.error));
 
-
+setupGlobalAuth({
+    onLogin: () => {
+        guestbookForm.style.display = "flex";
+    },
+    onLogout: () => {
+        guestbookForm.style.display = "none";
+    }
+});
 
 
 
