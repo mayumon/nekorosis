@@ -307,17 +307,6 @@ setupGlobalAuth({
     }
 });
 
-// set up login/logout button
-document.getElementById("google-login-btn")
-    .addEventListener("click", () => signInWithGoogle().catch(console.error));
-
-
-document.getElementById("logout-btn")
-    .addEventListener("click", () => {
-        signOutUser()
-            .catch(err => console.error("Logout failed:", err));
-    });
-
 // ================================
 // ascii animation
 // ================================

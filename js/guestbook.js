@@ -234,12 +234,6 @@ window.addEventListener("DOMContentLoaded", () => {
     initGuestbookListener();
 });
 
-setupGlobalAuth({
-    onLogin:  () => { loginPromptGB.style.display = "none"; guestbookUI.style.display = "block"; },
-    onLogout: () => { loginPromptGB.style.display = "block"; guestbookUI.style.display = "none"; }
-});
-
-
 // ================================
 // icon-picker
 // ================================

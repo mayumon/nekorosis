@@ -432,75 +432,6 @@ hr.dotted {
 }
 
 
-#logout-btn {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    border: none;
-    background: none;
-    padding: 0;
-    margin: 0;
-    font: inherit;
-    cursor: pointer;
-    order: 0;
-    flex: 0 0 auto;
-
-    margin-left: auto;
-    display: inline-block;
-
-    border: 1px solid white;
-    border-radius: 20px;
-    background: transparent;
-    color: white;
-    width: 5em;
-    height: 1.5em;
-    line-height: 1em;
-    text-align: center;
-    font-size: 0.8em;
-}
-
-#logout-btn:hover{
-    background: white;
-    color: black;
-}
-
-#login-prompt {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 8px;
-}
-
-#google-login-btn{
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    background: none;
-    padding: 0;
-    margin: 0 auto;
-    font: inherit;
-    cursor: pointer;
-    order: 0;
-    flex: 0 0 auto;
-
-    display: block;
-    text-align: center;
-
-    border: 1px solid white;
-    border-radius: 20px;
-    background: transparent;
-    color: white;
-    width: 8em;
-    height: 1.5em;
-    line-height: 1em;
-    font-size: 0.8em;
-}
-
-#google-login-btn:hover{
-    background: white;
-    color: black;
-}
-
 /* only show reply/delete buttons on hover */
 .msg-controls {
     display: none;
@@ -798,11 +729,6 @@ hr.dotted {
     z-index: -1;
 }
 
-#guestbook-login-prompt {
-    margin-bottom: 1rem;
-    display: none;
-}
-
 #guestbook-ui {
     display: none;
     width: 100%;
@@ -913,6 +839,68 @@ hr.dotted {
     width: auto;
 }
 
+#google-login-btn{
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background: none;
+    padding: 0;
+    margin: 0 auto;
+    font: inherit;
+    cursor: pointer;
+    order: 0;
+    flex: 0 0 auto;
+
+    margin-left: auto;
+    display: inline-block;
+
+    border: 1px solid white;
+    border-radius: 20px;
+    background: transparent;
+    color: white;
+    width: 5em;
+    height: 1.5em;
+    line-height: 1em;
+    text-align: center;
+    font-size: 0.8em;
+}
+
+#google-login-btn:hover{
+    background: white;
+    color: black;
+}
+
+#logout-btn {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: none;
+    background: none;
+    padding: 0;
+    margin: 0;
+    font: inherit;
+    cursor: pointer;
+    order: 0;
+    flex: 0 0 auto;
+
+    margin-left: auto;
+    display: inline-block;
+
+    border: 1px solid white;
+    border-radius: 20px;
+    background: transparent;
+    color: white;
+    width: 5em;
+    height: 1.5em;
+    line-height: 1em;
+    text-align: center;
+    font-size: 0.8em;
+}
+
+#logout-btn:hover{
+    background: white;
+    color: black;
+}
 
 
 
