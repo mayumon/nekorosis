@@ -38,7 +38,9 @@ import { db } from "./auth.js";
     }
 })();
 
+// ================================
 // danmaku comments
+// ================================
 
 let danmakuComments = [];
 
@@ -121,3 +123,33 @@ function launchDanmaku() {
 }
 
 setInterval(launchDanmaku, TICK_MS);
+
+
+// ================================
+// nano * radio 365
+// ================================
+
+async function loadSongOfDay() {
+    // fetch song list
+    const resp = await fetch('assets/nanoradio.json');
+    const songs = await resp.json();
+
+    // get today date (YYYY-MM-DD)
+    const today = new Date().toISOString().slice(0,10);
+
+    // find respective entry
+    const entry = songs.find(s => s.date === today);
+    if (!entry) return;  // todo: nothing found view
+
+    // update DOM
+    const link = document.getElementById('song-link');
+    const thumb = document.getElementById('song-thumb');
+    const title = document.getElementById('song-title');
+
+    link.href = `https://www.youtube.com/watch?v=${entry.videoId}`;
+    thumb.src  = `https://img.youtube.com/vi/${entry.videoId}/mqdefault.jpg`;
+    thumb.alt  = entry.title;
+    title.textContent = entry.title;
+}
+
+loadSongOfDay();
