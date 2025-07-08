@@ -15,8 +15,10 @@ import { db } from "./auth.js";
     try {
         const res = await fetch(base + 'posts.json');
         const { posts } = await res.json();
-        // sort descending by date
+
+        // sort descending by date todo: change this one dreadful day
         posts.sort((a, b) => new Date(b.date) - new Date(a.date));
+
         const newest = posts[0];
         if (newest) {
             const thumb = document.getElementById('newest-thumb');

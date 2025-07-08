@@ -1,3 +1,5 @@
+<!--index.html-->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,26 +26,35 @@
 
                 <!-- newest post card -->
                 <div class="post-card" id="newest-post-card">
-                    <div class="square-header">> newest post</div>
                     <div class="post-square">
                         <a id="newest-link" href="#">
                             <img src="" alt="newest post thumbnail" id="newest-thumb">
                         </a>
                         <div class="danmaku"></div>
                     </div>
-                    <div class="square-title" id="newest-title"></div>
+                    <div class="square-title">
+                        <div class="bubble-header">★ newest post</div>
+                        <div class="bubble-text" id="newest-title"></div>
+                    </div>
                 </div>
 
                 <!-- empty placeholders -->
                 <div class="post-card">
-                    <div class="square-header">> song of the day</div>
                     <div class="post-square"></div>
-                    <div class="square-title">cool person - cool song</div>
+
+                    <div class="square-title">
+                        <div class="bubble-header">♩ nano * radio 365</div>
+                        <div class="bubble-text">cool person - cool song</div>
+                    </div>
                 </div>
+
                 <div class="post-card">
-                    <div class="square-header">> something else</div>
                     <div class="post-square"></div>
-                    <div class="square-title">i mean i dont know</div>
+
+                    <div class="square-title">
+                        <div class="bubble-header">★ something else</div>
+                        <div class="bubble-text">i mean i dont know</div>
+                    </div>
                 </div>
 
             </div>
@@ -53,7 +64,7 @@
         <h2>♡˚. guestbook</h2>
 
         <div id="guestbook-login-prompt">
-            <button id="guestbook-google-login-btn">Log in with Google to sign</button>
+            <button id="guestbook-google-login-btn">log in with google</button>
         </div>
 
         <!-- main guestbook ui: name + message inputs, draggable icons, and drop zone -->

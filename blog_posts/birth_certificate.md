@@ -72,20 +72,36 @@ nekorosis/n3korosis began development in february 20th, 2025 - though it has alw
 
 - chat fixes 
   - x ensure chat messages are "clean" no script running
-  - (idea) ensure unique usernames (possible???)
   - (idea) change colour picking shape?
   - x add user sheet in data?
   - x add logout button
   - x add replying
+  - chat revamp
+    - add date before ms
+
+- homepage improvements
+  - x latest post highlight view
+    - x danmaku comments
+  - song of the day view
+  - twt feed
+
+- detailed view fixes
+  - no tags, just a header
+  - change display of posts
+
+- new pages
+  - music page
+  - 
 
 - (big) drawing/sticker guestbook
   - fields:
     - creature/thing pick
     - name
     - short message
-    - a song?
+    - a song? too stressful? can change anytime tho...? can they?
     - the date
     - visitor number
+    - badges?
   - rules
     - not too close to other's
     - i want the setup around it (?)
@@ -99,7 +115,8 @@ nekorosis/n3korosis began development in february 20th, 2025 - though it has alw
   - add random icon at first
   - scene behind
 
-  - (DONE) drag and drop
+  - x drag and drop
+    - bug fix needed on resizing
   
   - highlighting
   - customizing 
