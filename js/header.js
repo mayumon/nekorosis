@@ -7,7 +7,7 @@ fetch('header.html')
         document.getElementById('header-placeholder').innerHTML = html;
 
         // now that header is in DOM, grab the buttons:
-        const loginBtn  = document.getElementById('google-login-btn');
+        const loginBtn  = document.getElementById('login-btn');
         const logoutBtn = document.getElementById('logout-btn');
 
         loginBtn.addEventListener('click', () =>

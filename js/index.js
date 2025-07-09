@@ -4,7 +4,9 @@ import {
     collection,
     query,
     orderBy,
-    onSnapshot
+    onSnapshot,
+    collectionGroup,
+    limit
 } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 import { db } from "./auth.js";
 
@@ -153,3 +155,42 @@ async function loadSongOfDay() {
 }
 
 loadSongOfDay();
+
+
+// ================================
+// activity feed
+// ================================
+
+function timeAgo(date) {
+    const seconds = Math.floor((Date.now() - date.getTime()) / 1000);
+    if (seconds < 60) return `${seconds}s ago`;
+    const minutes = Math.floor(seconds / 60);
+    if (minutes < 60) return `${minutes}m ago`;
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24)   return `${hours}h ago`;
+    const days = Math.floor(hours / 24);
+    return `${days}d ago`;
+}
+
+const activityList = document.getElementById("activity-list");
+const feedQuery = query(
+    collectionGroup(db, "chat"),
+    orderBy("createdAt", "desc"),
+    limit(3) // maybe increase?
+);
+
+onSnapshot(feedQuery, snapshot => {
+    activityList.innerHTML = "";
+    snapshot.docs.forEach(docSnap => {
+        const data = docSnap.data();
+
+        const postId = docSnap.ref.parent.parent.id;
+        const when   = data.createdAt?.toDate
+            ? timeAgo(data.createdAt.toDate())
+            : "";
+
+        const li = document.createElement("li");
+        li.textContent = `${data.username} sent a message in ${postId} (${when})`;
+        activityList.appendChild(li);
+    });
+});

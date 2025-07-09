@@ -839,7 +839,7 @@ hr.dotted {
     width: auto;
 }
 
-#google-login-btn{
+.log-btn{
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
@@ -865,7 +865,7 @@ hr.dotted {
     font-size: 0.8em;
 }
 
-#google-login-btn:hover{
+.log-btn:hover{
     background: white;
     color: black;
 }
@@ -1124,6 +1124,33 @@ hr.dotted {
 
 
 
+/* activity feed */
+
+#activity-feed {
+    color: white;
+    background-color: blue;
+    margin: 1rem 0;
+    padding: 0 30px;
+}
+#activity-feed h3 {
+    margin-bottom: .5rem;
+    font-size: 1em;
+    text-transform: lowercase;
+    letter-spacing: .5px;
+}
+#activity-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+#activity-list li {
+    font-size: .9em;
+    margin-bottom: 4px;
+    opacity: 0.8;
+}
+#activity-list li:last-child {
+    margin-bottom: 0;
+}
 
 
 
