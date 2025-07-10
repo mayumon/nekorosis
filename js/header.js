@@ -6,7 +6,7 @@ fetch('header.html')
     .then(html => {
         document.getElementById('header-placeholder').innerHTML = html;
 
-        // now that header is in DOM, grab the buttons:
+        const helloBtn  = document.getElementById('hello-btn');
         const loginBtn  = document.getElementById('login-btn');
         const logoutBtn = document.getElementById('logout-btn');
 
@@ -24,6 +24,53 @@ fetch('header.html')
                 })
                 .catch(console.error);
         });
+
+
+
+
+
+
+
+
+
+
+        // HELLO WORLD
+
+        helloBtn.addEventListener('click', () => {
+
+            // build overlay
+            const overlay = document.createElement('div');
+            overlay.className = 'popup-overlay';
+            overlay.innerHTML = `
+        <div class="popup-box">
+          <button class="close">&times;</button>
+          <h2>Hello World!</h2>
+          <p>wowow cant wait until things are here.</p>
+        </div>
+      `;
+            document.body.appendChild(overlay);
+
+            // close handler
+            overlay.querySelector('button.close').addEventListener('click', () => {
+                overlay.remove();
+            });
+            // close on outside‐click
+            overlay.addEventListener('click', e => {
+                if (e.target === overlay) overlay.remove();
+            });
+        });
+
+
+
+
+
+
+
+
+
+
+
+
 
         // show/hide buttons
         setupGlobalAuth({
