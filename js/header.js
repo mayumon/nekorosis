@@ -1,6 +1,6 @@
 // header.js
 import { setupGlobalAuth, signInWithGoogle, signOutUser } from './auth.js';
-import { doc, setDoc } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+import { doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 import { auth, db } from './auth.js';
 
 fetch('header.html')
@@ -48,7 +48,18 @@ fetch('header.html')
 
 // CUSTOMIZE POPUP
 
-function showCustomizePopup() {
+async function showCustomizePopup() {
+
+    // load user preferences
+    const user = auth.currentUser;
+    let saved = {};
+    if (user) {
+        const snap = await getDoc(doc(db, "users", user.uid));
+        if (snap.exists() && snap.data().customization) {
+            saved = snap.data().customization;
+        }
+    }
+
     const overlay = document.createElement('div');
     overlay.className = 'popup-overlay';
 
@@ -145,46 +156,60 @@ function showCustomizePopup() {
 
     // initialize colour pickers
     overlay.querySelectorAll('.color-group').forEach(groupEl => {
+        const group = groupEl.dataset.group;
         const swatches = groupEl.querySelectorAll('.colour-option');
-        swatches.forEach((swatch, i) => {
-
-            swatch.style.backgroundColor = swatch.dataset.colour;
-
-            // click
-            swatch.onclick = () => {
-                swatches.forEach(s => s.classList.remove('selected'));
-                swatch.classList.add('selected');
-                console.log(`picked for ${groupEl.dataset.group}:`, swatch.dataset.colour);
+        swatches.forEach((sw, i) => {
+            sw.style.backgroundColor = sw.dataset.colour;
+            sw.onclick = () => {
+                swatches.forEach(x=>x.classList.remove('selected'));
+                sw.classList.add('selected');
             };
 
-            if (i === 0) swatch.classList.add('selected');
+            // pick saved colour or default
+            const want = saved[
+                group==='main' ? 'mainColour'
+                    : group==='accent1' ? 'accent1Colour'
+                        : group==='accent2' ? 'accent2Colour'
+                            : null
+                ];
+
+            if (want) {
+                const match = [...swatches].find(x=>x.dataset.colour===want);
+                if (match) match.classList.add('selected');
+                else if (i===0) sw.classList.add('selected');
+            } else if (i===0) {
+                sw.classList.add('selected');
+            }
         });
     });
 
 
     // initialize letter‐pickers
     overlay.querySelectorAll('.letter-group').forEach(groupEl => {
-        const left  = groupEl.querySelector('.arrow.left');
-        const right = groupEl.querySelector('.arrow.right');
-        const span  = groupEl.querySelector('.letter');
+        const group = groupEl.dataset.group;
+        const left = groupEl.querySelector('.arrow.left');
+        const right= groupEl.querySelector('.arrow.right');
+        const span = groupEl.querySelector('.letter');
 
-        groupEl.dataset.index = 0;
-        const update = () => {
-            const idx = parseInt(groupEl.dataset.index,10);
-            span.textContent = letters[idx];
-            console.log(`letter for ${groupEl.dataset.group}:`, letters[idx]);
-        };
+        // pick saved colour or default
+        const savedLetter = saved[
+            group==='accent1' ? 'accent1Letter'
+                : group==='accent2' ? 'accent2Letter'
+                    : group==='emotion' ? 'emotionLetter'
+                        : group==='accessory' ? 'accessoryLetter'
+                            : null
+            ] || 'none';
+        let idx = letters.indexOf(savedLetter);
+        if (idx<0) idx = 0;
+        groupEl.dataset.index = idx;
+        const update = () => span.textContent = letters[ +groupEl.dataset.index ];
         left.onclick = () => {
-            let idx = parseInt(groupEl.dataset.index,10) - 1;
-            if (idx < 0) idx = letters.length - 1;
-            groupEl.dataset.index = idx;
-            update();
+            idx = (idx - 1 + letters.length) % letters.length;
+            groupEl.dataset.index = idx; update();
         };
         right.onclick = () => {
-            let idx = parseInt(groupEl.dataset.index,10) + 1;
-            if (idx >= letters.length) idx = 0;
-            groupEl.dataset.index = idx;
-            update();
+            idx = (idx + 1) % letters.length;
+            groupEl.dataset.index = idx; update();
         };
         update();
     });
