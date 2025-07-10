@@ -1,5 +1,7 @@
 // header.js
 import { setupGlobalAuth, signInWithGoogle, signOutUser } from './auth.js';
+import { doc, setDoc } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+import { auth, db } from './auth.js';
 
 fetch('header.html')
     .then(res => res.text())
@@ -131,6 +133,11 @@ function showCustomizePopup() {
   `;
 
     document.body.appendChild(overlay);
+    overlay.querySelector('.popup-box').insertAdjacentHTML('beforeend', `
+    <div class="popup-footer">
+      <button id="save-custom">Save</button>
+    </div>
+  `);
 
     // close handlers
     overlay.querySelector('button.close').onclick = () => overlay.remove();
@@ -182,7 +189,49 @@ function showCustomizePopup() {
         update();
     });
 
+    // save preferences
+    async function saveUserPrefs(prefs) {
+        const user = auth.currentUser;
+        if (!user) {
+            alert("LOG IN");
+            return;
+        }
+        const userRef = doc(db, "users", user.uid);
+        await setDoc(userRef, { customization: prefs }, { merge: true });
+        alert("Saved!");
+        overlay.remove();
+    }
 
+    // save
+    overlay.querySelector('#save-custom').onclick = () => {
 
+        const prefs = {};
 
+        // main colour
+        prefs.mainColour = overlay
+            .querySelector('.color-group[data-group="main"] .colour-option.selected')
+            .dataset.colour;
+
+        // accent1
+        const a1group = overlay.querySelector('.color-group[data-group="accent1"]');
+        prefs.accent1Colour = a1group.querySelector('.colour-option.selected').dataset.colour;
+        prefs.accent1Letter = overlay.querySelector('.letter-group[data-group="accent1"] .letter').textContent;
+
+        // accent2
+        const a2group = overlay.querySelector('.color-group[data-group="accent2"]');
+        prefs.accent2Colour = a2group.querySelector('.colour-option.selected').dataset.colour;
+        prefs.accent2Letter = overlay.querySelector('.letter-group[data-group="accent2"] .letter').textContent;
+
+        // emotion letter
+        prefs.emotionLetter = overlay.querySelector('.letter-group[data-group="emotion"] .letter').textContent;
+
+        // accessory letter
+        prefs.accessoryLetter = overlay.querySelector('.letter-group[data-group="accessory"] .letter').textContent;
+
+        // finally save
+        saveUserPrefs(prefs).catch(err => {
+            console.error(err);
+            alert("FAILED");
+        });
+    };
 }
