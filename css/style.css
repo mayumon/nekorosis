@@ -1237,3 +1237,22 @@ hr.dotted {
     border-width: 4px;
     border-color: black;
 }
+
+.popup-left .colour-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.popup-left .colour-option {
+    width: 24px;
+    height: 24px;
+    border: 2px solid transparent;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.popup-left .colour-option.selected {
+    border-color: black;
+}
