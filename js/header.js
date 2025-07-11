@@ -146,6 +146,21 @@ async function showCustomizePopup() {
 
     document.body.appendChild(overlay);
 
+    // save button
+    const saveBtn = overlay.querySelector('#save-custom');
+    saveBtn.addEventListener('click', () => {
+        const prefs = {
+            mainColour: overlay.querySelector('.color-group[data-group="main"] .selected').dataset.colour,
+            accent1Colour: overlay.querySelector('.color-group[data-group="accent1"] .selected').dataset.colour,
+            accent1Letter: overlay.querySelector('.letter-group[data-group="accent1"] .letter').textContent,
+            accent2Colour: overlay.querySelector('.color-group[data-group="accent2"] .selected').dataset.colour,
+            accent2Letter: overlay.querySelector('.letter-group[data-group="accent2"] .letter').textContent,
+            emotionLetter: overlay.querySelector('.letter-group[data-group="emotion"] .letter').textContent,
+            accessoryLetter: overlay.querySelector('.letter-group[data-group="accessory"] .letter').textContent,
+        };
+        saveUserPrefs(prefs);
+    });
+
     overlay.querySelector('.popup-right').style.position = 'relative';
     overlay.querySelector('.popup-right').style.width    = '200px';
     overlay.querySelector('.popup-right').style.height   = '200px';
@@ -201,7 +216,6 @@ async function showCustomizePopup() {
         });
     }
 
-
     // initialize colour pickers
     overlay.querySelectorAll('.color-group').forEach(groupEl => {
         const group = groupEl.dataset.group;
@@ -230,7 +244,6 @@ async function showCustomizePopup() {
             }
         });
     });
-
 
     // initialize letter‐pickers
     overlay.querySelectorAll('.letter-group').forEach(groupEl => {
@@ -270,30 +283,37 @@ async function showCustomizePopup() {
 
     renderAvatar();
 
-
-    // save button
-    document.body.appendChild(overlay);
-    overlay.querySelector('.popup-box').insertAdjacentHTML('beforeend', `
-    <div class="popup-footer">
-      <button id="save-custom">Save</button>
-    </div>
-    `);
-
     // close handlers
     overlay.querySelector('button.close').onclick = () => overlay.remove();
     overlay.onclick = e => { if (e.target === overlay) overlay.remove(); };
 
-    // save preferences
+    // helper: save preferences
     async function saveUserPrefs(prefs) {
         const user = auth.currentUser;
         if (!user) {
-            alert("LOG IN");
+            alert("youre not logged in. how did you even get here?");
             return;
         }
+
         const userRef = doc(db, "users", user.uid);
-        await setDoc(userRef, { customization: prefs }, { merge: true });
-        alert("Saved!");
-        overlay.remove();
+        try {
+            // disable the save button to prevent double-submits
+            const saveBtn = overlay.querySelector('#save-custom');
+            saveBtn.disabled = true;
+
+            await setDoc(userRef, { customization: prefs }, { merge: true });
+            alert("avatar saved!");
+            overlay.remove();
+
+        } catch (err) {
+            console.error("error saving:", err);
+            alert("failed to save: " + err.message);
+
+        } finally {
+            // re-enable the button in case of error
+            const saveBtn = overlay.querySelector('#save-custom');
+            if (saveBtn) saveBtn.disabled = false;
+        }
     }
 
     // save
@@ -307,9 +327,9 @@ async function showCustomizePopup() {
             .dataset.colour;
 
         // accent
-        const a1group = overlay.querySelector('.color-group[data-group="accent"]');
+        const a1group = overlay.querySelector('.color-group[data-group="accent1"]');
         prefs.accent1Colour = a1group.querySelector('.colour-option.selected').dataset.colour;
-        prefs.accent1Letter = overlay.querySelector('.letter-group[data-group="accent"] .letter').textContent;
+        prefs.accent1Letter = overlay.querySelector('.letter-group[data-group="accent1"] .letter').textContent;
 
         // accent2
         const a2group = overlay.querySelector('.color-group[data-group="accent2"]');
@@ -321,12 +341,6 @@ async function showCustomizePopup() {
 
         // accessory letter
         prefs.accessoryLetter = overlay.querySelector('.letter-group[data-group="accessory"] .letter').textContent;
-
-        // finally save
-        saveUserPrefs(prefs).catch(err => {
-            console.error(err);
-            alert("FAILED");
-        });
     };
 }
 
