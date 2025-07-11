@@ -165,13 +165,13 @@ async function showCustomizePopup() {
     }
 
     function renderAvatar() {
-        const prefs = readPrefs();
+        const p = readPrefs();
         const layers = [
-            { type: 'main',      key: 'base',                  color: prefs.mainColour      },
-            { type: 'accent1',   key: prefs.accent1Letter,     color: prefs.accent1Colour   },
-            { type: 'accent2',   key: prefs.accent2Letter,     color: prefs.accent2Colour   },
-            { type: 'emotion',   key: prefs.emotionLetter,     color: '#ffffff'             },
-            { type: 'accessory', key: prefs.accessoryLetter,   color: '#ffffff'             },
+            { type:'main',    key:'base',               color:p.mainColour    },
+            { type:'accent',  key:p.accent1Letter,      color:p.accent1Colour },
+            { type:'accent',  key:p.accent2Letter,      color:p.accent2Colour },
+            { type:'emotion', key:p.emotionLetter,      color:'#fff'         },
+            { type:'accessory',key:p.accessoryLetter,   color:'#fff'         },
         ];
 
         const container = overlay.querySelector('.avatar-preview');
@@ -189,6 +189,7 @@ async function showCustomizePopup() {
         });
     }
 
+
     // initialize colour pickers
     overlay.querySelectorAll('.color-group').forEach(groupEl => {
         const group = groupEl.dataset.group;
@@ -203,7 +204,7 @@ async function showCustomizePopup() {
             // pick saved colour or default
             const want = saved[
                 group==='main' ? 'mainColour'
-                    : group==='accent1' ? 'accent1Colour'
+                    : group==='accent' ? 'accent1Colour'
                         : group==='accent2' ? 'accent2Colour'
                             : null
                 ];
@@ -228,7 +229,7 @@ async function showCustomizePopup() {
 
         // pick saved colour or default
         const savedLetter = saved[
-            group==='accent1' ? 'accent1Letter'
+            group==='accent' ? 'accent1Letter'
                 : group==='accent2' ? 'accent2Letter'
                     : group==='emotion' ? 'emotionLetter'
                         : group==='accessory' ? 'accessoryLetter'
@@ -293,10 +294,10 @@ async function showCustomizePopup() {
             .querySelector('.color-group[data-group="main"] .colour-option.selected')
             .dataset.colour;
 
-        // accent1
-        const a1group = overlay.querySelector('.color-group[data-group="accent1"]');
+        // accent
+        const a1group = overlay.querySelector('.color-group[data-group="accent"]');
         prefs.accent1Colour = a1group.querySelector('.colour-option.selected').dataset.colour;
-        prefs.accent1Letter = overlay.querySelector('.letter-group[data-group="accent1"] .letter').textContent;
+        prefs.accent1Letter = overlay.querySelector('.letter-group[data-group="accent"] .letter').textContent;
 
         // accent2
         const a2group = overlay.querySelector('.color-group[data-group="accent2"]');
