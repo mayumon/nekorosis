@@ -167,25 +167,37 @@ async function showCustomizePopup() {
     function renderAvatar() {
         const p = readPrefs();
         const layers = [
-            { type:'main',    key:'base',               color:p.mainColour    },
-            { type:'accent',  key:p.accent1Letter,      color:p.accent1Colour },
-            { type:'accent',  key:p.accent2Letter,      color:p.accent2Colour },
-            { type:'emotion', key:p.emotionLetter,      color:'#fff'         },
-            { type:'accessory',key:p.accessoryLetter,   color:'#fff'         },
+            { type: 'main',     key: 'base',            color: p.mainColour    },
+            { type: 'accent',  key: p.accent1Letter,   color: p.accent1Colour },
+            { type: 'accent',  key: p.accent2Letter,   color: p.accent2Colour },
+            { type: 'emotion',  key: p.emotionLetter,   color: null            },
+            { type: 'accessory',key: p.accessoryLetter, color: null            },
         ];
 
         const container = overlay.querySelector('.avatar-preview');
         container.innerHTML = '';
 
-        layers.forEach(({type, key, color}) => {
-            if (!key || key==='none') return;
-            const div = document.createElement('div');
-            div.className = 'avatar-layer';
-            div.style.color = color;
-            const src = `assets/avatar/${type}/${key}.png`;
-            div.style.maskImage       = `url("${src}")`;
-            div.style.WebkitMaskImage = `url("${src}")`;
-            container.appendChild(div);
+        layers.forEach(({ type, key, color }) => {
+            if (!key || key === 'none') return;
+
+            const folder = type === 'accent' ? 'accent' : type;
+            const src    = `assets/avatar/${folder}/${key}.png`;
+
+            if (type === 'emotion' || type === 'accessory') {
+                // full-color PNG
+                const img = document.createElement('img');
+                img.className = 'avatar-layer';
+                img.src       = src;
+                container.appendChild(img);
+            } else {
+                // masked + tinted
+                const div = document.createElement('div');
+                div.className = 'avatar-layer masked';
+                div.style.color            = color;
+                div.style.maskImage        = `url("${src}")`;
+                div.style.webkitMaskImage  = `url("${src}")`;
+                container.appendChild(div);
+            }
         });
     }
 
@@ -203,9 +215,9 @@ async function showCustomizePopup() {
 
             // pick saved colour or default
             const want = saved[
-                group==='main' ? 'mainColour'
-                    : group==='accent' ? 'accent1Colour'
-                        : group==='accent2' ? 'accent2Colour'
+                group === 'main' ? 'mainColour'
+                    : group === 'accent1'? 'accent1Colour'
+                        : group === 'accent2'? 'accent2Colour'
                             : null
                 ];
 
@@ -229,11 +241,11 @@ async function showCustomizePopup() {
 
         // pick saved colour or default
         const savedLetter = saved[
-            group==='accent' ? 'accent1Letter'
-                : group==='accent2' ? 'accent2Letter'
-                    : group==='emotion' ? 'emotionLetter'
-                        : group==='accessory' ? 'accessoryLetter'
-                            : null
+            group === 'accent1' ? 'accent1Letter'
+                : group === 'accent2' ? 'accent2Letter'
+                    : group === 'emotion' ? 'emotionLetter'
+                        : group === 'accessory'? 'accessoryLetter'
+                            :                       null
             ] || 'none';
         let idx = letters.indexOf(savedLetter);
         if (idx<0) idx = 0;
