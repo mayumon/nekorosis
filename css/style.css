@@ -1175,7 +1175,7 @@ hr.dotted {
 
 
 /* ================================ */
-/* hello‐world popup */
+/* customize popup */
 /* ================================ */
 .popup-overlay {
     position: fixed;
@@ -1192,8 +1192,11 @@ hr.dotted {
     color: black;
     padding: 2rem;
     border-radius: 8px;
-    text-align: center;
-    max-width: 300px;
+    /* your existing max-width / max-height / overflow-y from before: */
+    max-width: 600px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
     box-shadow: 0 2px 10px rgba(0,0,0,0.3);
     position: relative;
 }
@@ -1210,12 +1213,17 @@ hr.dotted {
 
 .popup-content {
     display: flex;
+    flex-direction: row;
+    align-items: flex-start;
     gap: 1rem;
 }
 
 /* left column */
 .popup-left {
     flex: 1;
+    overflow-y: auto;
+    /* you can tweak this to taste */
+    max-height: 60vh;
 }
 
 .popup-left h4 {
@@ -1241,8 +1249,6 @@ hr.dotted {
 .popup-left .colour-options {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-top: 1rem;
 }
 
 .popup-left .colour-option {
@@ -1255,4 +1261,52 @@ hr.dotted {
 
 .popup-left .colour-option.selected {
     border-color: black;
+}
+
+.popup-right {
+    flex: 0 0 200px;
+    position: relative;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.avatar-preview {
+    position: relative;
+    width: 200px;
+    height: 200px;
+}
+
+.avatar-layer {
+    position: absolute;
+    top:    0;
+    left:   0;
+    width:  100%;
+    height: 100%;
+
+    background-color: currentColor;
+    mask-repeat:   no-repeat;
+    mask-position: center;
+    mask-size:     contain;
+
+    -webkit-mask-repeat:   no-repeat;
+    -webkit-mask-position: center;
+    -webkit-mask-size:     contain;
+}
+
+.avatar-preview {
+    position: relative;
+    width: 200px;
+    height: 200px;
+}
+
+.avatar-layer {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-blend-mode: multiply;
 }

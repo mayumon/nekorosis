@@ -45,7 +45,6 @@ fetch('header.html')
     .catch(console.error);
 
 
-
 // CUSTOMIZE POPUP
 
 async function showCustomizePopup() {
@@ -132,27 +131,63 @@ async function showCustomizePopup() {
             <span class="letter">none</span>
             <button class="arrow right">&gt;</button>
           </div>
-
         </div>
 
         <div class="popup-right">
-          <img src="assets/images/mumu.png" alt="decorative">
-        </div>
-
+        <div class="avatar-preview"></div>
       </div>
-    </div>
-  `;
 
-    document.body.appendChild(overlay);
-    overlay.querySelector('.popup-box').insertAdjacentHTML('beforeend', `
+    </div>
     <div class="popup-footer">
       <button id="save-custom">Save</button>
     </div>
-  `);
+  </div>
+  `;
 
-    // close handlers
-    overlay.querySelector('button.close').onclick = () => overlay.remove();
-    overlay.onclick = e => { if (e.target === overlay) overlay.remove(); };
+    document.body.appendChild(overlay);
+
+    overlay.querySelector('.popup-right').style.position = 'relative';
+    overlay.querySelector('.popup-right').style.width    = '200px';
+    overlay.querySelector('.popup-right').style.height   = '200px';
+
+    // helper to read prefs
+    function readPrefs() {
+        const o = overlay;
+        return {
+            mainColour:      o.querySelector('.color-group[data-group="main"] .selected').dataset.colour,
+            accent1Colour:   o.querySelector('.color-group[data-group="accent1"] .selected').dataset.colour,
+            accent1Letter:   o.querySelector('.letter-group[data-group="accent1"] .letter').textContent,
+            accent2Colour:   o.querySelector('.color-group[data-group="accent2"] .selected').dataset.colour,
+            accent2Letter:   o.querySelector('.letter-group[data-group="accent2"] .letter').textContent,
+            emotionLetter:   o.querySelector('.letter-group[data-group="emotion"] .letter').textContent,
+            accessoryLetter: o.querySelector('.letter-group[data-group="accessory"] .letter').textContent,
+        };
+    }
+
+    function renderAvatar() {
+        const prefs = readPrefs();
+        const layers = [
+            { type: 'main',      key: 'base',                  color: prefs.mainColour      },
+            { type: 'accent1',   key: prefs.accent1Letter,     color: prefs.accent1Colour   },
+            { type: 'accent2',   key: prefs.accent2Letter,     color: prefs.accent2Colour   },
+            { type: 'emotion',   key: prefs.emotionLetter,     color: '#ffffff'             },
+            { type: 'accessory', key: prefs.accessoryLetter,   color: '#ffffff'             },
+        ];
+
+        const container = overlay.querySelector('.avatar-preview');
+        container.innerHTML = '';
+
+        layers.forEach(({type, key, color}) => {
+            if (!key || key==='none') return;
+            const div = document.createElement('div');
+            div.className = 'avatar-layer';
+            div.style.color = color;
+            const src = `assets/avatar/${type}/${key}.png`;
+            div.style.maskImage       = `url("${src}")`;
+            div.style.WebkitMaskImage = `url("${src}")`;
+            container.appendChild(div);
+        });
+    }
 
     // initialize colour pickers
     overlay.querySelectorAll('.color-group').forEach(groupEl => {
@@ -214,6 +249,27 @@ async function showCustomizePopup() {
         update();
     });
 
+    const triggers = [
+        ...overlay.querySelectorAll('.colour-option'),
+        ...overlay.querySelectorAll('.letter-group .arrow')
+    ];
+    triggers.forEach(el => el.addEventListener('click', renderAvatar));
+
+    renderAvatar();
+
+
+    // save button
+    document.body.appendChild(overlay);
+    overlay.querySelector('.popup-box').insertAdjacentHTML('beforeend', `
+    <div class="popup-footer">
+      <button id="save-custom">Save</button>
+    </div>
+    `);
+
+    // close handlers
+    overlay.querySelector('button.close').onclick = () => overlay.remove();
+    overlay.onclick = e => { if (e.target === overlay) overlay.remove(); };
+
     // save preferences
     async function saveUserPrefs(prefs) {
         const user = auth.currentUser;
@@ -260,3 +316,4 @@ async function showCustomizePopup() {
         });
     };
 }
+
