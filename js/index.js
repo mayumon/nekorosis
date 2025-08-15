@@ -176,21 +176,40 @@ const activityList = document.getElementById("activity-list");
 const feedQuery = query(
     collectionGroup(db, "chat"),
     orderBy("createdAt", "desc"),
-    limit(3) // maybe increase?
+    limit(12)
 );
 
-onSnapshot(feedQuery, snapshot => {
+onSnapshot(feedQuery, (snapshot) => {
     activityList.innerHTML = "";
-    snapshot.docs.forEach(docSnap => {
+
+    snapshot.docs.forEach((docSnap) => {
         const data = docSnap.data();
 
-        const postId = docSnap.ref.parent.parent.id;
-        const when   = data.createdAt?.toDate
+
+        const postId = docSnap.ref.parent.parent?.id || "unknown";
+        const when = data.createdAt && data.createdAt.toDate
             ? timeAgo(data.createdAt.toDate())
             : "";
 
         const li = document.createElement("li");
-        li.textContent = `${data.username} sent a message in ${postId} (${when})`;
+
+        const name = document.createElement("strong");
+        name.textContent = data.username || "anon";
+        li.appendChild(name);
+
+        li.appendChild(document.createTextNode(" sent a message in "));
+
+        const a = document.createElement("a");
+
+        a.href = `blog.html#${encodeURIComponent(postId)}`;
+        a.textContent = postId;
+
+        li.appendChild(a);
+
+        if (when) {
+            li.appendChild(document.createTextNode(` (${when})`));
+        }
+
         activityList.appendChild(li);
     });
 });

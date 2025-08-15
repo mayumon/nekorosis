@@ -77,12 +77,13 @@ nekorosis/n3korosis began development in february 20th, 2025 - though it has alw
   - x add logout button
   - x add replying
   - chat revamp
-    - add date before ms
+    - add date before messages
+    - add avatar before messages
 
 - homepage improvements
   - x latest post highlight view
     - x danmaku comments
-  - song of the day view
+  - x song of the day view
   - twt feed
 
 - detailed view fixes
@@ -112,7 +113,6 @@ nekorosis/n3korosis began development in february 20th, 2025 - though it has alw
   - x chat bubble.. thing on hover.
     - add border on border if possible?
 
-  - add random icon at first
   - scene behind
 
   - x drag and drop

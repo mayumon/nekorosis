@@ -27,20 +27,25 @@ fetch('header.html')
                 .catch(console.error);
         });
 
-        // customization screen
         customizeBtn.addEventListener('click', showCustomizePopup);
+        customizeBtn.style.display = 'none';
 
         // show/hide buttons
         setupGlobalAuth({
             onLogin: () => {
                 loginBtn.style.display  = 'none';
                 logoutBtn.style.display = '';
+                customizeBtn.style.display = 'flex';
+                renderHeaderAvatar(customizeBtn);
             },
             onLogout: () => {
                 loginBtn.style.display  = '';
                 logoutBtn.style.display = 'none';
+                customizeBtn.style.display = 'none';
             }
         });
+
+
     })
     .catch(console.error);
 
@@ -88,12 +93,12 @@ async function showCustomizePopup() {
         <div class="popup-left">
 
           <div class="color-group" data-group="main">
-            <h4>Main</h4>
+            <h4>main</h4>
             <div class="colour-options">${swatchesHTML}</div>
           </div>
 
           <div class="color-group" data-group="accent1">
-            <h4>Accent 1</h4>
+            <h4>accent 1</h4>
             
             <div class="letter-group" data-group="accent1">
               <button class="arrow left">&lt;</button>
@@ -106,7 +111,7 @@ async function showCustomizePopup() {
           </div>
 
           <div class="color-group" data-group="accent2">
-            <h4>Accent 2</h4>
+            <h4>accent 2</h4>
             
             <div class="letter-group" data-group="accent2">
               <button class="arrow left">&lt;</button>
@@ -119,7 +124,7 @@ async function showCustomizePopup() {
           </div>
 
           <div class="letter-group" data-group="emotion">
-            <h4>Emotion</h4>
+            <h4>emotion</h4>
             <button class="arrow left">&lt;</button>
             <span class="letter">none</span>
             <button class="arrow right">&gt;</button>
@@ -164,57 +169,6 @@ async function showCustomizePopup() {
     overlay.querySelector('.popup-right').style.position = 'relative';
     overlay.querySelector('.popup-right').style.width    = '200px';
     overlay.querySelector('.popup-right').style.height   = '200px';
-
-    // helper to read prefs
-    function readPrefs() {
-        const o = overlay;
-        return {
-            mainColour:      o.querySelector('.color-group[data-group="main"] .selected').dataset.colour,
-            accent1Colour:   o.querySelector('.color-group[data-group="accent1"] .selected').dataset.colour,
-            accent1Letter:   o.querySelector('.letter-group[data-group="accent1"] .letter').textContent,
-            accent2Colour:   o.querySelector('.color-group[data-group="accent2"] .selected').dataset.colour,
-            accent2Letter:   o.querySelector('.letter-group[data-group="accent2"] .letter').textContent,
-            emotionLetter:   o.querySelector('.letter-group[data-group="emotion"] .letter').textContent,
-            accessoryLetter: o.querySelector('.letter-group[data-group="accessory"] .letter').textContent,
-        };
-    }
-
-    function renderAvatar() {
-        const p = readPrefs();
-        const layers = [
-            { type: 'main',     key: 'base',            color: p.mainColour    },
-            { type: 'accent',  key: p.accent1Letter,   color: p.accent1Colour },
-            { type: 'accent',  key: p.accent2Letter,   color: p.accent2Colour },
-            { type: 'emotion',  key: p.emotionLetter,   color: null            },
-            { type: 'accessory',key: p.accessoryLetter, color: null            },
-        ];
-
-        const container = overlay.querySelector('.avatar-preview');
-        container.innerHTML = '';
-
-        layers.forEach(({ type, key, color }) => {
-            if (!key || key === 'none') return;
-
-            const folder = type === 'accent' ? 'accent' : type;
-            const src    = `assets/avatar/${folder}/${key}.png`;
-
-            if (type === 'emotion' || type === 'accessory') {
-                // full-color PNG
-                const img = document.createElement('img');
-                img.className = 'avatar-layer';
-                img.src       = src;
-                container.appendChild(img);
-            } else {
-                // masked + tinted
-                const div = document.createElement('div');
-                div.className = 'avatar-layer masked';
-                div.style.color            = color;
-                div.style.maskImage        = `url("${src}")`;
-                div.style.webkitMaskImage  = `url("${src}")`;
-                container.appendChild(div);
-            }
-        });
-    }
 
     // initialize colour pickers
     overlay.querySelectorAll('.color-group').forEach(groupEl => {
@@ -275,13 +229,19 @@ async function showCustomizePopup() {
         update();
     });
 
+    const preview = overlay.querySelector('.avatar-preview');
+    drawAvatar(preview, readPrefs(overlay));
+
     const triggers = [
         ...overlay.querySelectorAll('.colour-option'),
         ...overlay.querySelectorAll('.letter-group .arrow')
     ];
-    triggers.forEach(el => el.addEventListener('click', renderAvatar));
-
-    renderAvatar();
+    triggers.forEach(el => {
+        el.addEventListener('click', () => {
+            const prefs = readPrefs(overlay);
+            drawAvatar(preview, prefs);
+        });
+    });
 
     // close handlers
     overlay.querySelector('button.close').onclick = () => overlay.remove();
@@ -315,32 +275,69 @@ async function showCustomizePopup() {
             if (saveBtn) saveBtn.disabled = false;
         }
     }
-
-    // save
-    overlay.querySelector('#save-custom').onclick = () => {
-
-        const prefs = {};
-
-        // main colour
-        prefs.mainColour = overlay
-            .querySelector('.color-group[data-group="main"] .colour-option.selected')
-            .dataset.colour;
-
-        // accent
-        const a1group = overlay.querySelector('.color-group[data-group="accent1"]');
-        prefs.accent1Colour = a1group.querySelector('.colour-option.selected').dataset.colour;
-        prefs.accent1Letter = overlay.querySelector('.letter-group[data-group="accent1"] .letter').textContent;
-
-        // accent2
-        const a2group = overlay.querySelector('.color-group[data-group="accent2"]');
-        prefs.accent2Colour = a2group.querySelector('.colour-option.selected').dataset.colour;
-        prefs.accent2Letter = overlay.querySelector('.letter-group[data-group="accent2"] .letter').textContent;
-
-        // emotion letter
-        prefs.emotionLetter = overlay.querySelector('.letter-group[data-group="emotion"] .letter').textContent;
-
-        // accessory letter
-        prefs.accessoryLetter = overlay.querySelector('.letter-group[data-group="accessory"] .letter').textContent;
-    };
 }
 
+function drawAvatar(container, { mainColour, accent1Colour, accent1Letter, accent2Colour, accent2Letter, emotionLetter, accessoryLetter }) {
+    container.innerHTML = '';
+    const layers = [
+        { type: 'main',      key: 'base',             color: mainColour      },
+        { type: 'accent',    key: accent1Letter,      color: accent1Colour   },
+        { type: 'accent',    key: accent2Letter,      color: accent2Colour   },
+        { type: 'emotion',   key: emotionLetter,      color: null            },
+        { type: 'accessory', key: accessoryLetter,    color: null            },
+    ];
+    layers.forEach(({type,key,color}) => {
+        if (!key || key === 'none') return;
+        const folder = (type === 'accent') ? 'accent' : type;
+        const src    = `assets/avatar/${folder}/${key}.png`;
+        if (type === 'emotion' || type === 'accessory') {
+            const img = document.createElement('img');
+            img.className = 'avatar-layer';
+            img.src = src;
+            container.appendChild(img);
+        } else {
+            const div = document.createElement('div');
+            div.className = 'avatar-layer masked';
+            div.style.color = color;
+            div.style.maskImage = `url("${src}")`;
+            div.style.webkitMaskImage = div.style.maskImage;
+            container.appendChild(div);
+        }
+    });
+}
+
+async function renderHeaderAvatar(btn) {
+    const user = auth.currentUser;
+    // default prefs:
+    let prefs = {
+        mainColour:      '#e7dee3',
+        accent1Colour:   '#373335',
+        accent1Letter:   'none',
+        accent2Colour:   '#e7a457',
+        accent2Letter:   'none',
+        emotionLetter:   'a',
+        accessoryLetter: 'none'
+    };
+
+    if (user) {
+        const snap = await getDoc(doc(db, "users", user.uid));
+        if (snap.exists() && snap.data().customization) {
+            prefs = snap.data().customization;
+        }
+    }
+
+    drawAvatar(btn, prefs);
+}
+
+// helper to read prefs
+function readPrefs(o) {
+    return {
+        mainColour:      o.querySelector('.color-group[data-group="main"] .selected').dataset.colour,
+        accent1Colour:   o.querySelector('.color-group[data-group="accent1"] .selected').dataset.colour,
+        accent1Letter:   o.querySelector('.letter-group[data-group="accent1"] .letter').textContent,
+        accent2Colour:   o.querySelector('.color-group[data-group="accent2"] .selected').dataset.colour,
+        accent2Letter:   o.querySelector('.letter-group[data-group="accent2"] .letter').textContent,
+        emotionLetter:   o.querySelector('.letter-group[data-group="emotion"] .letter').textContent,
+        accessoryLetter: o.querySelector('.letter-group[data-group="accessory"] .letter').textContent,
+    };
+}
