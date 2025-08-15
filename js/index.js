@@ -179,37 +179,81 @@ const feedQuery = query(
     limit(12)
 );
 
-onSnapshot(feedQuery, (snapshot) => {
-    activityList.innerHTML = "";
+const activityListEl = document.getElementById("activity-list");
 
-    snapshot.docs.forEach((docSnap) => {
-        const data = docSnap.data();
+let activityWrapper = document.getElementById("activity-scroll");
+if (!activityWrapper) {
+    activityWrapper = document.createElement("div");
+    activityWrapper.id = "activity-scroll";
+    activityListEl.parentNode.replaceChild(activityWrapper, activityListEl);
+    activityWrapper.appendChild(activityListEl);
+}
 
+const VISIBLE_COUNT = 4;
+const SCROLL_SPEED_PX_PER_SEC = 12;
 
-        const postId = docSnap.ref.parent.parent?.id || "unknown";
-        const when = data.createdAt && data.createdAt.toDate
-            ? timeAgo(data.createdAt.toDate())
-            : "";
+function stopActivityAnimation() {
+    activityListEl.style.animation = "none";
+    activityListEl.style.removeProperty("--scroll-to");
+    activityWrapper.style.height = "";
+}
 
+function buildAndStartScroll(items) {
+    stopActivityAnimation();
+
+    activityListEl.innerHTML = "";
+    if (!items || items.length === 0) {
         const li = document.createElement("li");
+        li.textContent = "no recent activity";
+        activityListEl.appendChild(li);
+    } else {
+        items.forEach(it => {
+            const li = document.createElement("li");
+            const name = document.createElement("strong");
+            name.textContent = it.username || "anon";
+            li.appendChild(name);
+            li.appendChild(document.createTextNode(" sent a message in "));
+            const a = document.createElement("a");
+            a.href = `blog.html#${encodeURIComponent(it.postId)}`;
+            a.textContent = it.postId;
+            li.appendChild(a);
+            if (it.when) li.appendChild(document.createTextNode(` (${it.when})`));
+            activityListEl.appendChild(li);
+        });
+    }
 
-        const name = document.createElement("strong");
-        name.textContent = data.username || "anon";
-        li.appendChild(name);
+    const originalChildren = Array.from(activityListEl.children).slice();
+    originalChildren.forEach(node => activityListEl.appendChild(node.cloneNode(true)));
 
-        li.appendChild(document.createTextNode(" sent a message in "));
+    requestAnimationFrame(() => {
+        const firstLi = activityListEl.querySelector("li");
+        const itemHeight = firstLi ? Math.ceil(firstLi.getBoundingClientRect().height) : 24;
+        activityWrapper.style.height = `${itemHeight * VISIBLE_COUNT}px`;
 
-        const a = document.createElement("a");
+        const originalCount = originalChildren.length;
+        const originalHeight = itemHeight * originalCount;
 
-        a.href = `blog.html#${encodeURIComponent(postId)}`;
-        a.textContent = postId;
-
-        li.appendChild(a);
-
-        if (when) {
-            li.appendChild(document.createTextNode(` (${when})`));
+        if (originalHeight <= itemHeight * VISIBLE_COUNT) {
+            stopActivityAnimation();
+            return;
         }
 
-        activityList.appendChild(li);
+        activityListEl.style.setProperty("--scroll-to", `-${originalHeight}px`);
+
+        const durationSec = Math.max(2, originalHeight / SCROLL_SPEED_PX_PER_SEC);
+
+        activityListEl.style.animation = `activityScroll ${durationSec}s linear infinite`;
+        activityListEl.style.animationPlayState = "running";
     });
+}
+
+onSnapshot(feedQuery, snapshot => {
+    const items = snapshot.docs.map(docSnap => {
+        const data = docSnap.data();
+        const postId = docSnap.ref.parent.parent?.id || "unknown";
+        const when = data.createdAt && data.createdAt.toDate ? timeAgo(data.createdAt.toDate()) : "";
+        return { postId, username: data.username || "anon", when };
+    });
+
+    buildAndStartScroll(items);
 });

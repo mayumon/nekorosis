@@ -1151,8 +1151,18 @@ hr.dotted {
     padding: 0;
     margin: 0;
 
-    transform: translateY(0);
     will-change: transform;
+    user-select: none;
+    transform-origin: 0 0;
+}
+
+@keyframes activityScroll {
+    from { transform: translateY(0); }
+    to   { transform: translateY(var(--scroll-to, -100px)); }
+}
+
+#activity-scroll:hover #activity-list {
+    animation-play-state: paused;
 }
 
 #activity-scroll {
@@ -1160,9 +1170,13 @@ hr.dotted {
 }
 
 #activity-list li {
+    padding: 6px 8px;
+    box-sizing: border-box;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
     font-size: .9em;
-    margin-bottom: 4px;
-    opacity: 0.8;
+    opacity: .9;
 }
 #activity-list li:last-child {
     margin-bottom: 0;
@@ -1228,7 +1242,6 @@ hr.dotted {
     color: black;
     padding: 2rem;
     border-radius: 8px;
-    /* your existing max-width / max-height / overflow-y from before: */
     max-width: 600px;
     width: 90%;
     max-height: 80vh;
