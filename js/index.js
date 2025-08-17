@@ -286,7 +286,7 @@ function stopActivityAnimation() {
 function buildAndStartScroll(items) {
     // stop any previous animation
     activityListEl.style.animation = "none";
-    activityListEl.style.removeProperty("--scroll-distance");
+    activityListEl.style.removeProperty("--scroll-to");
     activityWrapper.style.height = "";
 
     activityListEl.innerHTML = "";
@@ -339,7 +339,7 @@ function buildAndStartScroll(items) {
 
         if (originalHeight <= itemHeight * VISIBLE_COUNT) return;
 
-        activityListEl.style.setProperty("--scroll-distance", `-${originalHeight}px`);
+        activityListEl.style.setProperty("--scroll-to", `-${originalHeight}px`);
         const SCROLL_SPEED_PX_PER_SEC = 12;
         const durationSec = Math.max(2, originalHeight / SCROLL_SPEED_PX_PER_SEC);
 
