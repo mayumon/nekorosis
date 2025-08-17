@@ -6,7 +6,9 @@ import {
     orderBy,
     onSnapshot,
     collectionGroup,
-    limit
+    limit,
+    doc,
+    getDoc
 } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 import { db } from "./auth.js";
 
@@ -157,9 +159,90 @@ async function loadSongOfDay() {
 loadSongOfDay();
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 // ================================
 // activity feed
 // ================================
+
+// cache
+const userPrefsCache = new Map();
+
+function defaultPrefs() {
+    return {
+        mainColour:      '#e7dee3',
+        accent1Colour:   '#373335',
+        accent1Letter:   'none',
+        accent2Colour:   '#e7a457',
+        accent2Letter:   'none',
+        emotionLetter:   'a',
+        accessoryLetter: 'none'
+    };
+}
+
+async function getUserPrefs(uid) {
+    if (!uid) return defaultPrefs();
+    if (userPrefsCache.has(uid)) return userPrefsCache.get(uid);
+
+    try {
+        const snap = await getDoc(doc(db, "users", uid));
+        let prefs = defaultPrefs();
+        if (snap.exists()) {
+            const data = snap.data();
+            if (data?.customization) prefs = { ...prefs, ...data.customization };
+        }
+        userPrefsCache.set(uid, prefs);
+        return prefs;
+    } catch (e) {
+        console.error("getUserPrefs error:", e);
+        return defaultPrefs();
+    }
+}
+
+function renderMiniAvatar(container, prefs) {
+    container.className = "mini-avatar";
+    container.innerHTML = "";
+
+    const layers = [
+        { type: 'main',      key: 'base',             color: prefs.mainColour },
+        { type: 'accent',    key: prefs.accent1Letter, color: prefs.accent1Colour },
+        { type: 'accent',    key: prefs.accent2Letter, color: prefs.accent2Colour },
+        { type: 'emotion',   key: prefs.emotionLetter, color: null },
+        { type: 'accessory', key: prefs.accessoryLetter, color: null },
+    ];
+
+    layers.forEach(({type, key, color}) => {
+        if (!key || key === 'none') return;
+        const folder = (type === 'accent') ? 'accent' : type;
+        const src = `assets/avatar/${folder}/${key}.png`;
+
+        if (type === 'emotion' || type === 'accessory') {
+            const img = document.createElement('img');
+            img.className = 'mini-avatar-layer';
+            img.src = src;
+            container.appendChild(img);
+        } else {
+            const div = document.createElement('div');
+            div.className = 'mini-avatar-layer masked';
+            div.style.color = color;
+            div.style.maskImage = `url("${src}")`;
+            div.style.webkitMaskImage = div.style.maskImage;
+            container.appendChild(div);
+        }
+    });
+}
+
 
 function timeAgo(date) {
     const seconds = Math.floor((Date.now() - date.getTime()) / 1000);
@@ -199,7 +282,7 @@ function stopActivityAnimation() {
 }
 
 function buildAndStartScroll(items) {
-    stopActivityAnimation();
+    if (typeof stopActivityAnimation === "function") stopActivityAnimation();
 
     activityListEl.innerHTML = "";
     if (!items || items.length === 0) {
@@ -209,15 +292,27 @@ function buildAndStartScroll(items) {
     } else {
         items.forEach(it => {
             const li = document.createElement("li");
+            li.className = "activity-item";
+
+            // avatar placeholder
+            const avatar = document.createElement("span");
+            avatar.className = "mini-avatar";
+            avatar.dataset.uid = it.userId || "";
+            li.appendChild(avatar);
+
+            const textWrap = document.createElement("span");
+            textWrap.className = "activity-text";
             const name = document.createElement("strong");
             name.textContent = it.username || "anon";
-            li.appendChild(name);
-            li.appendChild(document.createTextNode(" sent a message in "));
+            textWrap.appendChild(name);
+            textWrap.appendChild(document.createTextNode(" sent a message in "));
             const a = document.createElement("a");
             a.href = `blog.html#${encodeURIComponent(it.postId)}`;
             a.textContent = it.postId;
-            li.appendChild(a);
-            if (it.when) li.appendChild(document.createTextNode(` (${it.when})`));
+            textWrap.appendChild(a);
+            if (it.when) textWrap.appendChild(document.createTextNode(` (${it.when})`));
+            li.appendChild(textWrap);
+
             activityListEl.appendChild(li);
         });
     }
@@ -234,26 +329,38 @@ function buildAndStartScroll(items) {
         const originalHeight = itemHeight * originalCount;
 
         if (originalHeight <= itemHeight * VISIBLE_COUNT) {
-            stopActivityAnimation();
-            return;
+
+            if (typeof stopActivityAnimation === "function") stopActivityAnimation();
+        } else {
+            activityListEl.style.setProperty("--scroll-to", `-${originalHeight}px`);
+            const durationSec = Math.max(2, originalHeight / SCROLL_SPEED_PX_PER_SEC);
+            activityListEl.style.animation = `activityScroll ${durationSec}s linear infinite`;
+            activityListEl.style.animationPlayState = "running";
         }
+    });
 
-        activityListEl.style.setProperty("--scroll-to", `-${originalHeight}px`);
-
-        const durationSec = Math.max(2, originalHeight / SCROLL_SPEED_PX_PER_SEC);
-
-        activityListEl.style.animation = `activityScroll ${durationSec}s linear infinite`;
-        activityListEl.style.animationPlayState = "running";
+    const uids = [...new Set(items.map(i => i.userId).filter(Boolean))];
+    uids.forEach(async uid => {
+        const prefs = await getUserPrefs(uid);
+        activityListEl.querySelectorAll('.mini-avatar').forEach(el => {
+            if (el.dataset.uid === uid) renderMiniAvatar(el, prefs);
+        });
     });
 }
 
-onSnapshot(feedQuery, snapshot => {
+
+onSnapshot(feedQuery, (snapshot) => {
     const items = snapshot.docs.map(docSnap => {
         const data = docSnap.data();
         const postId = docSnap.ref.parent.parent?.id || "unknown";
         const when = data.createdAt && data.createdAt.toDate ? timeAgo(data.createdAt.toDate()) : "";
-        return { postId, username: data.username || "anon", when };
+        return {
+            postId,
+            username: data.username || "anon",
+            userId: data.userId || null,
+            when
+        };
     });
-
     buildAndStartScroll(items);
 });
+
