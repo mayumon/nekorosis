@@ -159,25 +159,14 @@ async function loadSongOfDay() {
 loadSongOfDay();
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 // ================================
 // activity feed
 // ================================
 
 // cache
-const userPrefsCache = new Map();
+const userPrefsCache = new Map(); // uid -> prefs|null
+const userListeners = new Map();  // uid -> unsubscribe
+const PENDING = Symbol('pending');
 
 function defaultPrefs() {
     return {
@@ -192,33 +181,38 @@ function defaultPrefs() {
 }
 
 async function getUserPrefs(uid) {
-    if (!uid) return defaultPrefs();
-    if (userPrefsCache.has(uid)) return userPrefsCache.get(uid);
+    if (!uid) return null;
 
+    const cached = userPrefsCache.get(uid);
+    if (cached && cached !== PENDING) return cached; // real prefs or null
+    if (cached === PENDING) return null;
+
+    userPrefsCache.set(uid, PENDING);
     try {
         const snap = await getDoc(doc(db, "users", uid));
-        let prefs = defaultPrefs();
-        if (snap.exists()) {
-            const data = snap.data();
-            if (data?.customization) prefs = { ...prefs, ...data.customization };
+        if (!snap.exists() || !snap.data()?.customization) {
+            userPrefsCache.set(uid, null);  // keep spinner; no fake default
+            return null;
         }
+        const prefs = snap.data().customization;
         userPrefsCache.set(uid, prefs);
         return prefs;
     } catch (e) {
-        console.error("getUserPrefs error:", e);
-        return defaultPrefs();
+        console.warn("getUserPrefs error:", e);
+        userPrefsCache.delete(uid);
+        return null; // keep spinner
     }
 }
 
 function renderMiniAvatar(container, prefs) {
-    container.className = "mini-avatar";
+    container.classList.remove('loading');
     container.innerHTML = "";
 
     const layers = [
-        { type: 'main',      key: 'base',             color: prefs.mainColour },
-        { type: 'accent',    key: prefs.accent1Letter, color: prefs.accent1Colour },
-        { type: 'accent',    key: prefs.accent2Letter, color: prefs.accent2Colour },
-        { type: 'emotion',   key: prefs.emotionLetter, color: null },
+        { type: 'main',      key: 'base',               color: prefs.mainColour },
+        { type: 'accent',    key: prefs.accent1Letter,  color: prefs.accent1Colour },
+        { type: 'accent',    key: prefs.accent2Letter,  color: prefs.accent2Colour },
+        { type: 'emotion',   key: prefs.emotionLetter,  color: null },
         { type: 'accessory', key: prefs.accessoryLetter, color: null },
     ];
 
@@ -241,6 +235,14 @@ function renderMiniAvatar(container, prefs) {
             container.appendChild(div);
         }
     });
+}
+
+async function hydrateAvatarForUid(uid) {
+    const prefs = await getUserPrefs(uid);
+    if (!prefs) return; // still loading or failed; we'll try again next rebuild or when called again
+    activityListEl
+        .querySelectorAll(`.mini-avatar[data-uid="${uid}"]`)
+        .forEach(el => renderMiniAvatar(el, prefs));
 }
 
 
@@ -282,7 +284,10 @@ function stopActivityAnimation() {
 }
 
 function buildAndStartScroll(items) {
-    if (typeof stopActivityAnimation === "function") stopActivityAnimation();
+    // stop any previous animation
+    activityListEl.style.animation = "none";
+    activityListEl.style.removeProperty("--scroll-distance");
+    activityWrapper.style.height = "";
 
     activityListEl.innerHTML = "";
     if (!items || items.length === 0) {
@@ -294,12 +299,14 @@ function buildAndStartScroll(items) {
             const li = document.createElement("li");
             li.className = "activity-item";
 
-            // avatar placeholder
+            // avatar placeholder (spinner)
             const avatar = document.createElement("span");
-            avatar.className = "mini-avatar";
+            avatar.className = "mini-avatar loading";
             avatar.dataset.uid = it.userId || "";
+            avatar.innerHTML = '<span class="avatar-spinner" aria-hidden="true"></span>';
             li.appendChild(avatar);
 
+            // text
             const textWrap = document.createElement("span");
             textWrap.className = "activity-text";
             const name = document.createElement("strong");
@@ -317,35 +324,60 @@ function buildAndStartScroll(items) {
         });
     }
 
-    const originalChildren = Array.from(activityListEl.children).slice();
-    originalChildren.forEach(node => activityListEl.appendChild(node.cloneNode(true)));
+    const originals = Array.from(activityListEl.children);
+    originals.forEach(node => activityListEl.appendChild(node.cloneNode(true)));
 
     requestAnimationFrame(() => {
         const firstLi = activityListEl.querySelector("li");
         const itemHeight = firstLi ? Math.ceil(firstLi.getBoundingClientRect().height) : 24;
+
+        // 4 visible
+        const VISIBLE_COUNT = 4;
         activityWrapper.style.height = `${itemHeight * VISIBLE_COUNT}px`;
 
-        const originalCount = originalChildren.length;
-        const originalHeight = itemHeight * originalCount;
+        const originalHeight = itemHeight * originals.length;
 
-        if (originalHeight <= itemHeight * VISIBLE_COUNT) {
+        if (originalHeight <= itemHeight * VISIBLE_COUNT) return;
 
-            if (typeof stopActivityAnimation === "function") stopActivityAnimation();
-        } else {
-            activityListEl.style.setProperty("--scroll-to", `-${originalHeight}px`);
-            const durationSec = Math.max(2, originalHeight / SCROLL_SPEED_PX_PER_SEC);
-            activityListEl.style.animation = `activityScroll ${durationSec}s linear infinite`;
-            activityListEl.style.animationPlayState = "running";
-        }
+        activityListEl.style.setProperty("--scroll-distance", `-${originalHeight}px`);
+        const SCROLL_SPEED_PX_PER_SEC = 12;
+        const durationSec = Math.max(2, originalHeight / SCROLL_SPEED_PX_PER_SEC);
+
+        activityListEl.style.animation = `activityScroll ${durationSec}s linear infinite`;
+        activityListEl.style.animationPlayState = "running";
     });
 
     const uids = [...new Set(items.map(i => i.userId).filter(Boolean))];
-    uids.forEach(async uid => {
-        const prefs = await getUserPrefs(uid);
-        activityListEl.querySelectorAll('.mini-avatar').forEach(el => {
-            if (el.dataset.uid === uid) renderMiniAvatar(el, prefs);
+    uids.forEach(uid => {
+        ensureUserListener(uid);
+        getUserPrefs(uid).then(prefs => {
+            if (prefs) {
+                activityListEl
+                    .querySelectorAll(`.mini-avatar[data-uid="${uid}"]`)
+                    .forEach(el => renderMiniAvatar(el, prefs));
+            }
         });
     });
+
+}
+
+
+function ensureUserListener(uid) {
+    if (!uid || userListeners.has(uid)) return;
+
+    const ref = doc(db, "users", uid);
+    const unsub = onSnapshot(ref, snap => {
+        if (!snap.exists() || !snap.data()?.customization) return; // nothing to render yet
+        const prefs = snap.data().customization;
+        userPrefsCache.set(uid, prefs);
+        activityListEl
+            .querySelectorAll(`.mini-avatar[data-uid="${uid}"]`)
+            .forEach(el => renderMiniAvatar(el, prefs));
+    }, err => {
+        console.warn("user listener error", uid, err);
+    });
+
+    userListeners.set(uid, unsub);
 }
 
 
