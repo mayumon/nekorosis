@@ -331,8 +331,8 @@ function buildAndStartScroll(items) {
         const firstLi = activityListEl.querySelector("li");
         const itemHeight = firstLi ? Math.ceil(firstLi.getBoundingClientRect().height) : 24;
 
-        // 4 visible
-        const VISIBLE_COUNT = 4;
+        // how many visible
+        const VISIBLE_COUNT = 5;
         activityWrapper.style.height = `${itemHeight * VISIBLE_COUNT}px`;
 
         const originalHeight = itemHeight * originals.length;

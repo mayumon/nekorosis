@@ -1108,19 +1108,6 @@ hr.dotted {
     width: 100%;
 }
 
-#highlight .highlight-box h3 {
-    font-size: 1.2rem;
-    background-color: white;
-    color: #eac3d8;
-    margin: 0;
-    border-radius: 4px;
-    border: #eac3d8 double 3px;
-    letter-spacing: 1px;
-    margin-bottom: 0.75rem;
-    padding: 6px;
-    font-weight: normal;
-}
-
 #highlight .highlight-container {
     position: relative;
     margin: 20px;
@@ -1568,4 +1555,93 @@ hr.dotted {
     display: block;
     width: 100%;
     height: auto;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/* sozai frame — correct relative paths (css/ -> ../assets/...) */
+/* make the repeat-x/y strips taller/wider */
+.u01 {
+    background: url("../assets/images/frame/f-ue.gif") repeat-x;
+    background-size: auto 24px;   /* scale tile height */
+    height: 24px;                 /* match height */
+    margin: 0 24px;               /* adjust margins to match */
+}
+
+.s01 {
+    background: url("../assets/images/frame/f-sita.gif") repeat-x;
+    background-size: auto 24px;
+    height: 24px;
+    margin: 0 24px;
+}
+
+.box-top {
+    background-image: url("../assets/images/frame/f-kado1.gif"),
+    url("../assets/images/frame/f-kado2.gif");
+    background-repeat: no-repeat, no-repeat;
+    background-position: top left, top right;
+    background-size: 24px 24px, 24px 24px; /* scale corners */
+    height: 24px;
+}
+
+.box-bottom {
+    background-image: url("../assets/images/frame/f-kado3.gif"),
+    url("../assets/images/frame/f-kado4.gif");
+    background-repeat: no-repeat, no-repeat;
+    background-position: top left, top right;
+    background-size: 24px 24px, 24px 24px;
+    height: 24px;
+}
+
+.box-center {
+    background-image: url("../assets/images/frame/f-migi.gif"),
+    url("../assets/images/frame/f-hidari.gif");
+    background-repeat: repeat-y, repeat-y;
+    background-position: top right, top left;
+    background-size: 24px auto, 24px auto; /* scale sides */
+}
+
+
+
+
+
+
+
+
+
+
+/* make sure the frame sits above the decorative cat */
+.box22 { position: relative; z-index: 2; width: 100%; }
+
+/* (optional) keep the cat behind the frame just in case */
+#highlight .highlight-image { z-index: 1; }
+
+.box-inner {
+    background: #fff;   /* solid white background */
+    margin: 0 18px 0 19px;
+    padding: 12px;
+    color: black;       /* readable text */
+    box-sizing: border-box;
+}
+
+
+.feed-title {
+    display: inline-block;
+    font-size: 1.2rem;
+    background: #fff;
+    color: #eac3d8;
+    margin: 0 0 0.75rem 0;
+    padding: 6px;
+    border-radius: 4px;
+    border: #eac3d8 double 3px;
+    letter-spacing: 1px;
 }
