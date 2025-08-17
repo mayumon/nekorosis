@@ -845,8 +845,10 @@ hr.dotted {
     margin-left: auto;
     display: inline-block;
 
-    border: 1px solid white;
-    border-radius: 20px;
+    /* border: 1px solid white; */
+    /* border-radius: 20px; */
+    border: 2px outset #aaaaaa;
+
     background: transparent;
     color: white;
     width: 5em;
@@ -865,7 +867,6 @@ hr.dotted {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    border: none;
     background: none;
     padding: 0;
     margin: 0;
@@ -877,8 +878,8 @@ hr.dotted {
     margin-left: auto;
     display: inline-block;
 
-    border: 1px solid white;
-    border-radius: 20px;
+    border: 2px outset #aaaaaa;
+    /* border-radius: 20px; */
     background: transparent;
     color: white;
     width: 5em;
@@ -981,7 +982,7 @@ hr.dotted {
     width: 100%;
     aspect-ratio: 1 / 1;
     background: black;
-    border: 1px solid white;
+    border: 3px double white;
     position: relative;
     overflow: hidden;
     margin-top: 4px;
@@ -1106,10 +1107,11 @@ hr.dotted {
 
 #highlight .highlight-box h3 {
     font-size: 1.2rem;
-    background-color: #eac3d8;
-    color: white;
+    background-color: white;
+    color: #eac3d8;
     margin: 0;
     border-radius: 4px;
+    border: #eac3d8 double 3px;
     letter-spacing: 1px;
     margin-bottom: 0.75rem;
     padding: 6px;
@@ -1228,7 +1230,6 @@ hr.dotted {
     -webkit-mask-size: contain;
 }
 
-/* row layout stays the same */
 #activity-list li.activity-item {
     display: flex;
     align-items: center;
@@ -1247,7 +1248,6 @@ hr.dotted {
     white-space: nowrap;
 }
 
-/* mini avatar box */
 .mini-avatar {
     position: relative;
     width: 18px;
@@ -1255,7 +1255,6 @@ hr.dotted {
     flex: 0 0 18px;
 }
 
-/* loading spinner while we fetch prefs */
 .mini-avatar.loading .avatar-spinner {
     position: absolute;
     inset: 0;
@@ -1270,7 +1269,6 @@ hr.dotted {
 
 @keyframes mini-spin { to { transform: rotate(360deg); } }
 
-/* avatar layers */
 .mini-avatar-layer {
     position: absolute;
     inset: 0;
@@ -1286,6 +1284,10 @@ hr.dotted {
     -webkit-mask-repeat: no-repeat;
     -webkit-mask-position: center;
     -webkit-mask-size: contain;
+}
+
+#activity-list li:nth-child(even) {
+    background-color: #eeeeee;
 }
 
 
@@ -1372,7 +1374,6 @@ hr.dotted {
 .popup-left {
     flex: 1;
     overflow-y: auto;
-    /* you can tweak this to taste */
     max-height: 60vh;
 }
 
@@ -1456,6 +1457,56 @@ hr.dotted {
 
 
 
+/* chat avatar */
+
+.chat-msg {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin: 4px 0;
+}
+
+.chat-msg .msg-body {
+    flex: 1 1 auto;
+    min-width: 0;
+    word-break: break-word;
+}
+
+.mini-avatar {
+    position: relative;
+    width: 18px;
+    height: 18px;
+    flex: 0 0 18px;
+}
+
+.mini-avatar.loading .avatar-spinner {
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255,255,255,0.25);
+    border-top-color: rgba(255,255,255,0.9);
+    border-radius: 50%;
+    animation: mini-spin .7s linear infinite;
+}
+@keyframes mini-spin { to { transform: rotate(360deg); } }
+
+.mini-avatar-layer {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+}
+.mini-avatar-layer.masked {
+    background-color: currentColor;
+    mask-repeat: no-repeat;
+    mask-position: center;
+    mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    -webkit-mask-size: contain;
+}
 
 
 
