@@ -79,6 +79,17 @@ const walls = [
 ];
 World.add(engine.world, walls);
 
+// guard walls
+const guard = 200; // thickness
+const guardWalls = [
+    Bodies.rectangle(W/2, H + guard/2, W + guard*2, guard, { isStatic: true, render: { visible: false } }), // bottom
+    Bodies.rectangle(W/2, -guard/2,     W + guard*2, guard, { isStatic: true, render: { visible: false } }), // top
+    Bodies.rectangle(-guard/2, H/2,     guard, H + guard*2, { isStatic: true, render: { visible: false } }), // left
+    Bodies.rectangle(W + guard/2, H/2,  guard, H + guard*2, { isStatic: true, render: { visible: false } })  // right
+];
+World.add(engine.world, guardWalls);
+
+
 // bricks setup
 
 const BRICK_W = 64;
