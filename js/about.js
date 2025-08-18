@@ -99,7 +99,7 @@ function spawnCastle() {
             const brick = Bodies.rectangle(x, centerY, BRICK_W, BRICK_H, {
                 chamfer: { radius: 3 },
                 restitution: 0.05,
-                friction: 0.3,
+                friction: 0.8,
                 frictionAir: 0.02,
                 render: { fillStyle: '#AA9174', strokeStyle: '#000', lineWidth: 1 }
             });
@@ -128,7 +128,7 @@ function spawnCastle() {
         const brick = Bodies.rectangle(leftColX, yc, BRICK_W, BRICK_H, {
             chamfer: { radius: 3 },
             restitution: 0.05,
-            friction: 0.3,
+            friction: 0.8,
             frictionAir: 0.02,
             render: { fillStyle: '#AA9174', strokeStyle: '#000', lineWidth: 1 }
         });
@@ -138,7 +138,7 @@ function spawnCastle() {
     const triCenterY = single2Y - BRICK_H/2 - GAP_Y - r;
     const triangle = Bodies.polygon(leftColX, triCenterY, 3, R, {
         restitution: 0.05,
-        friction: 0.3,
+        friction: 0.8,
         frictionAir: 0.02,
         render: { fillStyle: '#AB747C', strokeStyle: '#000', lineWidth: 1 }
     });
