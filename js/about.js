@@ -28,6 +28,109 @@ const render = Render.create({
     }
 });
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// ---- HUD. TODO: DELETE LATER ----
+const hud = document.createElement('div');
+Object.assign(hud.style, {
+    position: 'absolute', top: '8px', left: '8px',
+    background: 'rgba(0,0,0,0.6)', color: 'white', font: '12px monospace',
+    padding: '6px 8px', border: '1px solid #fff', borderRadius: '4px',
+    zIndex: '6', pointerEvents: 'none'
+});
+box.appendChild(hud);
+
+let frames = 0, lastT = performance.now();
+Matter.Events.on(render, 'afterRender', () => { frames++; });
+
+setInterval(() => {
+    const now = performance.now();
+    const dt = now - lastT;
+    const fps = Math.round((frames * 1000) / dt);
+    frames = 0; lastT = now;
+
+    const bodies = Matter.Composite.allBodies(engine.world).length;
+    const constraints = Matter.Composite.allConstraints(engine.world).length;
+    const pairs = engine.pairs.list ? engine.pairs.list.length : 0;
+
+    let buckets = 0;
+    const bp = engine.broadphase || engine.grid || engine.world?.broadphase; // be defensive across versions
+    if (bp && bp.buckets) buckets = Object.keys(bp.buckets).length;
+
+    hud.textContent =
+        `FPS ${fps}\n` +
+        `bodies ${bodies}  constraints ${constraints}\n` +
+        `pairs ${pairs}  buckets ${buckets}`;
+}, 1000);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // banner
 const MESSAGES = [
     "you're not helping...",
