@@ -28,7 +28,42 @@ const render = Render.create({
     }
 });
 
+// banner
+let msgEl = document.createElement('div');
+msgEl.id = 'wip-msg';
+Object.assign(msgEl.style, {
+    position: 'absolute',
+    top: '16px',
+    left: '50%',
+    transform: 'translateX(-50%)',
+    background: 'rgba(0,0,0,0.8)',
+    color: 'white',
+    padding: '4px 8px',
+    border: '1px solid white',
+    borderRadius: '4px',
+    fontFamily: 'inherit',
+    fontSize: '14px',
+    pointerEvents: 'none',
+    opacity: '0',
+    transition: 'opacity 350ms ease',
+    zIndex: '5'
+});
+msgEl.textContent = "you're not helping...";
+box.style.position = 'relative';
+box.appendChild(msgEl);
 
+let hideTimer = null;
+function showBanner() {
+    if (hideTimer) clearTimeout(hideTimer);
+    msgEl.style.opacity = '1';
+    hideTimer = setTimeout(() => msgEl.style.opacity = '0', 1200);
+}
+function hideBannerNow() {
+    if (hideTimer) clearTimeout(hideTimer);
+    msgEl.style.opacity = '0';
+}
+
+// render
 Render.run(render);
 Runner.run(runner, engine);
 
@@ -81,7 +116,8 @@ function spawnPyramid() {
                 chamfer: { radius: 3 },
                 restitution: 0.1,
                 frictionAir: 0.02,
-                render: { fillStyle: '#AA9174', strokeStyle: '#000', lineWidth: 1 }
+                render: { fillStyle: '#AA9174', strokeStyle: '#000', lineWidth: 1 },
+                plugin: { isBrick: true }
             });
             World.add(engine.world, brick);
         }
@@ -101,7 +137,8 @@ function spawnCastle() {
                 restitution: 0.05,
                 friction: 0.8,
                 frictionAir: 0.02,
-                render: { fillStyle: '#AA9174', strokeStyle: '#000', lineWidth: 1 }
+                render: { fillStyle: '#AA9174', strokeStyle: '#000', lineWidth: 1 },
+                plugin: { isBrick: true }
             });
             World.add(engine.world, brick);
         }
@@ -130,7 +167,8 @@ function spawnCastle() {
             restitution: 0.05,
             friction: 0.8,
             frictionAir: 0.02,
-            render: { fillStyle: '#AA9174', strokeStyle: '#000', lineWidth: 1 }
+            render: { fillStyle: '#AA9174', strokeStyle: '#000', lineWidth: 1 },
+            plugin: { isBrick: true }
         });
         World.add(engine.world, brick);
     });
@@ -167,3 +205,17 @@ const mouseConstraint = MouseConstraint.create(engine, {
 });
 World.add(engine.world, mouseConstraint);
 render.mouse = mouse;
+
+
+// banner listener
+const { Events } = Matter;
+
+Events.on(mouseConstraint, 'startdrag', (e) => {
+    if (e.body && e.body.plugin && e.body.plugin.isBrick) {
+        showBanner();
+    }
+});
+
+Events.on(mouseConstraint, 'enddrag', () => {
+    hideBannerNow();
+});
