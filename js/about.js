@@ -29,7 +29,16 @@ const render = Render.create({
 });
 
 // banner
-let msgEl = document.createElement('div');
+const MESSAGES = [
+    "you're not helping...",
+    "nOoOoOoOoOoOoOoOoOoOo",
+    "the union will hear about this..."
+];
+let msgIndex = 0;
+let lastShown = 0;
+const COOLDOWN_MS = 5000;
+
+const msgEl = document.createElement('div');
 msgEl.id = 'wip-msg';
 Object.assign(msgEl.style, {
     position: 'absolute',
@@ -45,23 +54,32 @@ Object.assign(msgEl.style, {
     fontSize: '14px',
     pointerEvents: 'none',
     opacity: '0',
-    transition: 'opacity 350ms ease',
+    transition: 'opacity 250ms ease',
     zIndex: '5'
 });
-msgEl.textContent = "you're not helping...";
 box.style.position = 'relative';
 box.appendChild(msgEl);
 
 let hideTimer = null;
 function showBanner() {
+    const now = Date.now();
+    if (now - lastShown < COOLDOWN_MS) return;
+
+    msgEl.textContent = MESSAGES[msgIndex];
+    msgIndex = (msgIndex + 1) % MESSAGES.length;
+
     if (hideTimer) clearTimeout(hideTimer);
     msgEl.style.opacity = '1';
-    hideTimer = setTimeout(() => msgEl.style.opacity = '0', 1200);
+    hideTimer = setTimeout(() => (msgEl.style.opacity = '0'), 2000);
+
+    lastShown = now;
 }
+
 function hideBannerNow() {
     if (hideTimer) clearTimeout(hideTimer);
     msgEl.style.opacity = '0';
 }
+
 
 // render
 Render.run(render);
@@ -91,7 +109,6 @@ World.add(engine.world, guardWalls);
 
 
 // bricks setup
-
 const BRICK_W = 64;
 const BRICK_H = 28;
 const GAP_Y   = 6;
@@ -225,8 +242,4 @@ Events.on(mouseConstraint, 'startdrag', (e) => {
     if (e.body && e.body.plugin && e.body.plugin.isBrick) {
         showBanner();
     }
-});
-
-Events.on(mouseConstraint, 'enddrag', () => {
-    hideBannerNow();
 });
