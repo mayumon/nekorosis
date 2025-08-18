@@ -75,8 +75,11 @@ hr.dotted {
     box-sizing: border-box;
     overflow: hidden;
     position: relative;
-    margin-top: -120px;               /* overlap amount */
+    margin-top: -120px;
     transition: transform 0.2s ease;
+    padding: 10px;
+    border-radius: 3px;
+    border: 1px solid #eac3d8;
 }
 
 .post-item:first-child {
@@ -225,9 +228,28 @@ hr.dotted {
     transform: translateY(-10px);
 }
 
-#post-list.grid .post-thumb {
+.post-title::before {
+    content: "";
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    margin-right: 6px;
+    background: url("../assets/images/pencil.png") no-repeat center center;
+    background-size: contain;
+    vertical-align: middle;
+}
+
+#post-list .post-thumb {
+    display: block;
     width: 100%;
-    height: auto;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    background: black;
+
+    border: 2px solid black;
+    box-shadow: 0 0 0 3px white;
+    box-sizing: border-box;
+
 }
 
 #post-list.grid .post-date {
@@ -1619,20 +1641,15 @@ hr.dotted {
 
 
 
-/* make sure the frame sits above the decorative cat */
 .box22 { position: relative; z-index: 2; width: 100%; }
-
-/* (optional) keep the cat behind the frame just in case */
 #highlight .highlight-image { z-index: 1; }
 
 .box-inner {
-    background: #fff;   /* solid white background */
+    background: #fff;
     margin: 0 18px 0 19px;
-    padding: 12px;
-    color: black;       /* readable text */
+    color: black;
     box-sizing: border-box;
 }
-
 
 .feed-title {
     display: inline-block;
