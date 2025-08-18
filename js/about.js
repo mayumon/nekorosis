@@ -24,7 +24,7 @@ const render = Render.create({
         width: W,
         height: H,
         wireframes: false,
-        background: 'black'
+        background: 'transparent'
     }
 });
 
@@ -33,8 +33,10 @@ Runner.run(runner, engine);
 
 // walls
 const thickness = 30;
+const floorOffset = 10;
+
 const walls = [
-    Bodies.rectangle(W/2, H-10, W, 20, { isStatic: true, render:{ fillStyle:'#000' } }),   // floor
+    Bodies.rectangle(W/2, H-10-floorOffset, W, 20, { isStatic: true, render:{ fillStyle:'#000' } }),   // floor
     Bodies.rectangle(W/2, 10, W, 20, { isStatic: true, render:{ fillStyle:'#000' } }),     // ceiling
     Bodies.rectangle(10, H/2, 20, H, { isStatic: true, render:{ fillStyle:'#000' } }),     // left
     Bodies.rectangle(W-10, H/2, 20, H, { isStatic: true, render:{ fillStyle:'#000' } })    // right
@@ -49,7 +51,8 @@ let y = 60;
 
 rows.forEach((count, rowIndex) => {
     const totalWidth = count * BRICK_W;
-    const startX = (W - totalWidth)/2 + BRICK_W/2;
+    const offsetX = -120;
+    const startX = (W - totalWidth) / 2 + BRICK_W / 2 + offsetX;
     const rowY = y + rowIndex * (BRICK_H + 6);
     for (let i = 0; i < count; i++) {
         const x = startX + i * BRICK_W;
