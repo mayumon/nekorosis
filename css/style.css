@@ -1662,3 +1662,49 @@ hr.dotted {
     border: #eac3d8 double 3px;
     letter-spacing: 1px;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ================================ */
+/* WIP bricks toy */
+/* ================================ */
+
+#wip-container {
+    margin: 20px;
+}
+
+#brick-box {
+    position: relative;
+    width: 680px;
+    max-width: 100%;
+    height: 400px;
+    background: white;
+    border: 2px solid black;
+    box-shadow: 0 0 0 3px #eac3d8;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+#brick-box canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+

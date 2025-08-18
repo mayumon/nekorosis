@@ -1,5 +1,5 @@
 ---
-title: "wrapping images like gifts with text... sometimes theres too much to say"
+title: "wrapping images like gifts with text..."
 date: "2025-02-13T00:00:00Z"
 tags: ["test"]
 image: birth.png
