@@ -258,6 +258,7 @@ function spawnPyramid() {
 
 // castle
 function spawnCastle() {
+    // helper: centered row of N bricks, returns x of the leftmost brick
     function addRow(count, centerY) {
         const totalW = count * BRICK_W;
         const startX = centerX - totalW/2 + BRICK_W/2;
@@ -276,24 +277,29 @@ function spawnCastle() {
         return startX;
     }
 
-    // triangle topper
     const triBase = BRICK_W;
-    const R = triBase / Math.sqrt(3);
-    const r = triBase / (2 * Math.sqrt(3));
+    const R = triBase / Math.sqrt(3);        // circumradius
+    const r = triBase / (2 * Math.sqrt(3));  // inradius
+    const dy = BRICK_H + GAP_Y;
 
-    const y0Min = INNER_TOP + 2*dy + BRICK_H/2 + GAP_Y + r;
-    const y0Max = INNER_BOTTOM - BRICK_H/2 - dy;
-    const yTop  = clamp(y0, y0Min, y0Max);
+    // keep the toppers on-screen: need room for one single + triangle above top row
+    const y0Min = INNER_TOP + BRICK_H/2 + dy + GAP_Y + (r + R);
+    const y0Max = INNER_BOTTOM - BRICK_H/2 - dy; // still allow the second 3-wide row below
+    const yTop  = clamp(y0, y0Min, y0Max);       // y of the TOP 3-wide row
 
+    // two 3-wide rows (top then the one under it)
     const rowTopY = yTop;
     const rowBotY = yTop + dy;
-    const leftColX = addRow(3, rowTopY);
+    const startX  = addRow(3, rowTopY);
     addRow(3, rowBotY);
 
-    const single1Y = yTop - dy;
-    const single2Y = yTop - 2*dy;
-    [single1Y, single2Y].forEach(yc => {
-        const brick = Bodies.rectangle(leftColX, yc, BRICK_W, BRICK_H, {
+    // singles ABOVE the top row: leftmost and rightmost columns
+    const leftX  = startX;                 // col 0
+    const rightX = startX + 2 * BRICK_W;   // col 2
+    const singleY = yTop - dy;             // one level above the top row
+
+    [leftX, rightX].forEach(x => {
+        const brick = Bodies.rectangle(x, singleY, BRICK_W, BRICK_H, {
             chamfer: { radius: 3 },
             restitution: 0.05,
             friction: 0.8,
@@ -302,26 +308,24 @@ function spawnCastle() {
             plugin: { isBrick: true }
         });
         World.add(engine.world, brick);
-    });
 
-    const triCenterY = single2Y - BRICK_H/2 - GAP_Y - r;
-    const triangle = Bodies.polygon(leftColX, triCenterY, 3, R, {
-        restitution: 0.05,
-        friction: 0.8,
-        frictionAir: 0.02,
-        render: { fillStyle: '#AB747C', strokeStyle: '#000', lineWidth: 1 }
+        // triangle topper above each single (apex up)
+        const triCenterY = singleY - BRICK_H/2 - GAP_Y - r;
+        const triangle = Bodies.polygon(x, triCenterY, 3, R, {
+            restitution: 0.05,
+            friction: 0.8,
+            frictionAir: 0.02,
+            render: { fillStyle: '#AB747C', strokeStyle: '#000', lineWidth: 1 }
+        });
+        Matter.Body.setAngle(triangle, Math.PI / 2); // point up
+        World.add(engine.world, triangle);
     });
-    Matter.Body.setAngle(triangle, Math.PI / 2);
-
-    const origInertia = triangle.inertia;
-    Matter.Body.setInertia(triangle, Infinity);
-    World.add(engine.world, triangle);
-    setTimeout(() => Matter.Body.setInertia(triangle, origInertia || 1), 800);
 }
 
 
+
 // spawn
-if (Math.random() < 1/20) {
+if (Math.random() < 1/33) {
     spawnCastle();
 } else {
     spawnPyramid();
