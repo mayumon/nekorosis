@@ -21,6 +21,20 @@ const returnBtn = document.getElementById("return-btn");
 let tagFilterContainer = document.getElementById("tag-filter");
 const tagFilterParent    = tagFilterContainer.parentNode;
 
+// tag colour map
+const TAG_COLOUR_MAP = {
+    // "tagName": "colorKey",
+    all: "pink",
+    life: "green",
+    death: "blue",
+    test: "gray"
+
+};
+
+const DEFAULT_TAG_COLOUR = "gray";
+const TAG_ICON_EXT = "png";
+
+
 function loadPost(post){
 
     const header = document.getElementById('post-header');
@@ -85,11 +99,19 @@ function renderPostList(posts, filterTag = "all"){
             const dd = String(dateObj.getUTCDate()).padStart(2, '0');
             const mm = String(dateObj.getUTCMonth() + 1).padStart(2, '0');
             const yyyy = dateObj.getUTCFullYear();
+
             const dateDiv = document.createElement("div");
             dateDiv.classList.add("post-date");
             dateDiv.textContent = `${dd}-${mm}-${yyyy}`;
             li.appendChild(dateDiv);
+
+            const deco = document.createElement("img");
+            deco.src = "assets/images/heart-line.png";
+            deco.alt = "decoration";
+            deco.classList.add("post-deco");
+            li.appendChild(deco);
         }
+
 
         postList.appendChild(li);
     })
@@ -103,8 +125,8 @@ function updateLayout() {
     const hash = window.location.hash.slice(1);
 
     if (!hash) {
-        // no post selected --> grid mode
 
+        // no post selected --> grid mode
         rightColumn.style.display = "none";
 
         if (tagFilterContainer.parentNode !== postDisplayContainer) {
@@ -128,6 +150,7 @@ function updateLayout() {
         });
 
     } else {
+
         // post is selected --> detail mode
         rightColumn.style.display = "";
 
@@ -197,13 +220,27 @@ fetch(`${baseUrl}posts.json`)
         const labelRow = document.createElement("div");
         labelRow.classList.add("label-row");
 
-        // helper: build one icon and one label, wiring them together
+
+        function iconPathsForColor(color) {
+            const base = `assets/icons-tag/${color}`;
+            return {
+                normal:   `${base}.${TAG_ICON_EXT}`,
+                selected: `${base}-selected.${TAG_ICON_EXT}`
+            };
+        }
+
+
+        // helper: build one icon and one label, wire them together
         function makeTagElements(tagName, count){
+
+            const color = TAG_COLOUR_MAP[tagName] || DEFAULT_TAG_COLOUR;
+            const { normal, selected } = iconPathsForColor(color);
+
             // icon
             const img = document.createElement("img");
             img.dataset.tag = tagName;
-            img.dataset.default = `assets/icons-tag/${tagName}.ico`;
-            img.dataset.selected = `assets/icons-tag/selected.ico`;
+            img.dataset.default  = normal;
+            img.dataset.selected = selected;
             img.src = img.dataset.default;
             img.alt = tagName;
             img.classList.add("tag-icon");
@@ -217,7 +254,7 @@ fetch(`${baseUrl}posts.json`)
             // click both the same way
             [img, span].forEach(el => {
                 el.addEventListener("click", () => {
-                    // 1) remove “active” from everything
+                    // clear active
                     iconRow.querySelectorAll(".tag-icon").forEach(i => {
                         i.classList.remove("active");
                         i.src = i.dataset.default;
@@ -226,8 +263,8 @@ fetch(`${baseUrl}posts.json`)
                         l.classList.remove("active");
                     });
 
-                    // add active to clicked
-                    const icon = iconRow.querySelector(`img[data-tag="${tagName}"]`);
+                    // add active
+                    const icon  = iconRow.querySelector(`img[data-tag="${tagName}"]`);
                     const label = labelRow.querySelector(`span[data-tag="${tagName}"]`);
                     icon.classList.add("active");
                     label.classList.add("active");
@@ -240,7 +277,6 @@ fetch(`${baseUrl}posts.json`)
                     updateLayout();
                 });
             });
-
             return { img, span };
         }
 
