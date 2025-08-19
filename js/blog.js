@@ -100,18 +100,21 @@ function renderPostList(posts, filterTag = "all"){
             const mm = String(dateObj.getUTCMonth() + 1).padStart(2, '0');
             const yyyy = dateObj.getUTCFullYear();
 
+            const footer = document.createElement("div");
+            footer.classList.add("post-footer");
+
             const dateDiv = document.createElement("div");
             dateDiv.classList.add("post-date");
             dateDiv.textContent = `${dd}-${mm}-${yyyy}`;
-            li.appendChild(dateDiv);
 
             const deco = document.createElement("img");
             deco.src = "assets/images/heart-line.png";
             deco.alt = "decoration";
             deco.classList.add("post-deco");
-            li.appendChild(deco);
-        }
 
+            footer.appendChild(dateDiv);
+            li.appendChild(footer);
+        }
 
         postList.appendChild(li);
     })

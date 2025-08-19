@@ -210,8 +210,10 @@ hr.dotted {
 
 #post-list.grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 16px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    justify-content: center;
+    align-items: start;
     padding: 0;
 }
 
@@ -221,7 +223,7 @@ hr.dotted {
     z-index: auto;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
 }
 
 #post-list.grid .post-item:hover {
@@ -261,7 +263,6 @@ hr.dotted {
     color: black;
     border-radius: 2px;
     padding: 4px;
-    margin-bottom: 8px;
     text-align: left;
 }
 
@@ -1776,4 +1777,65 @@ hr.dotted {
     opacity: 0.85;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#post-list.grid .post-title {
+    background: black;
+    color: white;
+    border: 1px solid white;
+    border-radius: 2px;
+    padding: 0.25em;
+
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+
+    font-size: 12pt;
+    min-height: calc(1.2em * 3);
+    max-height: calc(1.2em * 3);
+}
+
+
+
+
+
+
+
+
+#post-list.grid .post-footer {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    position: relative;
+}
+
+#post-list.grid .post-footer .post-date {
+    align-self: flex-end;
+    font-size: 12px;
+    text-align: right;
+    border: black solid 2px;
+    box-shadow: 0 0 0 1px white;
+}
+
+#post-list.grid .post-footer .post-deco {
+    align-self: center;
+    margin: 0 auto;
+    width: auto;
+    max-width: 100%;
+    height: auto;
+}
 
