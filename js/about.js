@@ -28,40 +28,7 @@ const render = Render.create({
     }
 });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// ---- HUD. TODO: DELETE LATER ----
+// HUD
 const hud = document.createElement('div');
 Object.assign(hud.style, {
     position: 'absolute', top: '8px', left: '8px',
@@ -69,7 +36,7 @@ Object.assign(hud.style, {
     padding: '6px 8px', border: '1px solid #fff', borderRadius: '4px',
     zIndex: '6', pointerEvents: 'none'
 });
-box.appendChild(hud);
+//box.appendChild(hud);
 
 let frames = 0, lastT = performance.now();
 Matter.Events.on(render, 'afterRender', () => { frames++; });
@@ -93,42 +60,6 @@ setInterval(() => {
         `bodies ${bodies}  constraints ${constraints}\n` +
         `pairs ${pairs}  buckets ${buckets}`;
 }, 1000);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 // banner
@@ -282,18 +213,15 @@ function spawnCastle() {
     const r = triBase / (2 * Math.sqrt(3));  // inradius
     const dy = BRICK_H + GAP_Y;
 
-    // keep the toppers on-screen: need room for one single + triangle above top row
     const y0Min = INNER_TOP + BRICK_H/2 + dy + GAP_Y + (r + R);
-    const y0Max = INNER_BOTTOM - BRICK_H/2 - dy; // still allow the second 3-wide row below
-    const yTop  = clamp(y0, y0Min, y0Max);       // y of the TOP 3-wide row
+    const y0Max = INNER_BOTTOM - BRICK_H/2 - dy;
+    const yTop  = clamp(y0, y0Min, y0Max);
 
-    // two 3-wide rows (top then the one under it)
     const rowTopY = yTop;
     const rowBotY = yTop + dy;
     const startX  = addRow(3, rowTopY);
     addRow(3, rowBotY);
 
-    // singles ABOVE the top row: leftmost and rightmost columns
     const leftX  = startX;                 // col 0
     const rightX = startX + 2 * BRICK_W;   // col 2
     const singleY = yTop - dy;             // one level above the top row
@@ -309,7 +237,7 @@ function spawnCastle() {
         });
         World.add(engine.world, brick);
 
-        // triangle topper above each single (apex up)
+        // triangle topper
         const triCenterY = singleY - BRICK_H/2 - GAP_Y - r;
         const triangle = Bodies.polygon(x, triCenterY, 3, R, {
             restitution: 0.05,

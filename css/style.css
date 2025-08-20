@@ -19,6 +19,7 @@
     display: flex;
     flex: 1;
     flex-direction: column;
+    align-items: center;
     gap: 10px;
     margin-top: 20px;
 }
@@ -236,7 +237,7 @@ hr.dotted {
     width: 16px;
     height: 16px;
     margin-right: 6px;
-    background: url("../assets/images/pencil.png") no-repeat center center;
+    background: url("../assets/images/doc-icon.png") no-repeat center center;
     background-size: contain;
     vertical-align: middle;
 }
@@ -1750,16 +1751,17 @@ hr.dotted {
     position: absolute;
     top: 8px;
     left: 6px;
-    background: rgb(255,255,255, 0.75);
+    background: rgb(255,255,255, 1);
     color: black;
-    padding: 4px 8px;
-    border: 1px solid black;
+    padding: 2px 4px;
+    border: 2px solid black;
     border-radius: 3px;
     font-size: 12px;
     line-height: 1;
     z-index: 11;
     pointer-events: none;
     opacity: 0.9;
+    font-weight: bold   ;
 
     box-shadow: 0 0 0 2px white;
 }
@@ -1839,3 +1841,94 @@ hr.dotted {
     height: auto;
 }
 
+#construction-banner{
+    width: 400px;
+    padding: 40px;
+    height: auto;
+
+}
+
+.spacious-declaration{
+    padding-bottom: 40px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.caution-border {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: black;
+    border-left: 1px #222222 solid;
+    border-right: 1px #222222 solid;
+}
+
+.caution-border::before,
+.caution-border::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 20px;
+    background: url("../assets/images/tile-cautiontape.png") repeat-x;
+}
+
+.caution-border::before {
+    top: 0;
+}
+
+.caution-border::after {
+    bottom: 0;
+}
