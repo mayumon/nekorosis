@@ -37,7 +37,7 @@ const TAG_ICON_EXT = "png";
 
 function loadPost(post){
 
-    const header = document.getElementById('post-header');
+    const header = document.getElementById('header-title');
     header.textContent = "";
 
     postContent.innerHTML = "";
@@ -49,7 +49,7 @@ function loadPost(post){
             postContent.innerHTML = marked.parse(parsed.content);
 
             // set header title
-            const header = document.getElementById('post-header');
+            const header = document.getElementById('header-title');
             header.textContent = '▶ ' + parsed.data.title
                 || '▶ ' + post.replace('.md','').replace(/_/g,' ');
         })

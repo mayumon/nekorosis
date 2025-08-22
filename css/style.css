@@ -137,7 +137,7 @@ hr.dotted {
     position: absolute;
     font-family: 'nds_bios', sans-serif;
     cursor: pointer;
-    top: 21px;
+    top: 22px;
     right: 21px;
     width: 32px;
     height: 32px;
@@ -146,12 +146,13 @@ hr.dotted {
     font-size: 14px;
     text-align: center;
     font-weight: bold;
-    background: lightgray;
-    color: dimgray;
-    border: dimgray 1px solid;
+    background: black;
+    color: white;
+    border: white 1px solid;
+    box-shadow: 0 0 0 1px black;
 }
 
-#post-header {
+#header-title {
     display: none;
     position: absolute;
     top: 21px;
@@ -164,9 +165,17 @@ hr.dotted {
     overflow: hidden;
     text-overflow: ellipsis;
     z-index: 5;
-    height: 21px;
+    height: 22px;
     padding: 5px;
-    border: dimgray 1px solid;
+    border: black 1px solid;
+}
+
+#post-header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 10px;
+    background-color: white;
 }
 
 /* detail view */
@@ -179,7 +188,7 @@ hr.dotted {
     display: flex;
 }
 
-#post-display-container.detail #post-header {
+#post-display-container.detail #header-title {
     display: block;
 }
 
@@ -965,6 +974,9 @@ hr.dotted {
     background-clip: padding-box;
     background: transparent;
 
+    width: max-content;
+    max-width: 100%;
+    min-width: 0;
 
 }
 
@@ -1011,7 +1023,7 @@ hr.dotted {
     aspect-ratio: 1 / 1;
     background: black;
     border: 2px solid black;
-    box-shadow: 0 0 0 3px #eac3d8;
+    box-shadow: 0 0 0 3px white;
     position: relative;
     overflow: hidden;
     margin-top: 4px;
@@ -1187,6 +1199,12 @@ hr.dotted {
 
 #activity-scroll {
     overflow: hidden;
+
+}
+
+#activity-list-container{
+    border: 6px solid white;
+    box-shadow: 0 0 0 1px #eac3d8;
 }
 
 #activity-list li {
@@ -1647,7 +1665,12 @@ hr.dotted {
 
 
 
-.box22 { position: relative; z-index: 2; width: 100%; }
+.box22 {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+}
+
 #highlight .highlight-image { z-index: 1; }
 
 .box-inner {
@@ -1655,19 +1678,41 @@ hr.dotted {
     margin: 0 18px 0 19px;
     color: black;
     box-sizing: border-box;
+    padding-bottom: 10px;
 }
 
 .feed-title {
-    display: inline-block;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
     font-size: 1.2rem;
-    background: #fff;
-    color: #eac3d8;
+    color: black;
     margin: 0 0 0.75rem 0;
-    padding: 6px;
-    border-radius: 4px;
-    border: #eac3d8 double 3px;
-    letter-spacing: 1px;
+
+    background: transparent;
+    border: none;
+    text-transform: lowercase;
+    letter-spacing: 4px;
+    gap: .6em;
 }
+
+#feed-title-img{
+    height: 40px;
+    width: auto;
+}
+
+.feed-title::before,
+.feed-title::after {
+    content: "";
+    flex: 1;
+    border-top: 2px double black;
+
+}
+
+
+
 
 
 
@@ -1754,7 +1799,7 @@ hr.dotted {
     background: rgb(255,255,255, 1);
     color: black;
     padding: 2px 4px;
-    border: 2px solid black;
+    border: 1px solid black;
     border-radius: 3px;
     font-size: 12px;
     line-height: 1;
@@ -1931,4 +1976,104 @@ hr.dotted {
 
 .caution-border::after {
     bottom: 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.featured-row{
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    align-items: start;
+    gap: 16px;
+    width: 100%;
+}
+
+
+#right-rail{
+    box-sizing: border-box;
+    border: 2px solid #eac3d8;
+    border-radius: 14px;
+    padding: 16px;
+    background: transparent;
+    top: 60px;
+
+    min-width: 360px;
+    align-self: stretch;
+}
+
+.rail-title{
+    margin: 0 0 10px;
+    padding: 6px 10px;
+    background: black;
+    color: white;
+    border: 1px solid #eac3d8;
+    border-radius: 6px;
+    text-align: center;
+    letter-spacing: 2px;
+    text-transform: lowercase;
+}
+
+.rail-body{
+    background: white;
+    color: black;
+    border: 1px solid #eac3d8;
+    padding: 10px;
 }
