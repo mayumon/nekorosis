@@ -34,6 +34,7 @@ import { db } from "./auth.js";
 
             initDanmakuComments(postId);
 
+            const a = thumb.closest('a');
             a.href = `#${postId}`;
             a.addEventListener('click', (e) => {
                 e.preventDefault();
