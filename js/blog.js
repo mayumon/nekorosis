@@ -13,8 +13,7 @@ const baseUrl = preview_mode
     : 'https://raw.githubusercontent.com/mayumon/nekorosis/main/blog_posts/';
 
 const postList = document.getElementById("post-list");
-const postListContainer    = document.getElementById("post-list-container");
-const rightColumn          = document.getElementById("right-column");
+postList.classList.add("grid");
 const postDisplayContainer = document.getElementById("post-display-container");
 const postContent = document.getElementById("post-content");
 const returnBtn = document.getElementById("return-btn");
@@ -73,7 +72,10 @@ function renderPostList(posts, filterTag = "all"){
             .replace(".md", "");
         link.href = "#" + postHash;
 
-        link.onclick = () => {window.location.hash = postHash;};
+        link.addEventListener("click", (e) => {
+            e.preventDefault();
+            window.location.hash = postHash;
+        });
 
         // show floppy disk thumbnail
         if (post.image){
@@ -123,64 +125,24 @@ function renderPostList(posts, filterTag = "all"){
 // toggle grid vs detail view
 
 function updateLayout() {
-
-    // grab the current hash
     const hash = window.location.hash.slice(1);
 
     if (!hash) {
-
-        // no post selected --> grid mode
-        rightColumn.style.display = "none";
-
-        if (tagFilterContainer.parentNode !== postDisplayContainer) {
-            postDisplayContainer.insertBefore(
-                tagFilterContainer,
-                postDisplayContainer.firstChild
-            );
-        }
-
-        if (postList.parentNode !== postDisplayContainer) {
-            postDisplayContainer.appendChild(postList);
-        }
-
-        postList.classList.add("grid");
-
+        // modal closed
         postDisplayContainer.classList.remove("detail");
         returnBtn.classList.remove("visible");
-
-        document.querySelectorAll("#post-list .post-thumb").forEach(img => {
-            img.style.transform = "";
-        });
-
-    } else {
-
-        // post is selected --> detail mode
-        rightColumn.style.display = "";
-
-        if (tagFilterContainer.parentNode !== tagFilterParent) {
-            tagFilterParent.insertBefore(
-                tagFilterContainer,
-                tagFilterParent.firstChild
-            );
-        }
-
-        if (postList.parentNode !== postListContainer) {
-            postListContainer.appendChild(postList);
-        }
-
-        postList.classList.remove("grid");
-        postDisplayContainer.classList.add("detail");
-        returnBtn.classList.add("visible");
-
-        document.querySelectorAll("#post-list .post-thumb").forEach(img => {
-
-            const randomAngle = (Math.random() * 20) - 10; // angle adjust
-            img.style.transform = `rotate(${randomAngle}deg) scale(1)`; // scale adjust
-        });
-
-        loadPost(hash + ".md");
+        document.getElementById("header-title").style.display = "none";
+        return;
     }
+
+    // modal open
+    postDisplayContainer.classList.add("detail");
+    returnBtn.classList.add("visible");
+    document.getElementById("header-title").style.display = "block";
+    loadPost(hash + ".md");
 }
+
+
 
 
 // fetch and display posts
@@ -317,14 +279,7 @@ fetch(`${baseUrl}posts.json`)
 
 
 // check for url post and fetch if needed
-window.addEventListener('hashchange', () => {
-    const hash = window.location.hash.slice(1);
-    if (hash) {
-        const postFile = hash + '.md';
-        loadPost(postFile);
-    }
-    updateLayout();
-})
+window.addEventListener('hashchange', updateLayout);
 
 returnBtn.addEventListener("click", () => {
     window.location.hash = "";

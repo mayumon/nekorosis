@@ -34,8 +34,11 @@ import { db } from "./auth.js";
 
             initDanmakuComments(postId);
 
-            const a = document.getElementById('newest-link');
-            a.href = `blog.html#${postId}`;
+            a.href = `#${postId}`;
+            a.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.location.hash = postId;
+            });
         }
     } catch(e) {
         console.error('Could not load newest post:', e);
@@ -314,7 +317,7 @@ function buildAndStartScroll(items) {
             textWrap.appendChild(name);
             textWrap.appendChild(document.createTextNode(" sent a message in "));
             const a = document.createElement("a");
-            a.href = `blog.html#${encodeURIComponent(it.postId)}`;
+            a.href = `#${encodeURIComponent(it.postId)}`;
             a.textContent = it.postId;
             textWrap.appendChild(a);
             if (it.when) textWrap.appendChild(document.createTextNode(` (${it.when})`));

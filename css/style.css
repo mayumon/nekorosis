@@ -58,81 +58,176 @@ hr.dotted {
 }
 
 /* ================================ */
-/* posts display */
+/* posts display
 /* ================================ */
 
-#post-display-container .lace-container,
-#post-display-container #chat-container {
-    display: none;
+.blog-container{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+}
+
+#blog-panel{
+    width: min(1100px, 100%);
+    margin: 20px;
 }
 
 #post-list{
     list-style: none;
+    padding: 0;
+    margin: 0;
+
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    justify-content: center;
+    align-items: start;
 }
 
-.post-item {
-    display: block;
-    width: 100%;
-    box-sizing: border-box;
-    overflow: hidden;
-    position: relative;
-    margin-top: -120px;
-    transition: transform 0.2s ease;
+.post-item{
+    margin: 0;
     padding: 10px;
     border-radius: 3px;
     border: 1px solid #eac3d8;
+    position: relative;
+    transition: transform 0.2s ease;
+    background: transparent;
+
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+
+    box-sizing: border-box;
+    overflow: hidden;
 }
 
-.post-item:first-child {
-    margin-top: 0;
-}
-
-.post-item:hover {
+.post-item:hover{
     transform: translateY(-10px);
     z-index: 5;
 }
 
-.post-title {
+#post-list .post-thumb{
     display: block;
     width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    background: black;
+
+    border: 2px solid black;
+    box-shadow: 0 0 0 3px white;
     box-sizing: border-box;
-    margin: 0.5em 0;
+}
+
+.post-title{
+    margin: 0.5em 0 0;
     padding: 0.25em;
     background: black;
     color: white;
     border: 1px solid white;
     border-radius: 2px;
 
-    white-space: normal;
-    word-break: break-word;
-    overflow-wrap: break-word;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+
+    font-size: 12pt;
+    min-height: calc(1.2em * 3);
+    max-height: calc(1.2em * 3);
 }
 
-.post-item:hover .post-title {
-    opacity: 1;
-}
-
-#post-display-container {
-    width: 55%;
+.post-footer{
     display: flex;
     flex-direction: column;
-    margin: 20px;
+    justify-content: flex-end;
+    margin-top: auto;
+    position: relative;
 }
 
-#post-content, #chat-container {
+.post-date{
+    align-self: flex-end;
+    font-size: 12px;
+    background: white;
+    font-weight: bold;
+    letter-spacing: 5px;
+    color: black;
+    border-radius: 2px;
+    padding: 4px;
+
+    border: black solid 2px;
+    box-shadow: 0 0 0 1px white;
+}
+
+.post-deco{
+    display: block;
+    margin: 4px auto 0;
+    width: 100%;
+    height: auto;
+    opacity: 0.85;
+}
+
+#post-display-container{
+    display: none;
+}
+
+#post-display-container.detail{
+    display: block;
+    position: fixed;
+    top: 50px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    padding: 20px;
+    background: rgba(0,0,0,0.92);
+    z-index: 1500;
+    overflow: auto;
+}
+
+#post-display-container .lace-container,
+#post-display-container #chat-container,
+#post-display-container #header-title{
+    display: none;
+}
+
+#post-display-container.detail .lace-container{
+    display: block;
+    max-width: 1100px;
+    margin: 0 auto;
+    background: transparent;
+}
+
+#post-display-container.detail #chat-container{
+    display: flex;
+}
+
+#post-display-container.detail #header-title{
+    display: block;
+}
+
+#post-content,
+#chat-container{
     width: 100%;
     max-width: 1000px;
     box-sizing: border-box;
 }
 
 #post-content{
-    /*border: #ff0091 1px solid;*/
     padding: 40px;
     background-color: white;
     color: black;
 }
 
-#return-btn {
+#post-header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 10px;
+    background-color: white;
+}
+
+#return-btn{
     display: none;
     position: absolute;
     font-family: 'nds_bios', sans-serif;
@@ -152,8 +247,11 @@ hr.dotted {
     box-shadow: 0 0 0 1px black;
 }
 
-#header-title {
-    display: none;
+#return-btn.visible{
+    display: block;
+}
+
+#header-title{
     position: absolute;
     top: 21px;
     left: 21px;
@@ -170,77 +268,18 @@ hr.dotted {
     border: black 1px solid;
 }
 
-#post-header{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding-bottom: 10px;
-    background-color: white;
-}
-
-/* detail view */
-
-#post-display-container.detail .lace-container{
-    display: block;
-}
-
-#post-display-container.detail #chat-container {
-    display: flex;
-}
-
-#post-display-container.detail #header-title {
-    display: block;
-}
-
-#return-btn.visible {
-    display: block;
-}
-
-#post-display-container .lace-container,
-#post-display-container #chat-container {
+#chat-banner img{
     display: none;
 }
 
-#post-display-container.detail .lace-container{
-    display: block;
-}
-
-#post-display-container.detail #chat-container{
-    display: flex;
-}
-
-#post-display-container.detail #chat-banner img {
+#post-display-container.detail #chat-banner img{
     display: block;
     width: 150px;
     height: auto;
     margin-bottom: 12px;
 }
 
-/* grid view */
-
-#post-list.grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
-    justify-content: center;
-    align-items: start;
-    padding: 0;
-}
-
-#post-list.grid .post-item {
-    margin-top: 0;
-    transform: none;
-    z-index: auto;
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-}
-
-#post-list.grid .post-item:hover {
-    transform: translateY(-10px);
-}
-
-.post-title::before {
+.post-title::before{
     content: "";
     display: inline-block;
     width: 16px;
@@ -249,35 +288,6 @@ hr.dotted {
     background: url("../assets/images/doc-icon.png") no-repeat center center;
     background-size: contain;
     vertical-align: middle;
-}
-
-#post-list .post-thumb {
-    display: block;
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    object-fit: cover;
-    background: black;
-
-    border: 2px solid black;
-    box-shadow: 0 0 0 3px white;
-    box-sizing: border-box;
-
-}
-
-#post-list.grid .post-date {
-    display: block;
-    font-size: 12px;
-    background: white;
-    font-weight: bold;
-    letter-spacing: 5px;
-    color: black;
-    border-radius: 2px;
-    padding: 4px;
-    text-align: left;
-}
-
-#post-list:not(.grid) .post-date {
-    display: none;
 }
 
 
@@ -575,84 +585,6 @@ hr.dotted {
     right: 0;
     transform: scaleX(-1);
     transform-origin: center;
-}
-
-
-/* ================================ */
-/* sidebar */
-/* ================================ */
-
-#sidebar {
-    width: 266px;
-    flex: none;
-    margin: 0 20px;
-}
-
-.sidebar-img-wrapper {
-    position: relative;
-    width: 100%;
-    isolation: isolate;
-}
-
-#sidebar-img {
-    display: block;
-    width: 100%;
-    height: auto;
-    pointer-events: none;
-}
-
-.sidebar-button {
-    position: absolute;
-    display: flex;
-    text-decoration: none;
-    background: transparent;
-    z-index: 10;
-    user-select: none;
-    overflow: hidden;
-}
-
-.sidebar-button .btn-label {
-    position: absolute;
-    bottom: 4px;
-    right: 6px;
-    color: #7d4f69;
-    pointer-events: none;
-}
-
-.hover-overlay {
-    position: absolute;
-    background: #d590b7;
-    mix-blend-mode: multiply;
-    opacity: 0;
-    transition:
-            opacity 0.15s ease,
-            top 0.05s ease,
-            left 0.05s ease,
-            width 0.05s ease,
-            height 0.05s ease;
-    pointer-events: none;
-    z-index: 5;
-}
-
-.sidebar-button:hover ~ .hover-overlay,
-.sidebar-button:focus ~ .hover-overlay {
-    opacity: 1;
-}
-
-.active-overlay {
-    position: absolute;
-    background: #71646b;
-    mix-blend-mode: multiply;
-    opacity: 0;
-    pointer-events: none;
-    z-index: 5;
-    transition: opacity 0.2s ease;
-}
-
-#sidebar-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
 }
 
 
@@ -986,10 +918,10 @@ hr.dotted {
 }
 
 #featured-banner {
-    height: 550px;
+    height: 165px;
     width: auto;
     display: block;
-    object-fit: cover;
+    /*object-fit: cover;*/
     margin: 0 20px 0 20px;
 }
 
