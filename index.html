@@ -1,239 +1,35 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.jsdelivr.net/npm/marked@15.0.7/lib/marked.umd.min.js"></script>
-    <link rel="stylesheet" href="css/style.css">
-    <title>nekorosis</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>pktnet</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
+<main>
+    <h1>nya</h1>
+    <p class="intro">i need it to exist. there is 1 thing to do right now.</p>
+    <div id="posts"></div>
+</main>
 
-<div id="header-placeholder"></div>
+<script src="posts.js"></script>
+<script>
+    const container = document.querySelector("#posts");
 
-<div class="home-container">
-
-    <div class="content-wrapper">
-
-        <section id="home-view">
-            <div class="featured-row">
-                <section id="featured-posts">
-
-                    <div class="featured-left">
-
-                        <img src="assets/images/banner-index.png" alt="featured banner" id="featured-banner">
-
-                        <section id="highlight">
-                            <div class="highlight-container">
-
-                                <div class="box22">
-                                    <div class="box-top">
-                                        <div class="u01"></div>
-                                    </div>
-
-                                    <div class="box-center">
-                                        <div class="box-inner">
-                                            <h3 class="feed-title">
-                                                <img id="feed-title-img" src="assets/images/recently.png">
-                                            </h3>
-                                            <div id="activity-list-container">
-                                                <ul id="activity-list"></ul>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="box-bottom">
-                                        <div class="s01"></div>
-                                    </div>
-                                </div>
-
-                                <img src="assets/images/cat-orange-hand.png" alt="decorative" class="highlight-image"/>
-                            </div>
-                        </section>
-
-                    </div>
-
-                    <div class="post-squares">
-
-                        <div class="post-card" id="newest-post-card">
-                            <div class="post-square">
-                                <a id="newest-link" href="#">
-                                    <img src="" alt="newest post thumbnail" id="newest-thumb">
-                                </a>
-                                <div class="new-badge">
-                                    <img src="assets/images/new.gif" alt="new badge">
-                                </div>
-                                <div class="danmaku"></div>
-                            </div>
-                            <div class="square-title">
-                                <div class="bubble-header">★ newest post</div>
-                                <div class="bubble-text" id="newest-title"></div>
-                            </div>
-                        </div>
-
-                        <div class="post-card" id="song-of-day-card">
-                            <div class="post-square">
-                                <a id="song-link" href="#" target="_blank" rel="noopener">
-                                    <img id="song-thumb" src="" alt="song of the day thumbnail">
-                                </a>
-
-                                <div class="play-badge">
-                                    <img src="assets/images/play.gif" alt="play icon">
-                                </div>
-
-                                <div class="play-hint">click to play</div>
-
-                                <div class="danmaku"></div>
-                            </div>
-
-                            <div class="square-title">
-                                <div class="bubble-header">♩ nano * radio 365</div>
-                                <div class="bubble-text">
-                                    <span id="song-title">a song title!</span>
-                                </div>
-                            </div>
-
-                        </div>
-
-                    </div>
-                </section>
+    posts
+        .sort((a, b) => new Date(b.date) - new Date(a.date))
+        .forEach(post => {
+            container.innerHTML += `
+          <a class="post-card" href="posts/${post.slug}/">
+            <img src="posts/${post.slug}/header.png" alt="">
+            <div>
+              <strong>${post.title}</strong>
+              <small>${post.date}</small>
             </div>
-
-            <section id="blog-view">
-                <div class="blog-container">
-
-                    <div id="post-display-container">
-
-                        <div class="lace-container">
-
-                            <div id="post-header">
-                                <button id="return-btn">☓</button>
-                                <div id="header-title"></div>
-                            </div>
-
-                            <div class="lace corner top-left"></div>
-                            <div class="lace corner top-right"></div>
-                            <div class="lace corner bottom-right"></div>
-                            <div class="lace corner bottom-left"></div>
-
-                            <div class="lace side top"></div>
-                            <div class="lace side right"></div>
-                            <div class="lace side bottom"></div>
-                            <div class="lace side left"></div>
-
-                            <div id="post-content"></div>
-                        </div>
-
-                        <hr class="dotted">
-
-                        <div id="chat-banner">
-                            <img src="assets/images/banner-chat.gif" alt="chat banner">
-                        </div>
-
-                        <div id="chat-container">
-
-                            <div id="chat-header-container">
-                                <p id="chat-info"></p>
-                            </div>
-
-                            <div id="chat-main">
-
-                                <div id="chat-messages"></div>
-
-                                <div id="chat-user-info">
-
-                                    <label for="username-input">username:</label>
-                                    <input id="username-input" type="text" placeholder="anon" maxlength="20">
-
-                                    <label>colour:</label>
-                                    <div id="colour-options">
-                                        <div class="colour-option" data-colour="#d590b7"></div>
-                                        <div class="colour-option" data-colour="#d5bc90"></div>
-                                        <div class="colour-option" data-colour="#d5d090"></div>
-                                        <div class="colour-option" data-colour="#90d5ae"></div>
-                                        <div class="colour-option" data-colour="#90d5d1"></div>
-                                        <div class="colour-option" data-colour="#9095d5"></div>
-                                        <div class="colour-option" data-colour="#ae90d5"></div>
-                                    </div>
-
-                                </div>
-
-                                <div id="chat-controls">
-                                <textarea id="chat-input" type="text"
-                                          placeholder="type your message..."
-                                          maxlength="280" wrap="soft"
-                                          rows="2"></textarea>
-
-                                    <button id="send-btn">send</button>
-
-                                    <div class="flex-break"></div>
-
-                                    <div id="reply-tag" style="display:none; font-size:0.9em; margin-top:0.25rem;">
-                                        replying to <span id="reply-tag-id"></span>
-                                        <button id="clear-reply" style="margin-left:0.5rem;">✕</button>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <div id="blog-panel">
-                        <div id="tag-filter"></div>
-                        <div id="post-list-container">
-                            <ul id="post-list"></ul>
-                        </div>
-                    </div>
-
-                </div>
-            </section>
-
-            <h2>♡˚. guestbook</h2>
-
-            <div id="guestbook-ui">
-                <div id="guestbook-icons">
-                    <div id="guestbook-dropzone"></div>
-                </div>
-
-                <div id="guestbook-form">
-                    <div id="icon-chooser-wrapper">
-                        <img id="selected-icon-preview" src="" alt="">
-                        <button type="button" id="open-icon-picker">choose icon</button>
-                    </div>
-
-                    <div>oka
-                        <label for="guest-name">your name:</label>
-                        <input id="guest-name" placeholder="your name..." type="text" maxlength="20">
-                    </div>
-
-                    <div>
-                        <label for="guest-text">short message:</label>
-                        <textarea id="guest-text" placeholder="write a message!!" maxlength="280"></textarea>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-
-
-    </div>
-</div>
-
-<div class="hover-tooltip"></div>
-
-<div id="icon-picker-overlay">
-    <div>
-        <button id="close-icon-picker">×</button>
-        <div id="icon-grid"></div>
-    </div>
-</div>
-
-<script type="module" src="js/chat.js"></script>
-<script type="module" src="js/guestbook.js"></script>
-<script type="module" src="js/header.js"></script>
-<script type="module" src="js/index.js"></script>
-<script type="module" src="js/blog.js"></script>
-
+          </a>
+        `;
+        });
+</script>
 </body>
 </html>
